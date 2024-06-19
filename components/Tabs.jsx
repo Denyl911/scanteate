@@ -1,14 +1,40 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Keyboard } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useRoute } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 
 export default function Tabs() {
   const route = useRoute();
+  const [isOpen, setOpen] = useState(false)
+
+  useEffect(() => {
+    // Suscribirse a los eventos de teclado
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setOpen(true)
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setOpen(false)
+      }
+    );
+
+    // Limpiar los listeners cuando el componente se desmonte
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
-    <View className="bg-white w-screen px-8 py-5 absolute bottom-0">
+    <View className={`bg-white w-screen px-8 py-5 absolute bottom-0 ${isOpen ? 'hidden' : ''}`}>
       <View className="flex items-center justify-between flex-center flex-row">
         <Pressable
           onPress={() => router.navigate('/home')}
@@ -68,7 +94,7 @@ export default function Tabs() {
               route.name == 'settings' ? 'text-sky-800 font-bold' : 'text-black'
             } text-center`}
           >
-            Mi perfil
+            Mi Perfil
           </Text>
         </Pressable>
       </View>

@@ -7,8 +7,11 @@ import {
   ScrollView,
   Image,
   StatusBar,
+  Pressable
 } from 'react-native';
 import Tabs from '../components/Tabs';
+import { router } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
 
 const meses = [
   'Enero',
@@ -53,7 +56,7 @@ export default function Report() {
     setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
     const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
     all.forEach((el) => {
-      if (el.id == user.id) {
+      if (el.userId == user.id) {
         setUserEmotions((op) => [...op, el]);
         if (counter.hasOwnProperty(el.emocion)) {
           counter[el.emocion] += 1;
@@ -82,6 +85,12 @@ export default function Report() {
   return (
     <View className="h-[100%] bg-slate-200">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
+      <Pressable
+        className="absolute top-10 left-5 bg-slate-300 p-2 rounded-lg opacity-50"
+        onPress={() => router.back()}
+      >
+        <AntDesign name="left" size={24} color="#0369a1" />
+      </Pressable>
       <View>
         <View className="h-[87%] mt-16">
           <Text className="text-sky-800 text-center font-bold text-3xl">
@@ -91,7 +100,7 @@ export default function Report() {
             {mes}
           </Text>
           <Text className="text-center text-lg mb-2 px-10">
-            La emocion mas presente de este mes fue:{' '}
+            La emoción mas presente de este mes fue:{' '}
             <Text className="text-sky-600 font-bold">{maxEmotion}</Text>
           </Text>
           <ScrollView>

@@ -68,17 +68,24 @@ export default function HomeScreen() {
               source={require('../assets/images/juegos.png')}
             ></Image>
           </Pressable>
-          <View className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20">
-            <Text className="text-white text-xl">Cronograma</Text>
-            <Text className="text-white">
-              Un calendario completo con todas tus tareas pendientes
+          <Pressable
+            onPress={() => router.navigate(user.type == 'Profesor' ? '/alumnos' : '/home')}
+            className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20"
+          >
+            <Text className="text-white text-xl">
+              {user.type == 'Profesor' ? 'Alumnos' : 'Cronograma'}
+            </Text>
+            <Text className="text-white pr-6">
+              {user.type == 'Profesor'
+                ? 'Listado de todos los alumnos registrados en la app'
+                : 'Un calendario completo con todas tus tareas pendientes'}
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"
               source={require('../assets/images/cronograma.png')}
             ></Image>
-          </View>
-          <View className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40">
+          </Pressable>
+          <Pressable onLongPress={() => router.navigate('/setUrl')} className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40">
             <Text className="text-white text-xl">Juegos</Text>
             <Text className="text-white">
               Juegos para poner en práctica los conocimientos
@@ -87,10 +94,10 @@ export default function HomeScreen() {
               className="mt-10 absolute right-0 bottom-2"
               source={require('../assets/images/juegos2.png')}
             ></Image>
-          </View>
+          </Pressable>
         </ScrollView>
       </View>
-      <Tabs />
+      <Tabs className="absolute bottom-0" />
     </View>
   );
 }

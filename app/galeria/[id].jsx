@@ -12,9 +12,10 @@ import {
   Modal,
   StyleSheet,
 } from 'react-native';
-import Tabs from '../components/Tabs';
+import Tabs from '../../components/Tabs';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
+import { useLocalSearchParams } from 'expo-router';
 
 function formatearFecha(fecha) {
   if (fecha) {
@@ -43,6 +44,7 @@ function formatearFecha(fecha) {
 }
 
 export default function Galery() {
+    const { id } = useLocalSearchParams();
   const [user, setUser] = useState({
     name: '',
     type: '',
@@ -53,13 +55,15 @@ export default function Galery() {
   const [deleteId, setDeleteId] = useState(0);
 
   const getUser = async () => {
-    const us = JSON.parse(await AsyncStorage.getItem('user'))
-    setUser( us|| user);
+    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
+    const alumno = users.find((el) => el.id == id);
+    if (alumno) {
+      setUser(alumno);
+    }
     const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
     setAllEmotions(all);
-    console.log(all);
     all.forEach((el) => {
-      if (el.userId == us.id) {
+      if (el.userId == id) {
         setUserEmotions((op) => [...op, el]);
       }
     });
@@ -79,7 +83,7 @@ export default function Galery() {
     await AsyncStorage.setItem('emotions', JSON.stringify(allFilt));
     setModalVisible(!modalVisible);
     ToastAndroid.showWithGravity(
-      'Eliminado exitosamente',
+      'Registrado exitosamente',
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );
@@ -100,8 +104,11 @@ export default function Galery() {
       </Pressable>
       <View>
         <View className="h-[87%] mt-16">
-          <Text className="text-sky-800 text-center font-bold text-3xl mb-10">
+          <Text className="text-sky-800 text-center font-bold text-3xl mb-3">
             Galería de Emociones
+          </Text>
+          <Text className="text-gray-800 text-center font-bold text-2xl mb-10">
+            {user.name}
           </Text>
           <ScrollView>
             {userEmotions.map((el, i) => {
@@ -111,16 +118,8 @@ export default function Galery() {
                   key={i}
                 >
                   <View className="basis-">
-                    <Text className="text-lg font-bold">{el.emocion}</Text>
+                    <Text className="text-lg font-bold mb-3">{el.emocion}</Text>
                     <Text>{formatearFecha(el.date)}</Text>
-                    <Pressable
-                      onPress={() => preDelete(el.date)}
-                      className="mt-5 bg-slate-50 rounded-md px-2 py-1"
-                    >
-                      <Text className="text-red-500 text-center">
-                        X Eliminar
-                      </Text>
-                    </Pressable>
                   </View>
                   <Image className="w-28 h-28 rounded" source={{ uri: el.uri }}></Image>
                 </View>
@@ -134,6 +133,7 @@ export default function Galery() {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}
       >

@@ -15,6 +15,7 @@ import Tabs from '../components/Tabs';
 
 export default function Settings() {
   const [user, setUser] = useState({
+    id: 0,
     name: '',
     type: '',
   });
@@ -64,17 +65,13 @@ export default function Settings() {
             <Text className="text-white">Galería de fichas de emociones</Text>
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/report")}
+            onPress={() => router.navigate(`/reportes/${user.id}`)}
             className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
           >
-            <Text
-              className="text-white text-xl"
-              
-            >
-              Generar reporte
-            </Text>
+            <Text className="text-white text-xl">Reportes</Text>
             <Text className="text-white">
-              Generar reporte de emociones del mes
+              Ver listado de reportes o genera un nuevo reporte de emociones del
+              mes
             </Text>
           </Pressable>
           <Pressable
@@ -86,7 +83,7 @@ export default function Settings() {
           </Pressable>
         </ScrollView>
       </View>
-      <Tabs />
+      <Tabs className="absolute bottom-0" />
     </View>
   );
 }

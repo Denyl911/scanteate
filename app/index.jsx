@@ -8,14 +8,20 @@ function Dots({ x }) {
   if (x == 1) {
     return (
       <View className="flex flex-row">
-        <Image className="mr-2" source={require('../assets/images/dot1.png')}></Image>
+        <Image
+          className="mr-2"
+          source={require('../assets/images/dot1.png')}
+        ></Image>
         <Image source={require('../assets/images/dot2.png')}></Image>
       </View>
     );
   } else {
     return (
       <View className="flex flex-row">
-        <Image className="mr-2" source={require('../assets/images/dot2.png')}></Image>
+        <Image
+          className="mr-2"
+          source={require('../assets/images/dot2.png')}
+        ></Image>
         <Image source={require('../assets/images/dot1.png')}></Image>
       </View>
     );
@@ -27,9 +33,11 @@ function Slides({ x }) {
     return (
       <View className="flex-1 items-center justify-center">
         <Image source={require('../assets/images/logo.png')}></Image>
-        <Text className="text-sky-700 text-center text-xl font-bold py-4">
-          SCAN<Text className="text-sky-500">TEA</Text>TE
-        </Text>
+        <Pressable onLongPress={() => router.navigate('/setUrl')}>
+          <Text className="text-sky-700 text-center text-xl font-bold py-4">
+            SCAN<Text className="text-sky-500">TEA</Text>TE
+          </Text>
+        </Pressable>
         <Text className="text-center mx-5">
           Una aplicación de comunicación para ayudar a los estudiantes con
           autismo a comunicarse con amigos y profesores.
@@ -55,20 +63,18 @@ function Slides({ x }) {
 export default function Welcome() {
   const [n, setN] = useState(1);
 
-  const [user, setUser] = useState({
-    name: '',
-    type: '',
-  });
   const getUser = async () => {
-    const data = JSON.parse(await AsyncStorage.getItem('user'))
+    const data = JSON.parse(await AsyncStorage.getItem('user'));
     if (data) {
-      setUser(data);
-      router.replace('/home')
+      router.replace('/home');
     }
   };
-  useFocusEffect(useCallback(() => {
-    getUser();
-  }));
+
+  useFocusEffect(
+    useCallback(() => {
+      getUser();
+    }, [])
+  );
 
   const nextSlide = () => {
     if (n == 2) {

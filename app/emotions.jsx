@@ -12,6 +12,7 @@ import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
 import SmallTabs from '../components/SmallTabs';
 
 export default function Emotions() {
@@ -69,8 +70,9 @@ export default function Emotions() {
         { format: SaveFormat.JPEG }
       );
       setFotoUri(fliped.uri);
+      const apiUrl = await AsyncStorage.getItem('apiUrl') || ''
       const res = await fetch(
-        'https://28cf-201-108-3-235.ngrok-free.app/emotions',
+        `${apiUrl}/emotions`,
         {
           method: 'POST',
           headers: {
@@ -165,16 +167,12 @@ export default function Emotions() {
       <View style={{ marginTop: StatusBar.currentHeight }}></View>
       <View className="flex- items-center">
         <View className="w-full">
-          <Pressable
-            onPress={() => {
-              router.back();
-            }}
-          >
-            <Image
-              className="w-8 h-8 my-3 mx-5"
-              source={require('../assets/images/back-arrow.png')}
-            ></Image>
-          </Pressable>
+        <Pressable
+        className=" bg-slate-200 p-2 rounded-lg z-40 w-12 my-2 ml-2"
+        onPress={() => router.back()}
+      >
+        <AntDesign name="left" size={24} color="#0369a1" />
+      </Pressable>
         </View>
         <View
           style={{
@@ -202,13 +200,13 @@ export default function Emotions() {
       </View>
       <View className="flex flex-row justify-between items-center mt-16 mx-5">
         <Pressable
-          className="py-3 px-1 rounded-full  active:bg-slate-200"
+          className="p-2 rounded-full bg-slate-200 active:bg-slate-300"
           onPress={toggleCameraType}
         >
-          <Text className="text-2xl text-black">Rotar</Text>
+          <Text className="text-2xl text-slate-800">Rotar</Text>
         </Pressable>
         <Pressable
-          className="px-4 py-3 rounded-full bg-sky-800"
+          className="px-4 py-3 rounded-full bg-sky-800 active:bg-sky-700"
           onPress={scanFace}
         >
           <Text className="text-3xl font-bold text-center text-white">
@@ -216,10 +214,10 @@ export default function Emotions() {
           </Text>
         </Pressable>
         <Pressable
-          className="py-3 px-1 rounded-full  active:bg-slate-200"
+          className="p-2 rounded-full  bg-slate-200 active:bg-slate-300"
           onPress={() => router.navigate('/galery')}
         >
-          <Text className="text-2xl text-black">Galeria</Text>
+          <Text className="text-2xl text-slate-800">Galería</Text>
         </Pressable>
       </View>
       <SmallTabs />
