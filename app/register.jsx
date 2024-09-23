@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { router } from 'expo-router';
+import { useState } from "react";
+import { router } from "expo-router";
 import {
   Image,
   StyleSheet,
@@ -10,36 +10,36 @@ import {
   ToastAndroid,
   ScrollView,
   KeyboardAvoidingView,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Register() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
-  const [pass2, setPass2] = useState('');
-  const [uType, setuType] = useState('Alumno');
+  const [name, setName] = useState("");
+  const [emailT, setEmailT] = useState("");
+  const [pass, setPass] = useState("");
+  const [pass2, setPass2] = useState("");
+  const [uType, setuType] = useState("Alumno");
 
   const changeType = () => {
-    if (uType == 'Alumno') {
-      setuType('Profesor');
+    if (uType == "Alumno") {
+      setuType("Profesor");
     } else {
-      setuType('Alumno');
+      setuType("Alumno");
     }
   };
 
   const registerUser = async () => {
     try {
-      if (name && email && pass && pass2) {
+      if (name && emailT && pass && pass2) {
         if (pass != pass2) {
           ToastAndroid.showWithGravity(
-            'Las contraseñas no coinciden',
+            "Las contraseñas no coinciden",
             ToastAndroid.LONG,
             ToastAndroid.CENTER
           );
           return;
         }
-        const dat = await AsyncStorage.getItem('users');
+        const dat = await AsyncStorage.getItem("users");
         let users = [];
         if (dat) {
           users = JSON.parse(dat);
@@ -47,29 +47,29 @@ export default function Register() {
         const user = {
           id: users.length + 1,
           name: name,
-          email: email,
+          emailT: emailT,
           password: pass,
           type: uType,
         };
         users.push(user);
-        await AsyncStorage.setItem('users', JSON.stringify(users));
-        await AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem("users", JSON.stringify(users));
+        await AsyncStorage.setItem("user", JSON.stringify(user));
         ToastAndroid.showWithGravity(
-          'Registrado exitosamente',
+          "Registrado exitosamente",
           ToastAndroid.SHORT,
           ToastAndroid.CENTER
         );
-        router.replace('/home');
+        router.replace("/home");
       } else {
         ToastAndroid.showWithGravity(
-          'Faltan campos por llenar',
+          "Faltan campos por llenar",
           ToastAndroid.LONG,
           ToastAndroid.CENTER
         );
       }
     } catch (e) {
       ToastAndroid.showWithGravity(
-        'Opps ocurrio un error!',
+        "Opps ocurrio un error!",
         ToastAndroid.SHORT,
         ToastAndroid.CENTER
       );
@@ -85,7 +85,7 @@ export default function Register() {
         <Image
           height={100}
           width={100}
-          source={require('../assets/images/register.png')}
+          source={require("../assets/images/register.png")}
         ></Image>
       </View>
       <View>
@@ -96,50 +96,49 @@ export default function Register() {
           >
             <Text
               className={`px-2 ${
-                uType == 'Alumno' ? 'py-1 rounded-full bg-white' : ''
+                uType == "Alumno" ? "py-1 rounded-full bg-white" : ""
               }`}
             >
               Alumno
             </Text>
             <Text
               className={`px-2 ${
-                uType == 'Profesor' ? 'py-1 rounded-full bg-white' : ''
+                uType == "Profesor" ? "py-1 rounded-full bg-white" : ""
               }`}
             >
               Profesor
             </Text>
           </Pressable>
           <TextInput
-            className="mt-10 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
+            className="mt-8 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2 bg-slate-100 rounded-md"
             onChangeText={setName}
             value={name}
             placeholder="Nombre"
           />
           <TextInput
-            className="mt-10 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
-            onChangeText={setEmail}
-            value={email}
+            className="mt-8 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2 bg-slate-100 rounded-md"
+            onChangeText={setEmailT}
+            value={emailT}
             inputMode="email-address"
-            placeholder="Email"
+            placeholder="Email del tutor"
           />
           <TextInput
-            className="mt-10 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
+            className="mt-8 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2 bg-slate-100 rounded-md"
             onChangeText={setPass}
             value={pass}
             secureTextEntry={true}
             placeholder="Contraseña"
           />
           <TextInput
-            className="mt-10 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
+            className="mt-8 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2 bg-slate-100 rounded-md"
             onChangeText={setPass2}
             value={pass2}
             secureTextEntry={true}
             placeholder="Confirmar contraseña"
           />
-          
         </KeyboardAvoidingView>
         <View className="bg-white flex items-center">
-        <Pressable
+          <Pressable
             onPress={registerUser}
             className="rounded-xl  shadow shadow-black bg-sky-800 py-3 px-4 mt-20"
           >
@@ -165,10 +164,10 @@ const styles = StyleSheet.create({
   separador: {
     borderRadius: 50,
     marginTop: -50,
-    backgroundColor: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {},
 });

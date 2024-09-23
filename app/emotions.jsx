@@ -1,5 +1,5 @@
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useCallback, useState } from 'react';
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { useCallback, useState } from "react";
 import {
   View,
   Pressable,
@@ -7,28 +7,37 @@ import {
   StyleSheet,
   Image,
   StatusBar,
-} from 'react-native';
-import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
-import SmallTabs from '../components/SmallTabs';
+} from "react-native";
+import Anthropic from "@anthropic-ai/sdk";
+import { manipulateAsync, FlipType, SaveFormat } from "expo-image-manipulator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import SmallTabs from "../components/SmallTabs";
 
 export default function Emotions() {
-  const [type, setType] = useState('front');
+  const anthropic = new Anthropic({
+    apiKey:
+      "", // defaults to process.env["ANTHROPIC_API_KEY"]
+  });
+
+  const [type, setType] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
-  const [emotion, setEmotion] = useState('Escaner de Emociones');
-  const [scanText, setScanText] = useState('ESCANEAR');
+  const [emotion, setEmotion] = useState("Escaner de Emociones");
+  const [scanText, setScanText] = useState("ESCANEAR");
   const [fotoUri, setFotoUri] = useState(null);
+  const [color, setColor] = useState("text-sky-900");
   const [user, setUser] = useState({
     id: 0,
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
   const getUser = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
+    setUser(JSON.parse(await AsyncStorage.getItem("user")) || user);
   };
   useFocusEffect(
     useCallback(() => {
@@ -36,73 +45,87 @@ export default function Emotions() {
     }, [])
   );
 
-  const trans = {
-    angry: 'Enojado',
-    disgust: 'Disgustado',
-    fear: 'Miedo',
-    happy: 'Felicidad',
-    neutral: 'Neutral',
-    sad: 'Triste',
-    surprise: 'Sorprendido',
+  const emotionColors = {
+    Felicidad: "text-green-500",
+    Alegría: "text-green-500",
+    Tristeza: "text-yellow-400",
+    Enojo: "text-rose-600",
+    Ira: "text-rose-600",
+    Miedo: "text-yellow-400",
+    Disgusto: "text-yellow-400",
+    Sorpresa: "text-green-500",
+    No: "text-sky-900",
   };
 
   function toggleCameraType() {
-    setType((current) => (current === 'back' ? 'front' : 'back'));
+    setType((current) => (current === "back" ? "front" : "back"));
   }
 
   async function scanFace() {
     if (fotoUri) {
       setFotoUri(null);
-      setScanText('ESCANEAR');
-      setEmotion('Escaner de Emociones');
+      setScanText("ESCANEAR");
+      setEmotion("Escaner de Emociones");
+      setColor("text-sky-900");
       return;
     }
-    setEmotion('Escaneando...');
-    setScanText('Volver');
+    setEmotion("Escaneando...");
+    setScanText("Volver");
     try {
       const img = await cameraRef.takePictureAsync({
         base64: true,
-        isImageMirror: true,
       });
-      const fliped = await manipulateAsync(
-        img.uri,
-        [{ flip: FlipType.Horizontal }],
-        { format: SaveFormat.JPEG }
-      );
-      setFotoUri(fliped.uri);
-      const apiUrl = await AsyncStorage.getItem('apiUrl') || ''
-      const res = await fetch(
-        `${apiUrl}/emotions`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+      if (type == "front") {
+        const fliped = await manipulateAsync(
+          img.uri,
+          [{ flip: FlipType.Horizontal }],
+          { format: SaveFormat.JPEG }
+        );
+        setFotoUri(fliped.uri);
+      } else {
+        setFotoUri(img.uri);
+      }
+      const msg = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 50,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: "image/jpeg",
+                  data: img.base64,
+                },
+              },
+              {
+                type: "text",
+                text: "Menciona unicamente el nombre de la emocion presente en el rostro y si no encuentras ningun rostro di solamente 'No'",
+              },
+            ],
           },
-          body: JSON.stringify({
-            imagen: img.base64,
-          }),
-        }
-      );
-      const data = await res.json();
-      const emo = data.emotion;
-      if (emo != 'No') {
-        const translated = emo.replace(/\b\w+\b/g, function (match) {
-          return trans[match] || match;
-        });
-        setEmotion(translated);
+        ],
+      });
+      const emo = msg.content[0].text;
+
+      if (emo != "No") {
+        setEmotion(emo);
+        setColor(emotionColors[emo]);
         const emotions =
-          JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+          JSON.parse(await AsyncStorage.getItem("emotions")) || [];
         const data = {
           userId: user.id,
-          emocion: translated,
-          uri: fliped.uri,
+          emocion: emo,
+          color: emotionColors[emo],
+          uri: img.uri,
           date: Date.now(),
         };
         emotions.unshift(data);
-        await AsyncStorage.setItem('emotions', JSON.stringify(emotions));
+        await AsyncStorage.setItem("emotions", JSON.stringify(emotions));
       } else {
-        setEmotion('No se detectó ninguna');
+        setEmotion("No se detectó ninguna");
       }
     } catch (e) {
       console.log(e);
@@ -115,7 +138,7 @@ export default function Emotions() {
         <Image
           style={{
             borderRadius: 8,
-            borderColor: '#000',
+            borderColor: "#000",
             borderWidth: 2,
             height: 472,
             width: 382,
@@ -167,18 +190,18 @@ export default function Emotions() {
       <View style={{ marginTop: StatusBar.currentHeight }}></View>
       <View className="flex- items-center">
         <View className="w-full">
-        <Pressable
-        className=" bg-slate-200 p-2 rounded-lg z-40 w-12 my-2 ml-2"
-        onPress={() => router.back()}
-      >
-        <AntDesign name="left" size={24} color="#0369a1" />
-      </Pressable>
+          <Pressable
+            className=" bg-slate-200 p-2 rounded-lg z-40 w-12 my-2 ml-2"
+            onPress={() => router.back()}
+          >
+            <AntDesign name="left" size={24} color="#0369a1" />
+          </Pressable>
         </View>
         <View
           style={{
-            display: fotoUri ? 'none' : 'block',
+            display: fotoUri ? "none" : "block",
             marginHorizontal: 20,
-            borderColor: '#000',
+            borderColor: "#000",
             borderWidth: 4,
             borderRadius: 12,
             height: 480,
@@ -189,12 +212,13 @@ export default function Emotions() {
             ref={(ref) => setCameraRef(ref)}
             style={styles.camera}
             facing={type}
+            pictureSize="1080x1080"
           ></CameraView>
         </View>
         <ShowImage show={fotoUri ? true : false}></ShowImage>
       </View>
       <View>
-        <Text className="mt-16 text-3xl font-bold text-center text-sky-900">
+        <Text className={`mt-16 text-4xl font-bold text-center ${color}`}>
           {emotion}
         </Text>
       </View>
@@ -203,7 +227,7 @@ export default function Emotions() {
           className="p-2 rounded-full bg-slate-200 active:bg-slate-300"
           onPress={toggleCameraType}
         >
-          <Text className="text-2xl text-slate-800">Rotar</Text>
+          <FontAwesome6 name="camera-rotate" size={38} color="rgb(8 47 73)" />
         </Pressable>
         <Pressable
           className="px-4 py-3 rounded-full bg-sky-800 active:bg-sky-700"
@@ -215,9 +239,9 @@ export default function Emotions() {
         </Pressable>
         <Pressable
           className="p-2 rounded-full  bg-slate-200 active:bg-slate-300"
-          onPress={() => router.navigate('/galery')}
+          onPress={() => router.navigate("/galery")}
         >
-          <Text className="text-2xl text-slate-800">Galería</Text>
+          <MaterialIcons name="photo-library" size={40} color="rgb(8 47 73)" />
         </Pressable>
       </View>
       <SmallTabs />
@@ -228,7 +252,7 @@ export default function Emotions() {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
-    borderColor: '#000',
+    borderColor: "#000",
     borderWidth: 4,
     borderRadius: 12,
     height: 480,
@@ -236,7 +260,7 @@ const styles = StyleSheet.create({
   },
   face: {
     marginHorizontal: 20,
-    borderColor: '#000',
+    borderColor: "#000",
     borderWidth: 4,
     borderRadius: 12,
     height: 420,
@@ -248,18 +272,18 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
+    flexDirection: "row",
+    backgroundColor: "transparent",
     margin: 64,
   },
   button: {
     flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
+    alignSelf: "flex-end",
+    alignItems: "center",
   },
   text: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
 });

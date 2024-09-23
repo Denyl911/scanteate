@@ -11,11 +11,12 @@ import {
   StatusBar,
   StyleSheet,
 } from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Octicons from "@expo/vector-icons/Octicons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import Entypo from "@expo/vector-icons/Entypo";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Tabs from "../components/Tabs";
 
-export default function Settings() {
+export default function Games() {
   const [user, setUser] = useState({
     id: 0,
     name: "",
@@ -50,54 +51,58 @@ export default function Settings() {
             ></Image>
           </View>
           <Text className="text-white text-center text-md mt-2 font-bold">
-            {user.name}
+            Juegos
           </Text>
           <Text className="text-white text-center mt-1 mb-0 text-sm">
-            {user.type}
+            Aprende divirtiendote
           </Text>
         </View>
       </View>
       <View style={styles.container}>
         <ScrollView className="mt-12">
           <Pressable
-            onPress={() => router.navigate("/galery")}
+            onPress={() => router.navigate("/memory")}
             className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-24"
           >
-            <Text className="text-white text-xl">Galería</Text>
-            <Text className="text-white">Galería de fichas de emociones</Text>
-            <MaterialCommunityIcons
-              name="view-gallery"
-              size={43}
-              color="rgb(245 243 255);"
-              className="absolute right-6 bottom-5"
+            <Text className="text-white text-xl">Memorama</Text>
+            <Text className="text-white pr-7">
+              Entrena tu memoria mientras te diviertes
+            </Text>
+            <FontAwesome5
+              name="brain"
+              size={45}
+              color="rgb(244 114 182);"
+              className="absolute right-6 bottom-6"
             />
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/reportConfig")}
+            onPress={() => router.navigate(`/reportes/${user.id}`)}
             className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
           >
-            <Text className="text-white text-xl">Reportes</Text>
-            <Text className="text-white">
-              Configuración y envio de reportes
+            <Text className="text-white text-xl">Colores</Text>
+            <Text className="text-white pe-3 pr-3">
+              Aprende como se combinan los colores
             </Text>
-            <Octicons
-              name="repo"
-              size={42}
-              color="rgb(245 243 255);"
-              className="absolute right-6 bottom-4"
+            <Entypo
+              name="brush"
+              size={40}
+              color="rgb(252 211 77);"
+              className="absolute right-4 bottom-4"
             />
           </Pressable>
           <Pressable
             onPress={logout}
-            className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-8"
+            className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-8 pr-5"
           >
-            <Text className="text-white text-xl">Logout</Text>
-            <Text className="text-white">Cerrar Sesión</Text>
-            <MaterialCommunityIcons
-              name="logout"
-              size={42}
-              color="rgb(245 243 255);"
-              className="absolute right-6 bottom-5"
+            <Text className="text-white text-xl">Emociones</Text>
+            <Text className="text-white pe-3 pr-3">
+              Distingue los dintisntos tipos de emociones
+            </Text>
+            <MaterialIcons
+              name="emoji-emotions"
+              size={45}
+              color="rgb(240 171 252);"
+              className="absolute right-4 bottom-7"
             />
           </Pressable>
         </ScrollView>
