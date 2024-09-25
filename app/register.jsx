@@ -90,27 +90,8 @@ export default function Register() {
       </View>
       <View>
         <KeyboardAvoidingView style={styles.separador}>
-          <Pressable
-            onPress={changeType}
-            className="bg-gray-300 rounded-full px-2 py-1 flex flex-row items-center mt-7"
-          >
-            <Text
-              className={`px-2 ${
-                uType == "Alumno" ? "py-1 rounded-full bg-white" : ""
-              }`}
-            >
-              Alumno
-            </Text>
-            <Text
-              className={`px-2 ${
-                uType == "Profesor" ? "py-1 rounded-full bg-white" : ""
-              }`}
-            >
-              Profesor
-            </Text>
-          </Pressable>
           <TextInput
-            className="mt-8 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2 bg-slate-100 rounded-md"
+            className="mt-12 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2 bg-slate-100 rounded-md"
             onChangeText={setName}
             value={name}
             placeholder="Nombre"

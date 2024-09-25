@@ -24,7 +24,7 @@ export default function Emotions() {
       "", // defaults to process.env["ANTHROPIC_API_KEY"]
   });
 
-  const [type, setType] = useState("back");
+  const [type, setType] = useState("front");
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
   const [emotion, setEmotion] = useState("Escaner de Emociones");
@@ -87,7 +87,7 @@ export default function Emotions() {
       }
       const msg = await anthropic.messages.create({
         model: "claude-3-5-sonnet-20240620",
-        max_tokens: 50,
+        max_tokens: 20,
         messages: [
           {
             role: "user",

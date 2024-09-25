@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "tunnel": "expo start --web --tunnel",
+    "tunnel": "expo start --tunnel",
     "test": "jest --watchAll",
     "lint": "expo lint"
   },

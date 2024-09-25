@@ -83,17 +83,15 @@ export default function HomeScreen() {
           </Pressable>
           <Pressable
             onPress={() =>
-              router.navigate(user.type == "Profesor" ? "/alumnos" : "/home")
+              router.navigate("/actividades")
             }
             className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40"
           >
             <Text className="text-white text-xl">
-              {user.type == "Profesor" ? "Alumnos" : "Cronograma"}
+              Actividades
             </Text>
             <Text className="text-white pr-6">
-              {user.type == "Profesor"
-                ? "Listado de todos los alumnos registrados en la app"
-                : "Un calendario completo con todas tus tareas pendientes"}
+              Actividades imprimibles para el desarrollo
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"
