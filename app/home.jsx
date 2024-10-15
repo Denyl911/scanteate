@@ -48,9 +48,6 @@ export default function HomeScreen() {
           <Text className="text-white text-center text-md mt-2 font-bold">
             {user.name}
           </Text>
-          <Text className="text-white text-center mt-1 mb-0 text-sm">
-            {user.type}
-          </Text>
         </View>
       </View>
       <View style={styles.container}>

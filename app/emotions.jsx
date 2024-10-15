@@ -21,7 +21,7 @@ import SmallTabs from "../components/SmallTabs";
 export default function Emotions() {
   const anthropic = new Anthropic({
     apiKey:
-      "", // defaults to process.env["ANTHROPIC_API_KEY"]
+      process.env.EXPO_PUBLIC_ANTHROPIC_API
   });
 
   const [type, setType] = useState("front");

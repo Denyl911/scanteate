@@ -18,15 +18,6 @@ export default function Register() {
   const [emailT, setEmailT] = useState("");
   const [pass, setPass] = useState("");
   const [pass2, setPass2] = useState("");
-  const [uType, setuType] = useState("Alumno");
-
-  const changeType = () => {
-    if (uType == "Alumno") {
-      setuType("Profesor");
-    } else {
-      setuType("Alumno");
-    }
-  };
 
   const registerUser = async () => {
     try {
@@ -39,27 +30,30 @@ export default function Register() {
           );
           return;
         }
-        const dat = await AsyncStorage.getItem("users");
-        let users = [];
-        if (dat) {
-          users = JSON.parse(dat);
+        const res = await fetch('http://scanteate.fun/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: {
+            name: name,
+            email: emailT,
+            password: pass 
+          }
+        })
+        if (!res.status == 201) {
+          ToastAndroid.showWithGravity(
+            'Oops ocurrio un error',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER
+          );
+          console.log(await res.json());
+        } else {
+          const data = await res.json()
+          await AsyncStorage.setItem('user', JSON.stringify(data.user))
+          await AsyncStorage.setItem('token', JSON.stringify(data.token))
+          router.replace('/home');
         }
-        const user = {
-          id: users.length + 1,
-          name: name,
-          emailT: emailT,
-          password: pass,
-          type: uType,
-        };
-        users.push(user);
-        await AsyncStorage.setItem("users", JSON.stringify(users));
-        await AsyncStorage.setItem("user", JSON.stringify(user));
-        ToastAndroid.showWithGravity(
-          "Registrado exitosamente",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        );
-        router.replace("/home");
       } else {
         ToastAndroid.showWithGravity(
           "Faltan campos por llenar",

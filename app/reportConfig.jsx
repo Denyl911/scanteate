@@ -9,7 +9,7 @@ import {
   Image,
   StatusBar,
   Pressable,
-  Modal,
+  TextInput,
   StyleSheet,
   ToastAndroid,
   Switch,
@@ -18,6 +18,7 @@ import Tabs from "../components/Tabs";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Entypo from '@expo/vector-icons/Entypo';
 import { Picker } from "@react-native-picker/picker";
 
 const meses = [
@@ -41,7 +42,7 @@ export default function ReportConfig() {
     name: "",
     type: "",
   });
-  const [userEmotions, setUserEmotions] = useState([]);
+  const [email, setEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
   const [isEnabled, setIsEnabled] = useState(true);
@@ -55,6 +56,10 @@ export default function ReportConfig() {
       ToastAndroid.CENTER
     );
   };
+
+  const setPscicoEmail = async () => {
+    const res = await fetch()
+  }
 
   return (
     <View className="h-[100%] bg-slate-200">
@@ -70,7 +75,22 @@ export default function ReportConfig() {
           <Text className="text-sky-800 text-center font-bold text-3xl">
             Configuración de envio de reportes
           </Text>
-          <View className="mx-2 px-3 mt-12 border-b-2 border-slate-300 py-2 rounded">
+          <View className="mb-6 mt-10 px-2">
+            <Text className="text-slate-800 font-bold text-xl">
+              Correo electrónico del psicólogo
+            </Text>
+            <View className="flex flex-row content-center justify-between">
+              <TextInput
+                className="border-2 rounded-lg border-sky-800 text-2xl placeholder:text-slate-400 w-[72%] p-1 pl-3 text-sm"
+                onChangeText={setEmail} 
+                value={email}
+                keyboardType="email-address"
+                placeholder="Email"
+              />
+              <Pressable className="p-2 bg-sky-600 rounded w-[25%] flex items-center mr-2"><Text className="text-white font-bold">Guardar <Entypo name="save" size={16} color="white" /></Text></Pressable>
+            </View>
+          </View>
+          <View className="mx-2 px-3 border-b-2 border-sky-800 py-2 rounded">
             <Text className="text-xl mt-3 font-bold text-slate-800">
               Envío de reportes automatico
             </Text>
@@ -103,7 +123,7 @@ export default function ReportConfig() {
             Envio manual:
           </Text>
           <Pressable
-            className="p-3 bg-sky-400 rounded mx-2"
+            className="p-3 bg-sky-600 rounded mx-2"
             onPress={sendReport}
           >
             <Text className="text-center text-xl font-bold text-white">
@@ -122,31 +142,3 @@ export default function ReportConfig() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-});

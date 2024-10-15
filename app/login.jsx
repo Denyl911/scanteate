@@ -17,9 +17,17 @@ export default function Login() {
   const [pass, setPass] = useState('');
 
   const login = async () => {
-    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
-    const user = users.find((el) => el.email == email && el.password == pass);
-    if (!user) {
+    const res = await fetch('http://scanteate.fun/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        email: email,
+        password: pass 
+      }
+    })
+    if (!res.status == 200) {
       ToastAndroid.showWithGravity(
         'Datos incorrectos',
         ToastAndroid.LONG,
@@ -27,8 +35,10 @@ export default function Login() {
       );
       console.log('Datos incorrectos');
     } else {
-      await AsyncStorage.setItem('user', JSON.stringify(user))
-      router.replace('Home');
+      const data = await res.json()
+      await AsyncStorage.setItem('user', JSON.stringify(data.user))
+      await AsyncStorage.setItem('token', JSON.stringify(data.token))
+      router.replace('/home');
     }
   };
   return (
