@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   Animated,
   Easing,
-} from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import Tabs from "../components/Tabs";
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Tabs from '../components/Tabs';
 
 const randomArrFunction = (arr) => {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -18,20 +18,21 @@ const randomArrFunction = (arr) => {
   }
   return arr;
 };
+
 const gameCardsFunction = () => {
   const icons = [
-    "paw",
-    "paw",
-    "heart",
-    "heart",
-    "tree",
-    "tree",
-    "star",
-    "star",
-    "bell",
-    "bell",
-    "gift",
-    "gift",
+    'paw',
+    'paw',
+    'heart',
+    'heart',
+    'tree',
+    'tree',
+    'star',
+    'star',
+    'bell',
+    'bell',
+    'gift',
+    'gift',
   ];
   const randomIcons = randomArrFunction(icons);
   return randomIcons.map((icon, index) => ({
@@ -40,13 +41,53 @@ const gameCardsFunction = () => {
     isFlipped: false,
   }));
 };
+
 export default function Memory() {
   const [cards, setCards] = useState(gameCardsFunction());
   const [selectedCards, setSelectedCards] = useState([]);
   const [matches, setMatches] = useState(0);
   const [winMessage, setWinMessage] = useState(new Animated.Value(0));
   const [gameWon, setGameWon] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setTimer((timer) => timer + 1);
+      }, 1000);
+    } else if (!isActive && timer !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, timer]);
+
+  const startTimer = () => {
+    setIsActive(true);
+  };
+
+  const stopTimer = () => {
+    setIsActive(false);
+  };
+
+  const resetTimer = () => {
+    setTimer(0);
+    setIsActive(false);
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  };
+
   const cardClickFunction = (card) => {
+    if (!isActive) {
+      startTimer();
+    }
     if (!gameWon && selectedCards.length < 2 && !card.isFlipped) {
       const updatedSelectedCards = [...selectedCards, card];
       const updatedCards = cards.map((c) =>
@@ -61,6 +102,7 @@ export default function Memory() {
           if (matches + 1 === cards.length / 2) {
             geekWinGameFunction();
             setGameWon(true);
+            stopTimer();
           }
         } else {
           setTimeout(() => {
@@ -76,6 +118,7 @@ export default function Memory() {
       }
     }
   };
+
   const geekWinGameFunction = () => {
     Animated.timing(winMessage, {
       toValue: 1,
@@ -84,23 +127,31 @@ export default function Memory() {
       useNativeDriver: false,
     }).start();
   };
+
   useEffect(() => {
     if (matches === cards.length / 2) {
       geekWinGameFunction();
       setGameWon(true);
+      stopTimer();
     }
   }, [matches]);
+
   const msg = `Encotrados: ${matches} / ${cards.length / 2}`;
+
   return (
     <View style={styles.container}>
       <Text className="text-5xl text-sky-700 font-bold">SCANTEATE</Text>
       <Text style={styles.header2}>MEMORAMA</Text>
+      <Text className="text-center mb-7">Encuentra las imagenes iguales</Text>
+      <Text className="text-center font-bold text-xl">Cronómetro</Text>
+      <Text style={styles.timerText}>{formatTime(timer)}</Text>
       <Text style={styles.matchText}>{msg}</Text>
       {gameWon ? (
         <View style={styles.winMessage}>
           <View style={styles.winMessageContent}>
             <Text style={styles.winText}>Felicidades!</Text>
             <Text style={styles.winText}>Has Ganado!</Text>
+            <Text style={styles.winTimeText}>Tiempo: {formatTime(timer)}</Text>
           </View>
           <View className="mt-5"></View>
           <Button
@@ -111,6 +162,7 @@ export default function Memory() {
               setMatches(0);
               setWinMessage(new Animated.Value(0));
               setGameWon(false);
+              resetTimer();
             }}
           />
         </View>
@@ -133,69 +185,81 @@ export default function Memory() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(241 245 249)',
   },
   header1: {
     fontSize: 36,
     marginBottom: 10,
-    color: "green",
+    color: 'green',
   },
   header2: {
     fontSize: 18,
-    marginBottom: 20,
-    color: "black",
-    fontWeight: "bold",
+    marginBottom: 10,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  timerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'rgb(3, 105, 161)',
+    marginBottom: 10,
   },
   matchText: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
+    fontWeight: 'bold',
+    color: 'black',
     marginBottom: 10,
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   card: {
     width: 80,
     height: 80,
     margin: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0284c7",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0284c7',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: 'black',
   },
   cardFlipped: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   cardIcon: {
-    color: "blue",
+    color: 'rgb(3, 105, 161)',
   },
   winMessage: {
-    position: "absolute",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 1,
   },
   winMessageContent: {
-    backgroundColor: "rgba(14, 165, 233, 0.7)",
+    backgroundColor: 'rgba(14, 165, 233, 0.7)',
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   winText: {
     fontSize: 36,
-    color: "white",
+    color: 'white',
+  },
+  winTimeText: {
+    fontSize: 24,
+    color: 'white',
+    marginTop: 10,
   },
 });
