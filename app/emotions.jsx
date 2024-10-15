@@ -1,5 +1,5 @@
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { useCallback, useState } from "react";
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useCallback, useState } from 'react';
 import {
   View,
   Pressable,
@@ -7,37 +7,35 @@ import {
   StyleSheet,
   Image,
   StatusBar,
-} from "react-native";
-import Anthropic from "@anthropic-ai/sdk";
-import { manipulateAsync, FlipType, SaveFormat } from "expo-image-manipulator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
-import { AntDesign } from "@expo/vector-icons";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import SmallTabs from "../components/SmallTabs";
+} from 'react-native';
+import Anthropic from '@anthropic-ai/sdk';
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import SmallTabs from '../components/SmallTabs';
 
 export default function Emotions() {
   const anthropic = new Anthropic({
-    apiKey:
-      process.env.EXPO_PUBLIC_ANTHROPIC_API
+    apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API,
   });
 
-  const [type, setType] = useState("front");
+  const [type, setType] = useState('front');
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
-  const [emotion, setEmotion] = useState("Escaner de Emociones");
-  const [scanText, setScanText] = useState("ESCANEAR");
+  const [emotion, setEmotion] = useState('Escaner de Emociones');
+  const [scanText, setScanText] = useState('ESCANEAR');
   const [fotoUri, setFotoUri] = useState(null);
-  const [color, setColor] = useState("text-sky-900");
+  const [color, setColor] = useState('text-sky-900');
   const [user, setUser] = useState({
     id: 0,
-    name: "",
-    type: "",
+    name: '',
   });
   const getUser = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem("user")) || user);
+    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
   };
   useFocusEffect(
     useCallback(() => {
@@ -46,36 +44,36 @@ export default function Emotions() {
   );
 
   const emotionColors = {
-    Felicidad: "text-green-500",
-    Alegría: "text-green-500",
-    Tristeza: "text-yellow-400",
-    Enojo: "text-rose-600",
-    Ira: "text-rose-600",
-    Miedo: "text-yellow-400",
-    Disgusto: "text-yellow-400",
-    Sorpresa: "text-green-500",
-    No: "text-sky-900",
+    Felicidad: 'text-green-500',
+    Alegría: 'text-green-500',
+    Tristeza: 'text-yellow-400',
+    Enojo: 'text-rose-600',
+    Ira: 'text-rose-600',
+    Miedo: 'text-yellow-400',
+    Disgusto: 'text-yellow-400',
+    Sorpresa: 'text-green-500',
+    No: 'text-sky-900',
   };
 
   function toggleCameraType() {
-    setType((current) => (current === "back" ? "front" : "back"));
+    setType((current) => (current === 'back' ? 'front' : 'back'));
   }
 
   async function scanFace() {
     if (fotoUri) {
       setFotoUri(null);
-      setScanText("ESCANEAR");
-      setEmotion("Escaner de Emociones");
-      setColor("text-sky-900");
+      setScanText('ESCANEAR');
+      setEmotion('Escaner de Emociones');
+      setColor('text-sky-900');
       return;
     }
-    setEmotion("Escaneando...");
-    setScanText("Volver");
+    setEmotion('Escaneando...');
+    setScanText('Volver');
     try {
       const img = await cameraRef.takePictureAsync({
         base64: true,
       });
-      if (type == "front") {
+      if (type == 'front') {
         const fliped = await manipulateAsync(
           img.uri,
           [{ flip: FlipType.Horizontal }],
@@ -86,22 +84,22 @@ export default function Emotions() {
         setFotoUri(img.uri);
       }
       const msg = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20240620",
+        model: 'claude-3-5-sonnet-20240620',
         max_tokens: 20,
         messages: [
           {
-            role: "user",
+            role: 'user',
             content: [
               {
-                type: "image",
+                type: 'image',
                 source: {
-                  type: "base64",
-                  media_type: "image/jpeg",
+                  type: 'base64',
+                  media_type: 'image/jpeg',
                   data: img.base64,
                 },
               },
               {
-                type: "text",
+                type: 'text',
                 text: "Menciona unicamente el nombre de la emocion presente en el rostro y si no encuentras ningun rostro di solamente 'No'",
               },
             ],
@@ -110,11 +108,11 @@ export default function Emotions() {
       });
       const emo = msg.content[0].text;
 
-      if (emo != "No") {
+      if (emo != 'No') {
         setEmotion(emo);
         setColor(emotionColors[emo]);
         const emotions =
-          JSON.parse(await AsyncStorage.getItem("emotions")) || [];
+          JSON.parse(await AsyncStorage.getItem('emotions')) || [];
         const data = {
           userId: user.id,
           emocion: emo,
@@ -123,9 +121,9 @@ export default function Emotions() {
           date: Date.now(),
         };
         emotions.unshift(data);
-        await AsyncStorage.setItem("emotions", JSON.stringify(emotions));
+        await AsyncStorage.setItem('emotions', JSON.stringify(emotions));
       } else {
-        setEmotion("No se detectó ninguna");
+        setEmotion('No se detectó ninguna');
       }
     } catch (e) {
       console.log(e);
@@ -138,7 +136,7 @@ export default function Emotions() {
         <Image
           style={{
             borderRadius: 8,
-            borderColor: "#000",
+            borderColor: '#000',
             borderWidth: 2,
             height: 472,
             width: 382,
@@ -199,9 +197,9 @@ export default function Emotions() {
         </View>
         <View
           style={{
-            display: fotoUri ? "none" : "block",
+            display: fotoUri ? 'none' : 'block',
             marginHorizontal: 20,
-            borderColor: "#000",
+            borderColor: '#000',
             borderWidth: 4,
             borderRadius: 12,
             height: 480,
@@ -239,7 +237,7 @@ export default function Emotions() {
         </Pressable>
         <Pressable
           className="p-2 rounded-full  bg-slate-200 active:bg-slate-300"
-          onPress={() => router.navigate("/galery")}
+          onPress={() => router.navigate('/galery')}
         >
           <MaterialIcons name="photo-library" size={40} color="rgb(8 47 73)" />
         </Pressable>
@@ -252,7 +250,7 @@ export default function Emotions() {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
-    borderColor: "#000",
+    borderColor: '#000',
     borderWidth: 4,
     borderRadius: 12,
     height: 480,
@@ -260,7 +258,7 @@ const styles = StyleSheet.create({
   },
   face: {
     marginHorizontal: 20,
-    borderColor: "#000",
+    borderColor: '#000',
     borderWidth: 4,
     borderRadius: 12,
     height: 420,
@@ -272,18 +270,18 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "transparent",
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
     margin: 64,
   },
   button: {
     flex: 1,
-    alignSelf: "flex-end",
-    alignItems: "center",
+    alignSelf: 'flex-end',
+    alignItems: 'center',
   },
   text: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
 });

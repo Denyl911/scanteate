@@ -56,7 +56,7 @@ export default function HomeScreen() {
             onPress={() => router.navigate("/emotions")}
             className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-24"
           >
-            <Text className="text-white text-xl">Emociones</Text>
+            <Text className="text-white text-xl font-bold">Emociones</Text>
             <Text className="text-white pr-16">
               Escaner de emociones faciales para niños y adultos
             </Text>
@@ -69,7 +69,7 @@ export default function HomeScreen() {
             onPress={() => router.navigate("/games")}
             className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20"
           >
-            <Text className="text-white text-xl">Juegos</Text>
+            <Text className="text-white text-xl font-bold">Juegos</Text>
             <Text className="text-white">
               Juegos para poner en práctica los conocimientos
             </Text>
@@ -84,7 +84,7 @@ export default function HomeScreen() {
             }
             className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40"
           >
-            <Text className="text-white text-xl">
+            <Text className="text-white text-xl font-bold">
               Actividades
             </Text>
             <Text className="text-white pr-6">

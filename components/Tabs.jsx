@@ -34,7 +34,7 @@ export default function Tabs() {
   }, []);
 
   return (
-    <View className={`bg-white rounded-t-lg w-screen px-8 py-5 absolute bottom-0 ${isOpen ? 'hidden' : ''}`}>
+    <View className={`bg-white rounded-t-xl w-screen px-8 py-5 absolute bottom-0 ${isOpen ? 'hidden' : ''}`}>
       <View className="flex items-center justify-between flex-center flex-row">
         <Pressable
           onPress={() => router.navigate('/home')}
