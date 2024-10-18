@@ -18,10 +18,17 @@ export default function Register() {
   const [emailT, setEmailT] = useState("");
   const [pass, setPass] = useState("");
   const [pass2, setPass2] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [uType, setuType] = useState("Alumno");
+
+  const changeType = () => {
+    if (uType == "Alumno") {
+      setuType("Profesor");
+    } else {
+      setuType("Alumno");
+    }
+  };
 
   const registerUser = async () => {
-    setLoading(true)
     try {
       if (name && emailT && pass && pass2) {
         if (pass != pass2) {
@@ -32,31 +39,27 @@ export default function Register() {
           );
           return;
         }
-        const res = await fetch('https://api.scanteate.fun/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: name,
-            email: emailT,
-            password: pass 
-          })
-        })
-        if (!res.status == 201) {
-          ToastAndroid.showWithGravity(
-            'Oops ocurrio un error',
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER
-          );
-          console.log(await res.json());
-        } else {
-          const data = await res.json()
-          console.log(data);
-          await AsyncStorage.setItem('user', JSON.stringify(data.user))
-          await AsyncStorage.setItem('token', JSON.stringify(data.token))
-          router.replace('/home');
+        const dat = await AsyncStorage.getItem("users");
+        let users = [];
+        if (dat) {
+          users = JSON.parse(dat);
         }
+        const user = {
+          id: users.length + 1,
+          name: name,
+          emailT: emailT,
+          password: pass,
+          type: uType,
+        };
+        users.push(user);
+        await AsyncStorage.setItem("users", JSON.stringify(users));
+        await AsyncStorage.setItem("user", JSON.stringify(user));
+        ToastAndroid.showWithGravity(
+          "Registrado exitosamente",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+        router.replace("/home");
       } else {
         ToastAndroid.showWithGravity(
           "Faltan campos por llenar",
@@ -64,7 +67,6 @@ export default function Register() {
           ToastAndroid.CENTER
         );
       }
-      
     } catch (e) {
       ToastAndroid.showWithGravity(
         "Opps ocurrio un error!",
@@ -73,7 +75,6 @@ export default function Register() {
       );
       console.log(e);
     }
-    setLoading(false)
   };
   return (
     <ScrollView className="bg-white">
@@ -100,7 +101,6 @@ export default function Register() {
             onChangeText={setEmailT}
             value={emailT}
             inputMode="email-address"
-            autoCapitalize="none"
             placeholder="Email del tutor"
           />
           <TextInput
@@ -108,7 +108,6 @@ export default function Register() {
             onChangeText={setPass}
             value={pass}
             secureTextEntry={true}
-            autoCapitalize="none"
             placeholder="Contraseña"
           />
           <TextInput
@@ -116,14 +115,12 @@ export default function Register() {
             onChangeText={setPass2}
             value={pass2}
             secureTextEntry={true}
-            autoCapitalize="none"
             placeholder="Confirmar contraseña"
           />
         </KeyboardAvoidingView>
         <View className="bg-white flex items-center">
           <Pressable
             onPress={registerUser}
-            disabled={loading}
             className="rounded-xl  shadow shadow-black bg-sky-800 py-3 px-4 mt-20"
           >
             <Text className="text-white text-lg">Registrarme</Text>

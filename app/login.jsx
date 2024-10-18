@@ -17,36 +17,18 @@ export default function Login() {
   const [pass, setPass] = useState('');
 
   const login = async () => {
-    try {
-      const res = await fetch('https://api.scanteate.fun/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: pass 
-        })
-      })
-      if (!res.status == 200) {
-        ToastAndroid.showWithGravity(
-          'Datos incorrectos',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER
-        );
-      } else {
-        const data = await res.json()
-        await AsyncStorage.setItem('user', JSON.stringify(data.user))
-        await AsyncStorage.setItem('token', JSON.stringify(data.token))
-        router.replace('/home');
-      }
-    } catch (e) {
+    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
+    const user = users.find((el) => el.email == email && el.password == pass);
+    if (!user) {
       ToastAndroid.showWithGravity(
         'Datos incorrectos',
         ToastAndroid.LONG,
         ToastAndroid.CENTER
       );
-      console.log(e);
+      console.log('Datos incorrectos');
+    } else {
+      await AsyncStorage.setItem('user', JSON.stringify(user))
+      router.replace('Home');
     }
   };
   return (
@@ -68,7 +50,6 @@ export default function Login() {
             value={email}
             keyboardType="email-address"
             placeholder="Email"
-            autoCapitalize="none"
           />
           <TextInput
             className="mt-12 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
@@ -76,7 +57,6 @@ export default function Login() {
             value={pass}
             secureTextEntry={true}
             placeholder="Contraseña"
-            autoCapitalize="none"
           />
           <Pressable
             onPress={login}
