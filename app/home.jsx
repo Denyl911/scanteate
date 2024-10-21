@@ -30,6 +30,7 @@ export default function HomeScreen() {
       getUser();
     }, [])
   );
+
   return (
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
@@ -48,15 +49,18 @@ export default function HomeScreen() {
           <Text className="text-white text-center text-md mt-2 font-bold">
             {user.name}
           </Text>
+          <Text className="text-white text-center mt-1 mb-0 text-sm">
+            {user.type}
+          </Text>
         </View>
       </View>
       <View style={styles.container}>
-        <ScrollView className=" mb-12">
+        <ScrollView className="mb-12">
           <Pressable
             onPress={() => router.navigate("/emotions")}
             className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-24"
           >
-            <Text className="text-white text-xl font-bold">Emociones</Text>
+            <Text className="text-white text-xl">Emociones</Text>
             <Text className="text-white pr-16">
               Escaner de emociones faciales para niños y adultos
             </Text>
@@ -69,7 +73,7 @@ export default function HomeScreen() {
             onPress={() => router.navigate("/games")}
             className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20"
           >
-            <Text className="text-white text-xl font-bold">Juegos</Text>
+            <Text className="text-white text-xl">Juegos</Text>
             <Text className="text-white">
               Juegos para poner en práctica los conocimientos
             </Text>
@@ -79,20 +83,31 @@ export default function HomeScreen() {
             ></Image>
           </Pressable>
           <Pressable
-            onPress={() =>
-              router.navigate("/actividades")
-            }
-            className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40"
+            onPress={() => router.navigate("/actividades")}
+            className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-12"
           >
-            <Text className="text-white text-xl font-bold">
-              Actividades
-            </Text>
+            <Text className="text-white text-xl">Actividades</Text>
             <Text className="text-white pr-6">
               Actividades imprimibles para el desarrollo
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"
               source={require("../assets/images/cronograma.png")}
+            ></Image>
+          </Pressable>
+          {/* Nueva sección "Cuentos" */}
+          <Pressable
+            onPress={() => router.navigate("/cuentos")}
+            className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mb-40"
+          >
+            <Text className="text-white text-xl">Cuentos</Text>
+            <Text className="text-white pr-6">
+              Historias educativas para niños con pictogramas!!!
+            </Text>
+            <Image
+              className="absolute right-0 bottom-2"
+              source={require("../assets/images/cuentos.png")}
+              style={[styles.image, styles.imageCuentos]}  // Ajuste de estilo para mover la imagen hacia arriba
             ></Image>
           </Pressable>
         </ScrollView>
@@ -105,5 +120,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     height: 700,
+  },
+  image: {
+    width: 95,  // Tamaño de imagen uniforme
+    height: 95,
+  },
+  imageCuentos: {
+    bottom: 30,  // Mueve la imagen hacia arriba (ajusta el valor según necesidad)
   },
 });

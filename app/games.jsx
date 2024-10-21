@@ -75,28 +75,34 @@ export default function Games() {
               className="absolute right-6 bottom-6"
             />
           </Pressable>
+          
+          
+          
           <Pressable
             onPress={() => router.navigate(`/reportes/${user.id}`)}
             className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
           >
-            <Text className="text-white text-xl">Colores</Text>
+            <Text className="text-white text-xl">¡Crea tus propias emociones!</Text>
             <Text className="text-white pe-3 pr-3">
-              Aprende como se combinan los colores
+              ¡Aprende emociones creando tu propio AVATAR!
             </Text>
             <Entypo
               name="brush"
-              size={40}
-              color="rgb(252 211 77);"
-              className="absolute right-4 bottom-4"
+              size={45}
+              color="rgb(240 171 252);"
+              className="absolute right-4 bottom-7"
             />
           </Pressable>
+
+
+
           <Pressable
-            onPress={logout}
+            onPress={()=> router.navigate("/imitame")}
             className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-8 pr-5"
           >
-            <Text className="text-white text-xl">Emociones</Text>
+            <Text className="text-white text-xl">Imitame</Text>
             <Text className="text-white pe-3 pr-3">
-              Distingue los dintisntos tipos de emociones
+              Aprender emociones, imitando emojis!
             </Text>
             <MaterialIcons
               name="emoji-emotions"
@@ -117,3 +123,6 @@ const styles = StyleSheet.create({
     height: 700,
   },
 });
+
+
+
