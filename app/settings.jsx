@@ -12,6 +12,7 @@ import {
   StyleSheet,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Octicons from "@expo/vector-icons/Octicons";
 import Tabs from "../components/Tabs";
 
@@ -59,9 +60,18 @@ export default function Settings() {
       </View>
       <View style={styles.container}>
         <ScrollView className="mt-12">
+        <Pressable
+            onPress={() => router.navigate("/createAvatar")}
+            className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mt-20"
+          >
+            <Text className="text-white text-xl">Mi Avatar</Text>
+            <Text className="text-white">Personaliza tu avatar</Text>
+            <FontAwesome5 name="user-astronaut" size={43} color="rgb(254 240 138)"
+              className="absolute right-6 bottom-5" />
+          </Pressable>
           <Pressable
             onPress={() => router.navigate("/galery")}
-            className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-24"
+            className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-8"
           >
             <Text className="text-white text-xl">Galería</Text>
             <Text className="text-white">Galería de fichas de emociones</Text>

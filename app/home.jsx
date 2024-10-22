@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
+import { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -10,17 +10,17 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
-} from "react-native";
+} from 'react-native';
 
-import Tabs from "../components/Tabs";
+import Tabs from '../components/Tabs';
 
 export default function HomeScreen() {
   const [user, setUser] = useState({
-    name: "",
-    type: "",
+    name: '',
+    type: '',
   });
   const getUser = async () => {
-    const data = await AsyncStorage.getItem("user");
+    const data = await AsyncStorage.getItem('user');
     if (data) {
       setUser(JSON.parse(data));
     }
@@ -33,16 +33,16 @@ export default function HomeScreen() {
   return (
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
-      <View style={{ marginTop: StatusBar.currentHeight }}>
+      <View style={{ marginTop: StatusBar.currentHeight, zIndex:99 }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require("../assets/images/home2.jpg")}
+          source={require('../assets/images/home2.jpg')}
         ></Image>
         <View className="-mt-48 flex items-center">
           <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 mt-10 flex items-center justify-center">
             <Image
               className="w-14 h-14"
-              source={require("../assets/images/user3.png")}
+              source={require('../assets/images/user3.png')}
             ></Image>
           </View>
           <Text className="text-white text-center text-md mt-2 font-bold">
@@ -53,7 +53,7 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <ScrollView className=" mb-12">
           <Pressable
-            onPress={() => router.navigate("/emotions")}
+            onPress={() => router.navigate('/emotions')}
             className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-24"
           >
             <Text className="text-white text-xl font-bold">Emociones</Text>
@@ -62,11 +62,11 @@ export default function HomeScreen() {
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"
-              source={require("../assets/images/juegos.png")}
+              source={require('../assets/images/juegos.png')}
             ></Image>
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/games")}
+            onPress={() => router.navigate('/games')}
             className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20"
           >
             <Text className="text-white text-xl font-bold">Juegos</Text>
@@ -75,26 +75,37 @@ export default function HomeScreen() {
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"
-              source={require("../assets/images/juegos2.png")}
+              source={require('../assets/images/juegos2.png')}
             ></Image>
           </Pressable>
           <Pressable
-            onPress={() =>
-              router.navigate("/actividades")
-            }
+            onPress={() => router.navigate('/cuentos')}
+            className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mb-20"
+          >
+            <Text className="text-white text-xl font-bold">Cuentos</Text>
+            <Text className="text-white pr-20">
+              Historias educativas para niños con pictogramas!!!
+            </Text>
+            <Image
+              className="absolute right-0 bottom-2"
+              source={require('../assets/images/cuentos.png')}
+              style={[styles.image, styles.imageCuentos]}
+            ></Image>
+          </Pressable>
+          <Pressable
+            onPress={() => router.navigate('/actividades')}
             className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40"
           >
-            <Text className="text-white text-xl font-bold">
-              Actividades
-            </Text>
+            <Text className="text-white text-xl font-bold">Actividades</Text>
             <Text className="text-white pr-6">
               Actividades imprimibles para el desarrollo
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"
-              source={require("../assets/images/cronograma.png")}
+              source={require('../assets/images/cronograma.png')}
             ></Image>
           </Pressable>
+          
         </ScrollView>
       </View>
       <Tabs className="absolute bottom-0" />
@@ -105,5 +116,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     height: 700,
+  },
+  image: {
+    width: 95, // Tamaño de imagen uniforme
+    height: 95,
+  },
+  imageCuentos: {
+    bottom: 30, // Mueve la imagen hacia arriba (ajusta el valor según necesidad)
   },
 });

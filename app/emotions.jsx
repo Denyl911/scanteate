@@ -16,6 +16,7 @@ import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import * as Speech from 'expo-speech';
 import SmallTabs from '../components/SmallTabs';
 
 export default function Emotions() {
@@ -30,6 +31,7 @@ export default function Emotions() {
   const [scanText, setScanText] = useState('ESCANEAR');
   const [fotoUri, setFotoUri] = useState(null);
   const [color, setColor] = useState('text-sky-900');
+  const [border, setBorder] = useState('border-sky-900');
   const [user, setUser] = useState({
     id: 0,
     name: '',
@@ -59,6 +61,12 @@ export default function Emotions() {
     setType((current) => (current === 'back' ? 'front' : 'back'));
   }
 
+  const sayEmotion = () => {
+    if (emotion  != 'Escaner de Emociones') {
+      Speech.speak(emotion, { language: 'es' });
+    }
+  }
+
   async function scanFace() {
     if (fotoUri) {
       setFotoUri(null);
@@ -68,7 +76,7 @@ export default function Emotions() {
       return;
     }
     setEmotion('Escaneando...');
-    setScanText('Volver');
+    setScanText('Volver a Escanear');
     try {
       const img = await cameraRef.takePictureAsync({
         base64: true,
@@ -110,7 +118,9 @@ export default function Emotions() {
 
       if (emo != 'No') {
         setEmotion(emo);
+        Speech.speak(emo, { language: 'es' });
         setColor(emotionColors[emo]);
+        setBorder(color.replace('text', 'border'))
         const emotions =
           JSON.parse(await AsyncStorage.getItem('emotions')) || [];
         const data = {
@@ -134,13 +144,7 @@ export default function Emotions() {
     if (props.show) {
       return (
         <Image
-          style={{
-            borderRadius: 8,
-            borderColor: '#000',
-            borderWidth: 2,
-            height: 472,
-            width: 382,
-          }}
+          className={`rounded-lg ${border} border-2 h-[472] w-[382]`}
           source={{
             uri: fotoUri,
           }}
@@ -186,25 +190,21 @@ export default function Emotions() {
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
       <View style={{ marginTop: StatusBar.currentHeight }}></View>
+      <View className="flex flex-row justify-between items-center p-2 bg-white">
+        <Pressable
+          className="bg-slate-300 p-2 rounded-lg opacity-50 z-40"
+          onPress={() => router.back()}
+        >
+          <AntDesign name="left" size={24} color="#0369a1" />
+        </Pressable>
+        <Text className="text-slate-500 text-center font-bold text-2xl">
+          SCAN<Text className="text-yellow-500">T<Text className="text-green-500">E</Text><Text className="text-sky-500">A</Text></Text>TE
+        </Text>
+        <View className='px-5'></View>
+      </View>
       <View className="flex- items-center">
-        <View className="w-full">
-          <Pressable
-            className=" bg-slate-200 p-2 rounded-lg z-40 w-12 my-2 ml-2"
-            onPress={() => router.back()}
-          >
-            <AntDesign name="left" size={24} color="#0369a1" />
-          </Pressable>
-        </View>
         <View
-          style={{
-            display: fotoUri ? 'none' : 'block',
-            marginHorizontal: 20,
-            borderColor: '#000',
-            borderWidth: 4,
-            borderRadius: 12,
-            height: 480,
-            width: 390,
-          }}
+          className={`h-[480] w-[390] rounded-xl border-4 ${border} mx-5 ${fotoUri ? 'hidden' : 'block'}`}
         >
           <CameraView
             ref={(ref) => setCameraRef(ref)}
@@ -216,13 +216,16 @@ export default function Emotions() {
         <ShowImage show={fotoUri ? true : false}></ShowImage>
       </View>
       <View>
+        <Pressable onPress={sayEmotion}>
         <Text className={`mt-16 text-4xl font-bold text-center ${color}`}>
           {emotion}
         </Text>
+        </Pressable>
+        <Text className="text-center">Toma una foto y escanea la emoción del rostro</Text>
       </View>
-      <View className="flex flex-row justify-between items-center mt-16 mx-5">
+      <View className="flex flex-row justify-between items-center mt-10 mx-4">
         <Pressable
-          className="p-2 rounded-full bg-slate-200 active:bg-slate-300"
+          className="p-2 rounded-xl bg-slate-200 active:bg-slate-300"
           onPress={toggleCameraType}
         >
           <FontAwesome6 name="camera-rotate" size={38} color="rgb(8 47 73)" />
@@ -236,7 +239,7 @@ export default function Emotions() {
           </Text>
         </Pressable>
         <Pressable
-          className="p-2 rounded-full  bg-slate-200 active:bg-slate-300"
+          className="p-2 rounded-xl  bg-slate-200 active:bg-slate-300"
           onPress={() => router.navigate('/galery')}
         >
           <MaterialIcons name="photo-library" size={40} color="rgb(8 47 73)" />

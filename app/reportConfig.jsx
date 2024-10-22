@@ -122,7 +122,7 @@ export default function ReportConfig() {
               </Pressable>
             </View>
           </View>
-          <View className="mx-2 pl-1 border-b-2 border-slate-400 py-1 rounded flex flex-row content-center justify-between">
+          <View className="mx-2 pl-1 py-1 rounded flex flex-row content-center justify-between">
             <Text className="text-xl mt-3 font-bold text-slate-800">
               Envío de reportes automatico
             </Text>
@@ -134,7 +134,7 @@ export default function ReportConfig() {
               value={isEnabled}
             />
           </View>
-          <View className="mb-10 mt-8 px-2">
+          <View className="mb-10 mt-6 px-2">
             <Text className="text-slate-800 font-bold text-xl">
               Periodo de envio:{' '}
             </Text>

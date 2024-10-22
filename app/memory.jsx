@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   View,
   Text,
   Button,
   StyleSheet,
-  TouchableOpacity,
   Animated,
   Easing,
+  Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Tabs from '../components/Tabs';
@@ -25,14 +26,22 @@ const gameCardsFunction = () => {
     'paw',
     'heart',
     'heart',
-    'tree',
-    'tree',
+    // 'tree',
+    // 'tree',
     'star',
     'star',
     'bell',
     'bell',
     'gift',
     'gift',
+    'rocket',
+    'rocket',
+    'leaf',
+    'leaf',
+    'car',
+    'car',
+    'bicycle',
+    'bicycle',
   ];
   const randomIcons = randomArrFunction(icons);
   return randomIcons.map((icon, index) => ({
@@ -48,6 +57,8 @@ export default function Memory() {
   const [matches, setMatches] = useState(0);
   const [winMessage, setWinMessage] = useState(new Animated.Value(0));
   const [gameWon, setGameWon] = useState(false);
+  const [round, setRound] = useState(1); // Estado para la ronda actual
+  const maxRounds = 3; // Total de rondas
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
@@ -100,9 +111,15 @@ export default function Memory() {
           setMatches(matches + 1);
           setSelectedCards([]);
           if (matches + 1 === cards.length / 2) {
-            geekWinGameFunction();
-            setGameWon(true);
-            stopTimer();
+            if (round < maxRounds) {
+              setTimeout(() => {
+                nextRound(); // Pasar a la siguiente ronda
+              }, 500);
+            } else {
+              geekWinGameFunction(); // Si es la última ronda, mostrar victoria
+              setGameWon(true);
+              stopTimer();
+            }
           }
         } else {
           setTimeout(() => {
@@ -119,6 +136,14 @@ export default function Memory() {
     }
   };
 
+  const nextRound = () => {
+    setRound(round + 1);
+    setCards(gameCardsFunction());
+    setSelectedCards([]);
+    setMatches(0);
+    setWinMessage(new Animated.Value(0));
+  };
+
   const geekWinGameFunction = () => {
     Animated.timing(winMessage, {
       toValue: 1,
@@ -128,56 +153,70 @@ export default function Memory() {
     }).start();
   };
 
-  useEffect(() => {
-    if (matches === cards.length / 2) {
-      geekWinGameFunction();
-      setGameWon(true);
-      stopTimer();
-    }
-  }, [matches]);
+  const resetGame = () => {
+    setCards(gameCardsFunction());
+    setSelectedCards([]);
+    setMatches(0);
+    setWinMessage(new Animated.Value(0));
+    setGameWon(false);
+    resetTimer();
+    setRound(1); // Reiniciar la ronda a 1
+  };
 
-  const msg = `Encotrados: ${matches} / ${cards.length / 2}`;
+  // useEffect(() => {
+  //   if (matches === cards.length / 2) {
+  //     geekWinGameFunction();
+  //     setGameWon(true);
+  //     stopTimer();
+  //   }
+  // }, [matches]);
+
+  const msg = `${matches}${cards.length / 2}`;
 
   return (
     <View style={styles.container}>
-      <Text className="text-5xl text-sky-700 font-bold">SCANTEATE</Text>
-      <Text style={styles.header2}>MEMORAMA</Text>
-      <Text className="text-center mb-7">Encuentra las imagenes iguales</Text>
-      <Text className="text-center font-bold text-xl">Cronómetro</Text>
-      <Text style={styles.timerText}>{formatTime(timer)}</Text>
-      <Text style={styles.matchText}>{msg}</Text>
+      <Text className="text-4xl text-sky-700 font-bold mt-14">MEMORAMA</Text>
+      <View>
+      {/* <Button className="relative right-5 top-5" title="Reiniciar" onPress={resetGame} /> */}
+      </View>
+      <Text className="text-center mb-3">Encuentra las imagenes iguales</Text>
+      <Text className="text-center font-bold text-xl ,b-2">
+        Ronda <Text className="text-sky-600">{round}</Text> de {maxRounds}
+      </Text>
+      <View className="flex flex-row content-center justify-between w-screen px-5">
+        <Text className="text-center font-bold text-xl">
+          Cronómetro <Text className="text-sky-600">{formatTime(timer)}</Text>
+        </Text>
+        <Text className="text-center font-bold text-xl">
+          Encontrados <Text className="text-sky-600">{matches} </Text>/{' '}
+          {cards.length / 2}
+        </Text>
+      </View>
       {gameWon ? (
         <View style={styles.winMessage}>
           <View style={styles.winMessageContent}>
-            <Text style={styles.winText}>Felicidades!</Text>
-            <Text style={styles.winText}>Has Ganado!</Text>
+            <Text style={styles.winText}>¡Felicidades!</Text>
+            <Text style={styles.winText}>Has ganado el juego!</Text>
             <Text style={styles.winTimeText}>Tiempo: {formatTime(timer)}</Text>
           </View>
           <View className="mt-5"></View>
-          <Button
-            title="Reiniciar"
-            onPress={() => {
-              setCards(gameCardsFunction());
-              setSelectedCards([]);
-              setMatches(0);
-              setWinMessage(new Animated.Value(0));
-              setGameWon(false);
-              resetTimer();
-            }}
-          />
+          <Button title="Reiniciar" onPress={resetGame} />
         </View>
       ) : (
         <View style={styles.grid}>
           {cards.map((card) => (
-            <TouchableOpacity
-              key={card.id}
-              style={[styles.card, card.isFlipped && styles.cardFlipped]}
-              onPress={() => cardClickFunction(card)}
-            >
-              {card.isFlipped ? (
-                <Icon name={card.symbol} size={40} style={styles.cardIcon} />
-              ) : null}
-            </TouchableOpacity>
+            <Pressable key={card.id} onPress={() => cardClickFunction(card)} style={[styles.card, card.isFlipped && styles.cardFlipped]}>
+              <LinearGradient
+                colors={
+                  card.isFlipped ? ['#f4f4f4', '#f4f4f4'] : ['#4dabf5', '#0284c7']
+                }
+                style={[styles.card, card.isFlipped && styles.cardFlipped]}
+              >
+                {card.isFlipped ? (
+                  <Icon name={card.symbol} size={40} style={styles.cardIcon} />
+                ) : null}
+              </LinearGradient>
+            </Pressable>
           ))}
         </View>
       )}
@@ -190,7 +229,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'rgb(241 245 249)',
   },
   header1: {
@@ -216,24 +254,32 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 10,
   },
+  roundText: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: 'red',
+    fontWeight: 'bold',
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    width: '100%'
   },
   card: {
-    width: 80,
-    height: 80,
-    margin: 10,
+    width: 90,
+    height: 90,
+    margin: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0284c7',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'black',
+    backgroundColor: 'linear-gradient(to right, #4dabf5, #0284c7)',
+    borderRadius: 8,
   },
   cardFlipped: {
     backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'rgb(3, 105, 161)',
+    borderRadius: 8
   },
   cardIcon: {
     color: 'rgb(3, 105, 161)',
