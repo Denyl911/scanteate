@@ -62,10 +62,10 @@ export default function Emotions() {
   }
 
   const sayEmotion = () => {
-    if (emotion  != 'Escaner de Emociones') {
+    if (emotion != 'Escaner de Emociones') {
       Speech.speak(emotion, { language: 'es' });
     }
-  }
+  };
 
   async function scanFace() {
     if (fotoUri) {
@@ -108,7 +108,7 @@ export default function Emotions() {
               },
               {
                 type: 'text',
-                text: "Menciona unicamente el nombre de la emocion presente en el rostro y si no encuentras ningun rostro di solamente 'No'",
+                text: "Menciona unicamente el nombre de la emocion presente en el rostro y si no encuentras ningun rostro devuelve solamente 'No'",
               },
             ],
           },
@@ -120,18 +120,28 @@ export default function Emotions() {
         setEmotion(emo);
         Speech.speak(emo, { language: 'es' });
         setColor(emotionColors[emo]);
-        setBorder(color.replace('text', 'border'))
-        const emotions =
-          JSON.parse(await AsyncStorage.getItem('emotions')) || [];
-        const data = {
-          userId: user.id,
-          emocion: emo,
-          color: emotionColors[emo],
-          uri: img.uri,
-          date: Date.now(),
-        };
-        emotions.unshift(data);
-        await AsyncStorage.setItem('emotions', JSON.stringify(emotions));
+        setBorder(color.replace('text', 'border'));
+        try {
+          const res = await fetch('https://api.scanteate.fun/users/emotions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              UserId: user.id,
+              name: emo,
+              color: emotionColors[emo],
+              uri: img.uri,
+            }),
+          });
+          const data = await res.json();
+          const emotions =
+            JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+          emotions.unshift(data);
+          await AsyncStorage.setItem('emotions', JSON.stringify(emotions));
+        } catch (e) {
+          console.log(e);
+        }
       } else {
         setEmotion('No se detectó ninguna');
       }
@@ -198,13 +208,20 @@ export default function Emotions() {
           <AntDesign name="left" size={24} color="#0369a1" />
         </Pressable>
         <Text className="text-slate-500 text-center font-bold text-2xl">
-          SCAN<Text className="text-yellow-500">T<Text className="text-green-500">E</Text><Text className="text-sky-500">A</Text></Text>TE
+          SCAN
+          <Text className="text-yellow-500">
+            T<Text className="text-green-500">E</Text>
+            <Text className="text-sky-500">A</Text>
+          </Text>
+          TE
         </Text>
-        <View className='px-5'></View>
+        <View className="px-5"></View>
       </View>
       <View className="flex- items-center">
         <View
-          className={`h-[480] w-[390] rounded-xl border-4 ${border} mx-5 ${fotoUri ? 'hidden' : 'block'}`}
+          className={`h-[480] w-[390] rounded-xl border-4 ${border} mx-5 ${
+            fotoUri ? 'hidden' : 'block'
+          }`}
         >
           <CameraView
             ref={(ref) => setCameraRef(ref)}
@@ -217,11 +234,13 @@ export default function Emotions() {
       </View>
       <View>
         <Pressable onPress={sayEmotion}>
-        <Text className={`mt-16 text-4xl font-bold text-center ${color}`}>
-          {emotion}
-        </Text>
+          <Text className={`mt-16 text-4xl font-bold text-center ${color}`}>
+            {emotion}
+          </Text>
         </Pressable>
-        <Text className="text-center">Toma una foto y escanea la emoción del rostro</Text>
+        <Text className="text-center">
+          Toma una foto y escanea la emoción del rostro
+        </Text>
       </View>
       <View className="flex flex-row justify-between items-center mt-10 mx-4">
         <Pressable

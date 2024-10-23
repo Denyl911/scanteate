@@ -61,6 +61,7 @@ export default function Memory() {
   const maxRounds = 3; // Total de rondas
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [startTime, setStartTime] = useState(null);
 
   useEffect(() => {
     let interval = null;
@@ -76,6 +77,7 @@ export default function Memory() {
 
   const startTimer = () => {
     setIsActive(true);
+    setStartTime(new Date());
   };
 
   const stopTimer = () => {
@@ -119,6 +121,7 @@ export default function Memory() {
               geekWinGameFunction(); // Si es la última ronda, mostrar victoria
               setGameWon(true);
               stopTimer();
+              sendGameTimeToAPI();
             }
           }
         } else {
@@ -163,21 +166,39 @@ export default function Memory() {
     setRound(1); // Reiniciar la ronda a 1
   };
 
-  // useEffect(() => {
-  //   if (matches === cards.length / 2) {
-  //     geekWinGameFunction();
-  //     setGameWon(true);
-  //     stopTimer();
-  //   }
-  // }, [matches]);
+  const sendGameTimeToAPI = async () => {
+    const endTime = new Date(); // Tiempo de finalización
+    const duration = Math.floor((endTime - startTime) / 1000); // Duración en segundos
 
-  const msg = `${matches}${cards.length / 2}`;
+    try {
+      const us = JSON.parse(await AsyncStorage.getItem('user'));
+      const response = await fetch('https://tu-api.com/game-time', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          UserId: us.id,
+          start: startTime.toISOString(),
+          end: endTime.toISOString(),
+          duration,
+        }),
+      });
+      if (!response.ok) {
+        console.log('Error al enviar los datos del tiempo del juego');
+      }
+      const data = await response.json();
+      console.log('Datos del tiempo enviados con éxito:', data);
+    } catch (error) {
+      console.error('Error al enviar los datos del tiempo', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text className="text-4xl text-sky-700 font-bold mt-14">MEMORAMA</Text>
       <View>
-      {/* <Button className="relative right-5 top-5" title="Reiniciar" onPress={resetGame} /> */}
+        {/* <Button className="relative right-5 top-5" title="Reiniciar" onPress={resetGame} /> */}
       </View>
       <Text className="text-center mb-3">Encuentra las imagenes iguales</Text>
       <Text className="text-center font-bold text-xl ,b-2">
@@ -205,10 +226,16 @@ export default function Memory() {
       ) : (
         <View style={styles.grid}>
           {cards.map((card) => (
-            <Pressable key={card.id} onPress={() => cardClickFunction(card)} style={[styles.card, card.isFlipped && styles.cardFlipped]}>
+            <Pressable
+              key={card.id}
+              onPress={() => cardClickFunction(card)}
+              style={[styles.card, card.isFlipped && styles.cardFlipped]}
+            >
               <LinearGradient
                 colors={
-                  card.isFlipped ? ['#f4f4f4', '#f4f4f4'] : ['#4dabf5', '#0284c7']
+                  card.isFlipped
+                    ? ['#f4f4f4', '#f4f4f4']
+                    : ['#4dabf5', '#0284c7']
                 }
                 style={[styles.card, card.isFlipped && styles.cardFlipped]}
               >
@@ -264,7 +291,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
   },
   card: {
     width: 90,
@@ -279,7 +306,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: 'rgb(3, 105, 161)',
-    borderRadius: 8
+    borderRadius: 8,
   },
   cardIcon: {
     color: 'rgb(3, 105, 161)',

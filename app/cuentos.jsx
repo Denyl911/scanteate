@@ -91,5 +91,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#0369a1',
     textAlign: 'left',
+    fontWeight: 'bold'
   },
 });

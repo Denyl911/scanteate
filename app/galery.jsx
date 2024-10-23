@@ -1,6 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -11,27 +11,27 @@ import {
   ToastAndroid,
   Modal,
   StyleSheet,
-} from "react-native";
-import Tabs from "../components/Tabs";
-import { router } from "expo-router";
-import { AntDesign } from "@expo/vector-icons";
+} from 'react-native';
+import Tabs from '../components/Tabs';
+import { router } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
 
 function formatearFecha(fecha) {
   if (fecha) {
     fecha = new Date(fecha);
     const meses = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
 
     const dia = fecha.getDate();
@@ -44,8 +44,8 @@ function formatearFecha(fecha) {
 
 export default function Galery() {
   const [user, setUser] = useState({
-    name: "",
-    type: "",
+    name: '',
+    type: '',
   });
   const [allEmotions, setAllEmotions] = useState([]);
   const [userEmotions, setUserEmotions] = useState([]);
@@ -53,16 +53,21 @@ export default function Galery() {
   const [deleteId, setDeleteId] = useState(0);
 
   const getUser = async () => {
-    const us = JSON.parse(await AsyncStorage.getItem("user"));
-    setUser(us || user);
-    const all = JSON.parse(await AsyncStorage.getItem("emotions")) || [];
-    setAllEmotions(all);
-    console.log(all);
-    all.forEach((el) => {
-      if (el.userId == us.id) {
-        setUserEmotions((op) => [...op, el]);
-      }
-    });
+    const us = JSON.parse(await AsyncStorage.getItem('user'));
+    setUser(us);
+    try {
+      const res = await fetch(`https://api.scanteate.fun/users/emotions/${us.id}`);
+      const emotions = await res.json();
+      setUserEmotions(emotions);
+    } catch (e) {
+      const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+      setAllEmotions(all);
+      all.forEach((el) => {
+        if (el.UserId == us.id) {
+          setUserEmotions((op) => [...op, el]);
+        }
+      });
+    }
   };
 
   useFocusEffect(
@@ -72,21 +77,30 @@ export default function Galery() {
   );
 
   const deleteEmotion = async () => {
-    const date = deleteId;
-    const allFilt = allEmotions.filter((el) => el.date != date);
+    const id = deleteId;
+    if (Number.isInteger(id)) {
+      try {
+        await fetch(`https://api.scanteate.fun/users/emotions/${id}`, {
+          method: 'DELETE',
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    const allFilt = allEmotions.filter((el) => el.id != id);
     setAllEmotions(allFilt);
-    setUserEmotions(userEmotions.filter((el) => el.date != date));
-    await AsyncStorage.setItem("emotions", JSON.stringify(allFilt));
+    setUserEmotions(userEmotions.filter((el) => el.id != id));
+    await AsyncStorage.setItem('emotions', JSON.stringify(allFilt));
     setModalVisible(!modalVisible);
     ToastAndroid.showWithGravity(
-      "Eliminado exitosamente",
+      'Eliminado exitosamente',
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );
   };
-  const preDelete = (date) => {
+  const preDelete = (id) => {
     setModalVisible(!modalVisible);
-    setDeleteId(date);
+    setDeleteId(id);
   };
 
   return (
@@ -112,11 +126,11 @@ export default function Galery() {
                 >
                   <View className="basis-">
                     <Text className={`text-lg font-bold ${el.color}`}>
-                      {el.emocion}
+                      {el.name}
                     </Text>
-                    <Text>{formatearFecha(el.date)}</Text>
+                    <Text>{formatearFecha(el.createdAt)}</Text>
                     <Pressable
-                      onPress={() => preDelete(el.date)}
+                      onPress={() => preDelete(el.id)}
                       className="mt-5 bg-slate-50 rounded-md px-2 py-1"
                     >
                       <Text className="text-red-500 text-center">
@@ -172,17 +186,17 @@ export default function Galery() {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -197,18 +211,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

@@ -76,23 +76,7 @@ export default function Games() {
             />
           </Pressable>
 
-          <Pressable
-            onPress={() => router.navigate(`/reportes/${user.id}`)}
-            className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
-          >
-            <Text className="text-white text-xl">
-              ¡Crea tus propias emociones!
-            </Text>
-            <Text className="text-white pe-3 pr-3">
-              ¡Aprende emociones creando tu propio AVATAR!
-            </Text>
-            <Entypo
-              name="brush"
-              size={45}
-              color="rgb(240 171 252);"
-              className="absolute right-4 bottom-7"
-            />
-          </Pressable>
+          
 
           <Pressable
             onPress={() => router.navigate('/imitame')}
@@ -109,6 +93,42 @@ export default function Games() {
               className="absolute right-4 bottom-7"
             />
           </Pressable>
+
+          <Pressable
+            onPress={() => router.navigate(`/reportes/${user.id}`)}
+            className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
+          >
+            <Text className="text-white text-xl">
+              Proximamente
+            </Text>
+            <Text className="text-white pe-3 pr-3">
+              Más juegos proximamente
+            </Text>
+            <Entypo
+              name="brush"
+              size={45}
+              color="rgb(240 171 252);"
+              className="absolute right-4 bottom-7"
+            />
+          </Pressable>
+
+          {/* <Pressable
+            onPress={() => router.navigate(`/reportes/${user.id}`)}
+            className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
+          >
+            <Text className="text-white text-xl">
+              ¡Crea tus propias emociones!
+            </Text>
+            <Text className="text-white pe-3 pr-3">
+              ¡Aprende emociones creando tu propio AVATAR!
+            </Text>
+            <Entypo
+              name="brush"
+              size={45}
+              color="rgb(240 171 252);"
+              className="absolute right-4 bottom-7"
+            />
+          </Pressable> */}
         </ScrollView>
       </View>
       <Tabs className="absolute bottom-0" />
