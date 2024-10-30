@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import Tabs from '../components/Tabs';
+import UserAvatar from '../components/UserAvatar';
 
 export default function HomeScreen() {
   const [user, setUser] = useState({
@@ -33,17 +34,14 @@ export default function HomeScreen() {
   return (
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
-      <View style={{ marginTop: StatusBar.currentHeight, zIndex:99 }}>
+      <View style={{ marginTop: StatusBar.currentHeight, zIndex: 99 }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
           source={require('../assets/images/home2.jpg')}
         ></Image>
         <View className="-mt-48 flex items-center">
-          <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 mt-10 flex items-center justify-center">
-            <Image
-              className="w-14 h-14"
-              source={require('../assets/images/user3.png')}
-            ></Image>
+          <View className="mt-10">
+            <UserAvatar />
           </View>
           <Text className="text-white text-center text-md mt-2 font-bold">
             {user.name}
@@ -105,7 +103,6 @@ export default function HomeScreen() {
               source={require('../assets/images/cronograma.png')}
             ></Image>
           </Pressable>
-          
         </ScrollView>
       </View>
       <Tabs className="absolute bottom-0" />

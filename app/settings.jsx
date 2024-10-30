@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useState } from "react";
-import { router } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
+import { router } from 'expo-router';
 import {
   View,
   Text,
@@ -10,20 +10,21 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
-} from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+} from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Octicons from "@expo/vector-icons/Octicons";
-import Tabs from "../components/Tabs";
+import Octicons from '@expo/vector-icons/Octicons';
+import Tabs from '../components/Tabs';
+import UserAvatar from '../components/UserAvatar';
 
 export default function Settings() {
   const [user, setUser] = useState({
     id: 0,
-    name: "",
-    type: "",
+    name: '',
+    type: '',
   });
   const getUser = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem("user")) || user);
+    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
   };
   useFocusEffect(
     useCallback(() => {
@@ -32,8 +33,8 @@ export default function Settings() {
   );
 
   const logout = async () => {
-    await AsyncStorage.removeItem("user");
-    router.replace("/loginBefore");
+    await AsyncStorage.removeItem('user');
+    router.replace('/loginBefore');
   };
   return (
     <View className="h-[100%]">
@@ -41,36 +42,40 @@ export default function Settings() {
       <View style={{ marginTop: StatusBar.currentHeight }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require("../assets/images/home2.jpg")}
+          source={require('../assets/images/home2.jpg')}
         ></Image>
         <View className="-mt-48 flex items-center">
-          <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 mt-10 flex items-center justify-center">
+          {/* <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 mt-10 flex items-center justify-center">
             <Image
               className="w-14 h-14"
               source={require("../assets/images/user3.png")}
             ></Image>
+          </View> */}
+          <View className="mt-10">
+            <UserAvatar />
           </View>
           <Text className="text-white text-center text-md mt-2 font-bold">
             {user.name}
-          </Text>
-          <Text className="text-white text-center mt-1 mb-0 text-sm">
-            {user.type}
           </Text>
         </View>
       </View>
       <View style={styles.container}>
         <ScrollView className="mt-12">
-        <Pressable
-            onPress={() => router.navigate("/createAvatar")}
+          <Pressable
+            onPress={() => router.navigate('/createAvatar')}
             className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mt-20"
           >
             <Text className="text-white text-xl">Mi Avatar</Text>
             <Text className="text-white">Personaliza tu avatar</Text>
-            <FontAwesome5 name="user-astronaut" size={43} color="rgb(254 240 138)"
-              className="absolute right-6 bottom-5" />
+            <FontAwesome5
+              name="user-astronaut"
+              size={43}
+              color="rgb(254 240 138)"
+              className="absolute right-6 bottom-5"
+            />
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/galery")}
+            onPress={() => router.navigate('/galery')}
             className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-8"
           >
             <Text className="text-white text-xl">Galería</Text>
@@ -83,7 +88,7 @@ export default function Settings() {
             />
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/reportConfig")}
+            onPress={() => router.navigate('/reportConfig')}
             className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
           >
             <Text className="text-white text-xl">Reportes</Text>
