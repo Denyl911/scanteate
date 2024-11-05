@@ -27,11 +27,11 @@ function Slides({ x }) {
       <View className="flex-1 items-center justify-center">
         <Image source={require('../assets/images/logo.png')}></Image>
         <Text className="text-sky-700 text-center text-xl font-bold py-4">
-          SCAN<Text className="text-sky-500">TEA</Text>TE
+          SCAN<Text style={{ fontFamily: 'PlayChicken' }}>TEA</Text>TE
         </Text>
         <Text className="text-center mx-5">
           Una aplicación de comunicación para ayudar a los estudiantes con
-          autismo a comunicarse con amigos y profesores.
+          autismo a comunicarse con amigos y profesores..
         </Text>
       </View>
     );

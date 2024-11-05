@@ -207,7 +207,7 @@ export default function Emotions() {
         >
           <AntDesign name="left" size={24} color="#0369a1" />
         </Pressable>
-        <Text className="text-slate-500 text-center font-bold text-2xl">
+        <Text className="text-slate-500 text-center font-custom text-3xl">
           SCAN
           <Text className="text-yellow-500">
             T<Text className="text-green-500">E</Text>
@@ -219,7 +219,7 @@ export default function Emotions() {
       </View>
       <View className="flex- items-center">
         <View
-          className={`h-[480] w-[390] rounded-xl border-4 ${border} mx-5 ${
+          className={`h-[500] w-[100%] rounded-xl border-4 ${border} mx-5 ${
             fotoUri ? 'hidden' : 'block'
           }`}
         >
@@ -234,11 +234,11 @@ export default function Emotions() {
       </View>
       <View>
         <Pressable onPress={sayEmotion}>
-          <Text className={`mt-16 text-4xl font-bold text-center ${color}`}>
+          <Text className={`mt-12 text-3xl text-center font-super ${color}`}>
             {emotion}
           </Text>
         </Pressable>
-        <Text className="text-center">
+        <Text className="text-center font-sla">
           Toma una foto y escanea la emoción del rostro
         </Text>
       </View>
@@ -247,13 +247,13 @@ export default function Emotions() {
           className="p-2 rounded-xl bg-slate-200 active:bg-slate-300"
           onPress={toggleCameraType}
         >
-          <FontAwesome6 name="camera-rotate" size={38} color="rgb(8 47 73)" />
+          <FontAwesome6 name="camera-rotate" size={34} color="rgb(8 47 73)" />
         </Pressable>
         <Pressable
-          className="px-4 py-3 rounded-full bg-sky-800 active:bg-sky-700"
+          className="px-6 py-3 rounded-full bg-sky-800 active:bg-sky-700"
           onPress={scanFace}
         >
-          <Text className="text-3xl font-bold text-center text-white">
+          <Text className="text-3xl font-custom text-center text-white">
             {scanText}
           </Text>
         </Pressable>
@@ -261,7 +261,7 @@ export default function Emotions() {
           className="p-2 rounded-xl  bg-slate-200 active:bg-slate-300"
           onPress={() => router.navigate('/galery')}
         >
-          <MaterialIcons name="photo-library" size={40} color="rgb(8 47 73)" />
+          <MaterialIcons name="photo-library" size={36} color="rgb(8 47 73)" />
         </Pressable>
       </View>
       <SmallTabs />

@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import SmallTabs from '../components/SmallTabs';
 import { router } from 'expo-router';
 
+
 const avatarImages = {
   color: [
     require('../assets/images/avatars/Color1.png'),
@@ -22,12 +23,13 @@ const avatarImages = {
     require('../assets/images/avatars/Color3.png'),
   ],
   cara: [
-    require('../assets/images/avatars/Caras4.png'),
-    require('../assets/images/avatars/Caras5.png'),
-    require('../assets/images/avatars/Caras1.png'),
-    require('../assets/images/avatars/Caras6.png'),
-    require('../assets/images/avatars/Caras3.png'),
-    require('../assets/images/avatars/Caras2.png'),
+    require('../assets/images/avatars/Cara1.png'),
+    require('../assets/images/avatars/Cara2.png'),
+    require('../assets/images/avatars/Cara3.png'),
+    require('../assets/images/avatars/Cara4.png'),
+    require('../assets/images/avatars/Cara5.png'),
+    require('../assets/images/avatars/Cara6.png'),
+    require('../assets/images/avatars/Cara7.png'),
   ],
   cabello: [
     require('../assets/images/avatars/Cabello1.png'),
@@ -148,14 +150,14 @@ export default function CreateAvatar() {
         >
           <AntDesign name="left" size={24} color="#0369a1" />
         </Pressable>
-        <Text className="text-slate-500 text-center font-bold text-2xl">
+        <Text className="text-slate-500 text-center font-custom text-3xl">
           Personalizar Avatar
         </Text>
         <Pressable
           className=" bg-slate-300 py-2 px-3 rounded-lg opacity-50 z-40"
           onPress={saveUserAvatar}
         >
-          <Text className="font-semibold text-sky-800 text-lg">Ok</Text>
+          <Text className="font-slabold text-sky-800 text-lg">Ok</Text>
         </Pressable>
       </View>
       <View className="h-[220] w-full flex items-center justify-center content-center mt-2 pt-3 pb-2 bg-slate-200">
@@ -175,7 +177,7 @@ export default function CreateAvatar() {
       <ScrollView className="h-[60%] rounded-3xl">
         {Object.keys(avatarImages).map((category) => (
           <View key={category}>
-            <Text className="text-lg font-bold text-slate-500 px-3 mt-3">
+            <Text className="text-lg font-super text-slate-500 px-3 mt-4">
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </Text>
             <ScrollView horizontal className="bg-white flex flex-row pt-3">
@@ -193,7 +195,7 @@ export default function CreateAvatar() {
         ))}
         <Pressable
           className=" bg-sky-800 py-3 mx-8 rounded-lg  z-40 mt-10 mb-10"
-          onPress={() => router.back()}
+          onPress={saveUserAvatar}
         >
           <Text className="font-semibold text-white text-xl text-center">
             Guardar

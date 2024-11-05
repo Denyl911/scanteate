@@ -34,11 +34,16 @@ function Slides({ x }) {
       <View className="flex-1 items-center justify-center">
         <Image source={require('../assets/images/logo.png')}></Image>
         <Pressable onLongPress={() => router.navigate('/setUrl')}>
-          <Text className="text-sky-700 text-center text-xl font-bold py-4">
-            SCAN<Text className="text-sky-500">TEA</Text>TE
+          <Text style={{fontFamily: 'PlayChickens', textAlign: 'center', fontSize: 46, paddingVertical: 16, color:'rgb(3,105,161)'}}>
+            SCAN
+            <Text className="text-yellow-500">
+              T<Text className="text-green-500">E</Text>
+              <Text className="text-red-500">A</Text>
+            </Text>
+            TE
           </Text>
         </Pressable>
-        <Text className="text-center mx-5">
+        <Text className="text-center mx-5 text-xl font-sla">
           Una aplicación de comunicación para ayudar a los estudiantes con
           autismo a comunicarse con amigos y profesores.
         </Text>
@@ -48,10 +53,10 @@ function Slides({ x }) {
     return (
       <View className="flex-1 items-center justify-center">
         <Image source={require('../assets/images/slide2.png')}></Image>
-        <Text className="text-sky-800 text-center text-xl font-bold py-4">
+        <Text style={{fontFamily: 'PlayChickens', textAlign: 'center', fontSize: 40, paddingVertical: 16, color:'rgb(3,105,161)'}}>
           Todo muy facil
         </Text>
-        <Text className="text-center mx-5">
+        <Text className="text-center mx-5 text-xl font-sla">
           En esta app la comunicación se hará a través de imágenes y figuras,
           para que todo sea mucho más amigable
         </Text>
@@ -110,5 +115,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontFamily: 'SuperFeel',
+    fontSize: 18
   },
 });

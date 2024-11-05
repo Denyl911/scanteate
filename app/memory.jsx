@@ -10,7 +10,9 @@ import {
   Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Tabs from '../components/Tabs';
+import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
 const randomArrFunction = (arr) => {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -20,45 +22,61 @@ const randomArrFunction = (arr) => {
   return arr;
 };
 
-const gameCardsFunction = () => {
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+// Modifica `gameCardsFunction` para asignar un color único a cada par
+const gameCardsFunction = (pairsCount) => {
   const icons = [
     'paw',
-    'paw',
     'heart',
-    'heart',
-    // 'tree',
-    // 'tree',
-    'star',
     'star',
     'bell',
-    'bell',
-    'gift',
     'gift',
     'rocket',
-    'rocket',
-    'leaf',
     'leaf',
     'car',
-    'car',
-    'bicycle',
     'bicycle',
   ];
-  const randomIcons = randomArrFunction(icons);
-  return randomIcons.map((icon, index) => ({
-    id: index,
-    symbol: icon,
-    isFlipped: false,
-  }));
+
+  // Selecciona los íconos necesarios y duplica cada ícono para crear los pares
+  const selectedIcons = icons
+    .slice(0, pairsCount)
+    .flatMap((icon) => [icon, icon]);
+
+  // Genera un color único para cada par de íconos
+  const colors = Array.from({ length: pairsCount }, () => getRandomColor());
+
+  // Asigna los colores a los pares de íconos
+  const randomIcons = randomArrFunction(
+    selectedIcons.map((icon, index) => ({
+      id: index,
+      symbol: icon,
+      isFlipped: false,
+      color: colors[Math.floor(index / 2)], // Asigna el mismo color a ambos íconos del par
+    }))
+  );
+
+  return randomIcons;
 };
 
 export default function Memory() {
-  const [cards, setCards] = useState(gameCardsFunction());
+  const [round, setRound] = useState(1);
+  const maxRounds = 3;
+  const pairsPerRound = [3, 6, 9];
+  const [cards, setCards] = useState(
+    gameCardsFunction(pairsPerRound[round - 1])
+  );
   const [selectedCards, setSelectedCards] = useState([]);
   const [matches, setMatches] = useState(0);
   const [winMessage, setWinMessage] = useState(new Animated.Value(0));
   const [gameWon, setGameWon] = useState(false);
-  const [round, setRound] = useState(1); // Estado para la ronda actual
-  const maxRounds = 3; // Total de rondas
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [startTime, setStartTime] = useState(null);
@@ -115,10 +133,10 @@ export default function Memory() {
           if (matches + 1 === cards.length / 2) {
             if (round < maxRounds) {
               setTimeout(() => {
-                nextRound(); // Pasar a la siguiente ronda
+                nextRound();
               }, 500);
             } else {
-              geekWinGameFunction(); // Si es la última ronda, mostrar victoria
+              geekWinGameFunction();
               setGameWon(true);
               stopTimer();
               sendGameTimeToAPI();
@@ -141,7 +159,7 @@ export default function Memory() {
 
   const nextRound = () => {
     setRound(round + 1);
-    setCards(gameCardsFunction());
+    setCards(gameCardsFunction(pairsPerRound[round]));
     setSelectedCards([]);
     setMatches(0);
     setWinMessage(new Animated.Value(0));
@@ -157,28 +175,29 @@ export default function Memory() {
   };
 
   const resetGame = () => {
-    setCards(gameCardsFunction());
+    setRound(1);
+    setCards(gameCardsFunction(pairsPerRound[0]));
     setSelectedCards([]);
     setMatches(0);
     setWinMessage(new Animated.Value(0));
     setGameWon(false);
     resetTimer();
-    setRound(1); // Reiniciar la ronda a 1
   };
 
   const sendGameTimeToAPI = async () => {
-    const endTime = new Date(); // Tiempo de finalización
-    const duration = Math.floor((endTime - startTime) / 1000); // Duración en segundos
+    const endTime = new Date();
+    const duration = Math.floor((endTime - startTime) / 1000);
 
     try {
       const us = JSON.parse(await AsyncStorage.getItem('user'));
-      const response = await fetch('https://tu-api.com/game-time', {
+      const response = await fetch('https://api.scanteate.fun/activities', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           UserId: us.id,
+          type: 'Memorama',
           start: startTime.toISOString(),
           end: endTime.toISOString(),
           duration,
@@ -196,19 +215,34 @@ export default function Memory() {
 
   return (
     <View style={styles.container}>
-      <Text className="text-4xl text-sky-700 font-bold mt-14">MEMORAMA</Text>
-      <View>
-        {/* <Button className="relative right-5 top-5" title="Reiniciar" onPress={resetGame} /> */}
+      <View className="absolute left-0 top-8">
+        <Pressable
+          className="ml-4 p-2 rounded-xl mt-5 bg-slate-50"
+          onPress={() => router.back()}
+        >
+          <AntDesign name="left" size={24} color="gray" />
+        </Pressable>
       </View>
-      <Text className="text-center mb-3">Encuentra las imagenes iguales</Text>
-      <Text className="text-center font-bold text-xl ,b-2">
+      <View className="absolute right-6 top-10">
+        <Pressable
+          className="p-2 rounded-xl mt-5 bg-slate-300"
+          onPress={resetGame}
+        >
+          <AntDesign name="reload1" size={24} color="rgb(3,105,61)" />
+        </Pressable>
+      </View>
+      <Text className="text-5xl text-sky-700 mt-14 font-custom">MEMORAMA</Text>
+      <Text className="text-center mb-4 font-slabold">
+        Encuentra las imágenes iguales
+      </Text>
+      <Text className="text-center font-super text-lg">
         Ronda <Text className="text-sky-600">{round}</Text> de {maxRounds}
       </Text>
-      <View className="flex flex-row content-center justify-between w-screen px-5">
-        <Text className="text-center font-bold text-xl">
+      <View className="flex flex-row content-center justify-between w-screen px-5 mb-2">
+        <Text className="text-center font-super text-lg">
           Cronómetro <Text className="text-sky-600">{formatTime(timer)}</Text>
         </Text>
-        <Text className="text-center font-bold text-xl">
+        <Text className="text-center font-super text-lg">
           Encontrados <Text className="text-sky-600">{matches} </Text>/{' '}
           {cards.length / 2}
         </Text>
@@ -216,12 +250,23 @@ export default function Memory() {
       {gameWon ? (
         <View style={styles.winMessage}>
           <View style={styles.winMessageContent}>
-            <Text style={styles.winText}>¡Felicidades!</Text>
-            <Text style={styles.winText}>Has ganado el juego!</Text>
-            <Text style={styles.winTimeText}>Tiempo: {formatTime(timer)}</Text>
+            <Text className="font-custom text-yellow-500 text-5xl text-center mb-1">
+              Felicidades!
+            </Text>
+            <Text className="font-custom text-white text-4xl text-center mb-5">
+              Has ganado el juego
+            </Text>
+            <Text className="font-super text-white text-3xl text-center">
+              Tiempo:{' '}
+              <Text className="text-green-400">{formatTime(timer)}</Text>
+            </Text>
+            <Pressable
+              onPress={resetGame}
+              className="bg-white p-3 rounded-md mt-8"
+            >
+              <Text className="text-sky-800 font-super text-xl">Reiniciar</Text>
+            </Pressable>
           </View>
-          <View className="mt-5"></View>
-          <Button title="Reiniciar" onPress={resetGame} />
         </View>
       ) : (
         <View style={styles.grid}>
@@ -240,14 +285,17 @@ export default function Memory() {
                 style={[styles.card, card.isFlipped && styles.cardFlipped]}
               >
                 {card.isFlipped ? (
-                  <Icon name={card.symbol} size={40} style={styles.cardIcon} />
+                  <Icon
+                    name={card.symbol}
+                    size={40}
+                    style={{ color: card.color }}
+                  />
                 ) : null}
               </LinearGradient>
             </Pressable>
           ))}
         </View>
       )}
-      <Tabs className="absolute bottom-0" />
     </View>
   );
 }
@@ -256,36 +304,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'rgb(241 245 249)',
-  },
-  header1: {
-    fontSize: 36,
-    marginBottom: 10,
-    color: 'green',
-  },
-  header2: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: 'black',
-    fontWeight: 'bold',
-  },
-  timerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'rgb(3, 105, 161)',
-    marginBottom: 10,
-  },
-  matchText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
-    marginBottom: 10,
-  },
-  roundText: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: 'red',
-    fontWeight: 'bold',
+    backgroundColor: 'rgb(219, 234, 249)',
   },
   grid: {
     flexDirection: 'row',
@@ -299,7 +318,6 @@ const styles = StyleSheet.create({
     margin: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'linear-gradient(to right, #4dabf5, #0284c7)',
     borderRadius: 8,
   },
   cardFlipped: {
@@ -307,9 +325,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgb(3, 105, 161)',
     borderRadius: 8,
-  },
-  cardIcon: {
-    color: 'rgb(3, 105, 161)',
   },
   winMessage: {
     position: 'absolute',
@@ -322,17 +337,20 @@ const styles = StyleSheet.create({
   },
   winMessageContent: {
     backgroundColor: 'rgba(14, 165, 233, 0.7)',
-    padding: 20,
+    padding: 25,
     borderRadius: 10,
     alignItems: 'center',
   },
   winText: {
     fontSize: 36,
     color: 'white',
+    fontFamily: 'PlayChickens',
+    marginBottom: 8,
   },
   winTimeText: {
     fontSize: 24,
     color: 'white',
     marginTop: 10,
+    fontFamily: 'SuperFeel',
   },
 });

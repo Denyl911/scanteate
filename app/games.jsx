@@ -15,6 +15,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Tabs from '../components/Tabs';
+import UserAvatar from '../components/UserAvatar';
 
 export default function Games() {
   const [user, setUser] = useState({
@@ -31,10 +32,7 @@ export default function Games() {
     }, [])
   );
 
-  const logout = async () => {
-    await AsyncStorage.removeItem('user');
-    router.replace('/loginBefore');
-  };
+
   return (
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
@@ -44,16 +42,13 @@ export default function Games() {
           source={require('../assets/images/home2.jpg')}
         ></Image>
         <View className="-mt-48 flex items-center">
-          <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 mt-10 flex items-center justify-center">
-            <Image
-              className="w-14 h-14"
-              source={require('../assets/images/user3.png')}
-            ></Image>
+        <View className="mt-10">
+            <UserAvatar />
           </View>
-          <Text className="text-white text-center text-md mt-2 font-bold">
+          <Text className="text-white text-center text-xl mt-2 font-custom">
             Juegos
           </Text>
-          <Text className="text-white text-center mt-1 mb-0 text-sm">
+          <Text className="text-white text-center mt-1 mb-0 text-sm font-slabold">
             Aprende divirtiendote
           </Text>
         </View>
@@ -64,33 +59,30 @@ export default function Games() {
             onPress={() => router.navigate('/memory')}
             className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-24"
           >
-            <Text className="text-white text-xl">Memorama</Text>
-            <Text className="text-white pr-7">
+            <Text className="text-white text-xl font-super">Memorama</Text>
+            <Text className="text-white pr-8 font-sla">
               Entrena tu memoria mientras te diviertes
             </Text>
             <FontAwesome5
               name="brain"
-              size={45}
+              size={50}
               color="rgb(244 114 182);"
               className="absolute right-6 bottom-6"
             />
           </Pressable>
-
-          
-
           <Pressable
             onPress={() => router.navigate('/imitame')}
             className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-8 pr-5"
           >
-            <Text className="text-white text-xl">Imitame</Text>
-            <Text className="text-white pe-3 pr-3">
+            <Text className="text-white text-xl font-super">Imitame</Text>
+            <Text className="text-white pe-3 pr-3 font-sla">
               Aprender emociones, imitando emojis!
             </Text>
             <MaterialIcons
               name="emoji-emotions"
-              size={45}
+              size={55}
               color="rgb(240 171 252);"
-              className="absolute right-4 bottom-7"
+              className="absolute right-3 bottom-5"
             />
           </Pressable>
 
@@ -98,17 +90,17 @@ export default function Games() {
             onPress={() => router.navigate(`/reportes/${user.id}`)}
             className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
           >
-            <Text className="text-white text-xl">
+            <Text className="text-white text-xl font-super">
               Proximamente
             </Text>
-            <Text className="text-white pe-3 pr-3">
+            <Text className="text-white pe-3 pr-3 font-sla">
               Más juegos proximamente
             </Text>
             <Entypo
               name="brush"
-              size={45}
+              size={50}
               color="rgb(240 171 252);"
-              className="absolute right-4 bottom-7"
+              className="absolute right-4 bottom-5"
             />
           </Pressable>
 

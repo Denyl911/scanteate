@@ -10,7 +10,7 @@ import {
   Animated,
   Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
@@ -85,7 +85,7 @@ export default function Emotions() {
       Animated.sequence([
         Animated.timing(fadeAnim, {
           toValue: 0,
-          duration: 500,
+          duration: 1000,
           useNativeDriver: true,
         }),
         Animated.timing(fadeAnim, {
@@ -123,9 +123,7 @@ export default function Emotions() {
     setEmotion(selectedEmotion);
 
     try {
-      const img = await cameraRef.takePictureAsync({
-        base64: true,
-      });
+      const img = await cameraRef.takePictureAsync();
 
       const flippedImg = await manipulateAsync(
         img.uri,
@@ -147,6 +145,7 @@ export default function Emotions() {
       selectEmotion();
     } else {
       setCurrentScreen(5);
+      showCompletionAlert()
     }
   };
 
@@ -161,17 +160,25 @@ export default function Emotions() {
       case 1:
         return (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-3xl font-bold">
-              Bienvenido al juego IMITAME!!!
+            <View className="absolute left-0 top-8">
+              <Pressable
+                className="ml-4 p-2 rounded-xl mt-5 bg-sky-100"
+                onPress={() => router.back()}
+              >
+                <AntDesign name="left" size={24} color="gray" />
+              </Pressable>
+            </View>
+            <Text className="text-3xl font-custom">
+              Bienvenido al juego IMITAME!
             </Text>
-            <Text className="text-center mt-2">
-              Imita las emociones que te salgan en pantalla!!!
+            <Text className="text-center text-xl mt-2 font-sla">
+              Imita las emociones que te salgan en pantalla
             </Text>
             <Pressable
               className="bg-sky-800 p-4 rounded-lg mt-4"
               onPress={() => setCurrentScreen(2)}
             >
-              <Text className="text-white font-bold text-lg">Comenzar</Text>
+              <Text className="text-white font-super text-lg">Comenzar</Text>
             </Pressable>
           </View>
         );
@@ -179,7 +186,18 @@ export default function Emotions() {
       case 2:
         return (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-lg font-semibold" style={{ marginBottom: 1 }}>
+            <View className="absolute left-0 top-8">
+              <Pressable
+                className="ml-4 p-2 rounded-xl mt-5 bg-sky-100"
+                onPress={() => router.back()}
+              >
+                <AntDesign name="left" size={24} color="gray" />
+              </Pressable>
+            </View>
+            <Text className="text-xl font-super mb-2">
+            Ronda <Text className="text-sky-600">{round}</Text> de 3
+            </Text>
+            <Text className="text-lg font-super mb-4">
               Seleccionando tu emoción a imitar...
             </Text>
             <View style={styles.emojiContainer}>
@@ -187,15 +205,26 @@ export default function Emotions() {
             </View>
             {/* Solo mostrar el nombre de la emoción después de que se haya seleccionado */}
             {!isAnimating && selectedEmotion && (
-              <Text className="text-xl font-bold">
-                Vas a imitar la emoción: {selectedEmotion}
-              </Text>
+              <View className="mb-5">
+                <Text className="text-xl font-super">
+                  Vas a imitar la emoción:
+                </Text>
+                <Text className="text-xl font-super text-sky-700 text-center">
+                  {selectedEmotion}
+                </Text>
+              </View>
             )}
             {showPrepareText && (
               <Animated.Text
                 style={[
                   styles.pulseText,
-                  { opacity: fadeAnim, color: 'red', textAlign: 'center' },
+                  {
+                    opacity: fadeAnim,
+                    color: 'red',
+                    textAlign: 'center',
+                    fontFamily: 'SlaberlinBold',
+                    marginBottom: 24,
+                  },
                 ]}
               >
                 Prepárate para imitar, ponte guapo y péinate!
@@ -203,10 +232,12 @@ export default function Emotions() {
             )}
             {showPrepareText && (
               <Pressable
-                className="bg-sky-800 p-3 rounded-lg mt-4"
+                className="bg-sky-800 p-3 rounded-lg mt-4 w-[90%] mx-auto"
                 onPress={() => setCurrentScreen(3)}
               >
-                <Text className="text-white font-bold text-lg">Empezar</Text>
+                <Text className="text-white text-xl font-custom px-5 text-center py-1">
+                  Empezar
+                </Text>
               </Pressable>
             )}
           </View>
@@ -214,11 +245,15 @@ export default function Emotions() {
       case 3:
         return (
           <View className="flex-1">
-            <CameraView style={styles.camera} ref={setCameraRef} type={type}>
-              {/* Espacio para la cámara */}
-            </CameraView>
-            <Pressable onPress={scanFace} style={styles.minimalistButton}>
-              <Text className="text-white">Tomar Foto</Text>
+            <CameraView
+              style={styles.camera}
+              ref={setCameraRef}
+              facing={type}
+            ></CameraView>
+            <Pressable onPress={scanFace} className="bg-sky-800 py-5">
+              <Text className="text-white font-super text-center text-xl">
+                Tomar Foto
+              </Text>
             </Pressable>
           </View>
         );
@@ -246,7 +281,7 @@ export default function Emotions() {
       case 5:
         return (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-xl font-bold text-center">
+            <Text className="text-3xl text-center font-custom text-sky-800">
               Completaste las emociones!!!
             </Text>
             <View style={styles.photosContainer}>
@@ -259,7 +294,7 @@ export default function Emotions() {
             </View>
             <View style={styles.buttonContainer}>
               <Pressable
-                className="bg-blue-800 p-4 rounded-lg" // Botón azul marino
+                className="bg-sky-700 p-4 rounded-lg" // Botón azul marino
                 onPress={() => {
                   setRound(1);
                   setCurrentScreen(1);
@@ -269,17 +304,15 @@ export default function Emotions() {
                   setFotoUri(null);
                 }}
               >
-                <Text className="text-white font-bold">Reiniciar</Text>
+                <Text className="text-white font-super">Reiniciar</Text>
               </Pressable>
               <Pressable
-                className="bg-blue-800 p-4 rounded-lg"
+                className="bg-sky-700 p-4 rounded-lg"
                 onPress={() => router.back()}
               >
-                <Text className="text-white font-bold">Menú Principal</Text>
+                <Text className="text-white font-super">Menú Principal</Text>
               </Pressable>
             </View>
-            \{/* Llamamos a la función para mostrar la notificación */}
-            {showCompletionAlert()}
           </View>
         );
       default:
@@ -300,7 +333,6 @@ const styles = StyleSheet.create({
   pulseText: {
     fontSize: 20,
     marginTop: 20,
-    fontWeight: 'bold',
     textAlign: 'center', // Centrado del texto
   },
   emotionText: {
@@ -319,9 +351,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   finalPhoto: {
-    width: 120, // Tamaño de imagen más grande
-    height: 120, // Tamaño de imagen más grande
+    width: 150, // Tamaño de imagen más grande
+    height: 150, // Tamaño de imagen más grande
     marginBottom: 10,
+    borderRadius: 8
   },
   minimalistButton: {
     backgroundColor: 'navy', // Azul marino
@@ -341,9 +374,9 @@ const styles = StyleSheet.create({
   },
   emotionLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 5,
+    marginBottom: 14,
     textAlign: 'center', // Centrar el texto de la emoción
+    fontFamily: 'SlaberlinBold'
   },
   camera: {
     flex: 1,

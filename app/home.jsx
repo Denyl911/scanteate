@@ -43,19 +43,27 @@ export default function HomeScreen() {
           <View className="mt-10">
             <UserAvatar />
           </View>
-          <Text className="text-white text-center text-md mt-2 font-bold">
+          <Text
+            style={{
+              color: 'white',
+              textAlign: 'center', // text-center
+              fontSize: 18, // text-md (en React Native, text-md suele ser 16px)
+              marginTop: 8, // mt-2 (en React Native, la unidad es dp)
+              fontFamily: 'SuperFeel', // font-bold
+            }}
+          >
             {user.name}
           </Text>
         </View>
       </View>
       <View style={styles.container}>
-        <ScrollView className=" mb-12">
+        <ScrollView className="mb-12">
           <Pressable
             onPress={() => router.navigate('/emotions')}
-            className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-24"
+            className="bg-sky-900 mx-8 rounded-xl px-5 py-5 mt-24 mb-20"
           >
-            <Text className="text-white text-xl font-bold">Emociones</Text>
-            <Text className="text-white pr-16">
+            <Text className="text-gray-100 text-xl font-custom">Scaner</Text>
+            <Text className="text-gray-100 pr-28 font-sla">
               Escaner de emociones faciales para niños y adultos
             </Text>
             <Image
@@ -65,10 +73,10 @@ export default function HomeScreen() {
           </Pressable>
           <Pressable
             onPress={() => router.navigate('/games')}
-            className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20"
+            className="bg-sky-600 mx-8 rounded-xl px-5 py-5 mb-20"
           >
-            <Text className="text-white text-xl font-bold">Juegos</Text>
-            <Text className="text-white">
+            <Text className="text-gray-100 text-xl font-custom">Juegos</Text>
+            <Text className="text-gray-100 font-sla pr-20">
               Juegos para poner en práctica los conocimientos
             </Text>
             <Image
@@ -78,10 +86,10 @@ export default function HomeScreen() {
           </Pressable>
           <Pressable
             onPress={() => router.navigate('/cuentos')}
-            className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mb-20"
+            className="bg-sky-400 mx-8 rounded-xl px-5 py-5 mb-20"
           >
-            <Text className="text-white text-xl font-bold">Cuentos</Text>
-            <Text className="text-white pr-20">
+            <Text className="text-gray-100 text-xl font-custom">Cuentos</Text>
+            <Text className="text-gray-100 pr-20 font-sla">
               Historias educativas para niños con pictogramas!!!
             </Text>
             <Image
@@ -92,11 +100,11 @@ export default function HomeScreen() {
           </Pressable>
           <Pressable
             onPress={() => router.navigate('/actividades')}
-            className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-40"
+            className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-40"
           >
-            <Text className="text-white text-xl font-bold">Actividades</Text>
-            <Text className="text-white pr-6">
-              Actividades imprimibles para el desarrollo
+            <Text className="text-gray-100 text-xl font-custom">Actividades</Text>
+            <Text className="text-gray-100 pr-10 font-sla">
+              Actividades imprimibles para el desarrollo socioemocional
             </Text>
             <Image
               className="mt-10 absolute right-0 bottom-2"

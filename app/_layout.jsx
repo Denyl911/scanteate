@@ -2,13 +2,27 @@ import { Stack } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { AppState, Platform } from 'react-native';
 import '../assets/css/glogal.css';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    'PlayChickens': require('../assets/fonts/PlayChickens.otf'),
+    'AmberyGarden': require('../assets/fonts/AmberyGarden.ttf'),
+    'SuperFeel': require('../assets/fonts/GrislyBeast.ttf'),
+    'Slaberlin': require('../assets/fonts/Slaberlin.ttf'),
+    'SlaberlinBold': require('../assets/fonts/SlaberlinBold.ttf'),
+  });
   const [appState, setAppState] = useState(AppState.currentState);
   const [sessionStart, setSessionStart] = useState(null);
 
   useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
     const handleAppStateChange = (nextAppState) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         // La app acaba de volver a primer plano (inicia sesión)
@@ -41,7 +55,7 @@ export default function RootLayout() {
     return () => {
       subscription.remove();
     };
-  }, [appState, sessionStart]);
+  }, [loaded, error, appState, sessionStart]);
 
   const sendSessionData = async (start, end, duration) => {
     try {
@@ -69,11 +83,16 @@ export default function RootLayout() {
       console.error('Error al registrar la sesión', error);
     }
   };
+
+  if (!loaded && !error) {
+    return null;
+  }
   return (
     <Stack
       screenOptions={{
         headerShown: false,
       }}
+      style={{ fontFamily: 'PlayChickens' }}
     ></Stack>
   );
 }

@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'PlayChickens',
     marginTop: 65,
     marginBottom: 30,
     color: '#0369a1',
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#0369a1',
     textAlign: 'left',
-    fontWeight: 'bold'
+    fontFamily: 'SuperFeel'
   },
 });
