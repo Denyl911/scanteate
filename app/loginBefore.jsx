@@ -16,7 +16,7 @@ export default function PreLogin() {
       <View className="flex flex-row items-center bg-sky-600 pb-96 px-10 pt-20">
         <Image
           style={styles.logo}
-          source={require('../assets/images/logo-shadow.png')}
+          source={require('../assets/images/logo1.png')}
         ></Image>
         <Text
           style={{
@@ -39,8 +39,8 @@ export default function PreLogin() {
       <View>
         <View style={styles.separador}>
           <Image
-            className="-mt-56"
-            source={require('../assets/images/preLogin.png')}
+            className="-mt-56 w-[290] h-[290]"
+            source={require('../assets/images/img11.png')}
           ></Image>
           <Link
             href="/register"

@@ -42,7 +42,7 @@ export default function Settings() {
       <View style={{ marginTop: StatusBar.currentHeight }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require('../assets/images/home2.jpg')}
+          source={require('../assets/images/image.png')}
         ></Image>
         <View className="-mt-48 flex items-center">
           <View className="mt-10">
@@ -68,22 +68,24 @@ export default function Settings() {
             className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mt-20"
           >
             <Text className="text-gray-100 text-xl font-super">Mi Avatar</Text>
-            <Text className="text-gray-100 font-sla">Personaliza tu avatar</Text>
-            <FontAwesome5
-              name="user-astronaut"
-              size={43}
-              color="rgb(254 240 138)"
-              className="absolute right-6 bottom-5"
-            />
+            <Text className="text-gray-100 font-sla">
+              Personaliza tu avatar
+            </Text>
+            <Image
+              className="mt-10 absolute right-4 bottom-1 w-[70] h-[70]"
+              source={require('../assets/images/img3.png')}
+            ></Image>
           </Pressable>
           <Pressable
             onPress={() => router.navigate('/galery')}
             className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-8"
           >
             <Text className="text-gray-100 text-xl font-super">Galería</Text>
-            <Text className="text-gray-100 font-sla">Galería de fichas de emociones</Text>
+            <Text className="text-gray-100 font-sla">
+              Galería de fichas de emociones
+            </Text>
             <MaterialCommunityIcons
-              name="view-gallery"
+              name="bookshelf"
               size={43}
               color="rgb(245 243 255);"
               className="absolute right-6 bottom-5"

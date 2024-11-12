@@ -37,7 +37,7 @@ export default function HomeScreen() {
       <View style={{ marginTop: StatusBar.currentHeight, zIndex: 99 }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require('../assets/images/home2.jpg')}
+          source={require('../assets/images/image.png')}
         ></Image>
         <View className="-mt-48 flex items-center">
           <View className="mt-10">
@@ -67,8 +67,8 @@ export default function HomeScreen() {
               Escaner de emociones faciales para niños y adultos
             </Text>
             <Image
-              className="mt-10 absolute right-0 bottom-2"
-              source={require('../assets/images/juegos.png')}
+              className="mt-10 absolute right-0 bottom-2 w-[120] h-[120]"
+              source={require('../assets/images/img10.png')}
             ></Image>
           </Pressable>
           <Pressable
@@ -80,8 +80,8 @@ export default function HomeScreen() {
               Juegos para poner en práctica los conocimientos
             </Text>
             <Image
-              className="mt-10 absolute right-0 bottom-2"
-              source={require('../assets/images/juegos2.png')}
+              className="mt-10 absolute -right-2 bottom-2 w-[125] h-[125]"
+              source={require('../assets/images/img2.png')}
             ></Image>
           </Pressable>
           <Pressable
@@ -90,25 +90,40 @@ export default function HomeScreen() {
           >
             <Text className="text-gray-100 text-xl font-custom">Cuentos</Text>
             <Text className="text-gray-100 pr-20 font-sla">
-              Historias educativas para niños con pictogramas!!!
+              Historias educativas para niños con ¡pictogramas!
             </Text>
             <Image
-              className="absolute right-0 bottom-2"
-              source={require('../assets/images/cuentos.png')}
+              className="absolute right-0 bottom-2 w-[125] h-[125]"
+              source={require('../assets/images/img8.png')}
               style={[styles.image, styles.imageCuentos]}
+            ></Image>
+          </Pressable>
+          <Pressable
+            onPress={() => router.navigate('/dailyTasks')}
+            className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-20"
+          >
+            <Text className="text-gray-100 text-xl font-custom">Rutina</Text>
+            <Text className="text-gray-100 pr-20 font-sla">
+              Crear una rutina saludable y estructurada puede ser beneficioso
+            </Text>
+            <Image
+              className="mt-10 absolute right-0 bottom-3 w-[70] h-[70]"
+              source={require('../assets/images/rutina.png')}
             ></Image>
           </Pressable>
           <Pressable
             onPress={() => router.navigate('/actividades')}
             className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-40"
           >
-            <Text className="text-gray-100 text-xl font-custom">Actividades</Text>
-            <Text className="text-gray-100 pr-10 font-sla">
+            <Text className="text-gray-100 text-xl font-custom">
+              Actividades
+            </Text>
+            <Text className="text-gray-100 pr-20 font-sla">
               Actividades imprimibles para el desarrollo socioemocional
             </Text>
             <Image
-              className="mt-10 absolute right-0 bottom-2"
-              source={require('../assets/images/cronograma.png')}
+              className="mt-10 absolute right-0 bottom-3 w-[100] h-[100]"
+              source={require('../assets/images/img5.png')}
             ></Image>
           </Pressable>
         </ScrollView>

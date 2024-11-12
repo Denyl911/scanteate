@@ -32,7 +32,7 @@ function Slides({ x }) {
   if (x == 1) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image source={require('../assets/images/logo.png')}></Image>
+        <Image style={{height: 270, width: 270}} source={require('../assets/images/img1.png')}></Image>
         <Pressable onLongPress={() => router.navigate('/setUrl')}>
           <Text style={{fontFamily: 'PlayChickens', textAlign: 'center', fontSize: 46, paddingVertical: 16, color:'rgb(3,105,161)'}}>
             SCAN
@@ -52,9 +52,9 @@ function Slides({ x }) {
   } else {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image source={require('../assets/images/slide2.png')}></Image>
+        <Image style={{height: 270, width: 270}} source={require('../assets/images/img12.png')}></Image>
         <Text style={{fontFamily: 'PlayChickens', textAlign: 'center', fontSize: 40, paddingVertical: 16, color:'rgb(3,105,161)'}}>
-          Todo muy facil
+          Todo muy fácil
         </Text>
         <Text className="text-center mx-5 text-xl font-sla">
           En esta app la comunicación se hará a través de imágenes y figuras,

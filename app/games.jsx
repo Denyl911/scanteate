@@ -39,7 +39,7 @@ export default function Games() {
       <View style={{ marginTop: StatusBar.currentHeight }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require('../assets/images/home2.jpg')}
+          source={require('../assets/images/image.png')}
         ></Image>
         <View className="-mt-48 flex items-center">
         <View className="mt-10">

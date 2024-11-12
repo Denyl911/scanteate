@@ -61,11 +61,17 @@ export default function Login() {
             <AntDesign name="left" size={24} color="white" />
           </Pressable>
         </View>
-        <Image source={require('../assets/images/login.png')}></Image>
+        <Image
+          style={{ height: 230, width: 230 }}
+          source={require('../assets/images/img6.png')}
+        ></Image>
       </View>
       <View>
         <View style={styles.separador}>
           <View className="mt-14"></View>
+          <Text className="text-sky-900 text-3xl font-super">
+            Iniciar Sesión
+          </Text>
           <TextInput
             style={styles.input}
             onChangeText={setEmail}

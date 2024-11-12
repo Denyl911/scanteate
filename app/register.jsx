@@ -84,15 +84,14 @@ export default function Register() {
             textAlign: 'center',
             color: 'white',
             marginTop: 64,
-            marginLeft: 24,
+            marginLeft: 20,
           }}
         >
           Registrarme
         </Text>
         <Image
-          height={100}
-          width={100}
-          source={require('../assets/images/register.png')}
+          style={{height: 230, width: 230}}
+          source={require('../assets/images/img7.png')}
         ></Image>
       </View>
       <View>
