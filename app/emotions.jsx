@@ -108,7 +108,7 @@ export default function Emotions() {
               },
               {
                 type: 'text',
-                text: "Menciona unicamente el nombre de la emocion presente en el rostro y si no encuentras ningun rostro devuelve solamente 'No'",
+                text: "Identifica exclusivamente la emoción predominante reflejada en el rostro de la persona. Si no se detecta ningún rostro, responde únicamente con 'No'.",
               },
             ],
           },
@@ -219,9 +219,8 @@ export default function Emotions() {
       </View>
       <View className="flex- items-center">
         <View
-          className={`h-[500] w-[100%] rounded-xl border-4 ${border} mx-5 ${
-            fotoUri ? 'hidden' : 'block'
-          }`}
+          className={`h-[500] w-[100%] rounded-xl border-4 ${border} mx-5 ${fotoUri ? 'hidden' : 'block'
+            }`}
         >
           <CameraView
             ref={(ref) => setCameraRef(ref)}

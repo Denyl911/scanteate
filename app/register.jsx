@@ -91,7 +91,7 @@ export default function Register() {
         </Text>
         <Image
           style={{height: 230, width: 230}}
-          source={require('../assets/images/img7.png')}
+          source={require('../assets/images/img77.png')}
         ></Image>
       </View>
       <View>

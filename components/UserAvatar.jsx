@@ -16,7 +16,12 @@ const avatarImages = {
     require('../assets/images/avatars/Cara4.png'),
     require('../assets/images/avatars/Cara5.png'),
     require('../assets/images/avatars/Cara6.png'),
-    require('../assets/images/avatars/Cara7.png'),
+    require('../assets/images/avatars/Caras10.png'),
+    require('../assets/images/avatars/Caras11.png'),
+    require('../assets/images/avatars/Caras7-2.png'),
+    require('../assets/images/avatars/Caras8.png'),
+    require('../assets/images/avatars/Caras9.png'),
+    require('../assets/images/avatars/Caras12.png'),
   ],
   cabello: [
     require('../assets/images/avatars/Cabello1.png'),
@@ -27,6 +32,7 @@ const avatarImages = {
     require('../assets/images/avatars/Cabello6.png'),
     require('../assets/images/avatars/Cabello7.png'),
     require('../assets/images/avatars/Cabello8.png'),
+    require('../assets/images/avatars/CabelloSin.png'),
   ],
   camisa: [
     require('../assets/images/avatars/Camisas1.png'),
@@ -45,12 +51,15 @@ const avatarImages = {
     require('../assets/images/avatars/Camisas14.png'),
     require('../assets/images/avatars/Camisas15.png'),
     require('../assets/images/avatars/Camisas16.png'),
+    require('../assets/images/avatars/Camisas17.png'),
+    require('../assets/images/avatars/Camisas18.png'),
+    require('../assets/images/avatars/Camisas19.png'),
   ],
   short: [
     require('../assets/images/avatars/Shorts1.png'),
     require('../assets/images/avatars/Shorts2.png'),
     require('../assets/images/avatars/Shorts3.png'),
-    require('../assets/images/avatars/Shorts4.png'),
+    require('../assets/images/avatars/Shorts4-2.png'),
   ],
   pies: [
     require('../assets/images/avatars/Pies1.png'),

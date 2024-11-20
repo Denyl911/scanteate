@@ -63,7 +63,9 @@ const avatarImages = {
     require('../assets/images/avatars/Camisas14.png'),
     require('../assets/images/avatars/Camisas15.png'),
     require('../assets/images/avatars/Camisas16.png'),
+    require('../assets/images/avatars/Camisas17.png'),
     require('../assets/images/avatars/Camisas18.png'),
+    require('../assets/images/avatars/Camisas19.png'),
   ],
   short: [
     require('../assets/images/avatars/Shorts1.png'),
