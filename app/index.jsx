@@ -32,31 +32,25 @@ function Slides({ x }) {
   if (x == 1) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image source={require('../assets/images/logo.png')}></Image>
+        <Image style={{height: 280, width: 380}} source={require('../assets/images/SNTv5.png')}></Image>
         <Pressable onLongPress={() => router.navigate('/setUrl')}>
-          <Text className="text-sky-700 text-center text-xl font-bold py-4">
-            SCAN<Text className="text-sky-500">TEA</Text>TE
-          </Text>
         </Pressable>
-        <Text className="text-center mx-5">
-          Una aplicación de comunicación para ayudar a los estudiantes con
-          autismo a comunicarse con amigos y profesores.
+        <Text className="text-center mx-5 text-xl font-play">
+          Una aplicación para ayudar a los niños con
+          autismo a comunicarse con su entorno
         </Text>
       </View>
     );
   } else {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image source={require('../assets/images/slide2.png')}></Image>
-        <Text className="text-sky-800 text-center text-xl font-bold py-4">
-          Todo muy facil
-        </Text>
-        <Text className="text-center mx-5">
+        <Image style={{height: 380, width: 350}} source={require('../assets/images/FIGURA-SLOGAN.png')}></Image>
+        <Text className="text-center mx-5 text-xl font-Mexcellent">
           En esta app la comunicación se hará a través de imágenes y figuras,
           para que todo sea mucho más amigable
         </Text>
       </View>
-    );
+    );5
   }
 }
 
@@ -110,5 +104,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontFamily: 'SuperFeel',
+    fontSize: 18
   },
 });

@@ -28,16 +28,16 @@ export default function Actvidades() {
             </Pressable>
             <View>
                 <View className="h-[87%] mt-24 p-3">
-                    <Text className="text-sky-800 text-center font-bold text-3xl">
+                    <Text className="text-sky-800 text-center font-custom text-3xl">
                         Actividades Descargables
                     </Text>
                     <ScrollView className="mt-10 px-2">
                         <Pressable className="p-4 bg-slate-300 rounded-lg mb-5" onPress={() => Linking.openURL('https://drive.google.com/file/d/1BnX6I1JD0gnxAbG1I6ipS_jlWQfBMa3w/view?usp=drive_link')} >
-                            <Text className="text-slate-800 font-bold text-xl ml-1">
+                            <Text className="text-slate-800 font-super text-xl ml-1">
                                 Relaciona los animales
                             </Text>
                             <Pressable className="bg-sky-700 text-white p-4 rounded w-3/4 mt-4" onPress={() => Linking.openURL('https://drive.google.com/file/d/1BnX6I1JD0gnxAbG1I6ipS_jlWQfBMa3w/view?usp=drive_link')}>
-                                <Text className="text-center text-white font-bold">Descargar</Text>
+                                <Text className="text-center text-white font-super">Descargar</Text>
                             </Pressable>
                             <Image
                                 style={{ width: 70, height: 70, borderRadius: 12, position: 'absolute', right: 8, bottom: 25 }}
@@ -45,11 +45,11 @@ export default function Actvidades() {
                             ></Image>
                         </Pressable>
                         <Pressable className="p-4 bg-slate-300 rounded-lg mb-5" onPress={() => Linking.openURL('https://drive.google.com/file/d/1CJNrYkWFZQ5DfOEbBTkFRlPw6GPhwttB/view?usp=drive_link')} >
-                            <Text className="text-slate-800 font-bold text-xl ml-1">
+                            <Text className="text-slate-800 font-super text-xl ml-1">
                                 Rompecabezas
                             </Text>
                             <Pressable className="bg-sky-700  p-4 rounded w-3/4 mt-4" onPress={() => Linking.openURL('https://drive.google.com/file/d/1CJNrYkWFZQ5DfOEbBTkFRlPw6GPhwttB/view?usp=drive_link')}>
-                                <Text className="text-center text-white font-bold">Descargar</Text>
+                                <Text className="text-center text-white font-super">Descargar</Text>
                             </Pressable>
                             <Image
                                 style={{ width: 70, height: 70, borderRadius: 12, position: 'absolute', right: 8, bottom: 25 }}
@@ -57,11 +57,11 @@ export default function Actvidades() {
                             ></Image>
                         </Pressable>
                         <Pressable className="p-4 bg-slate-300 rounded-lg mb-5" onPress={() => Linking.openURL('https://drive.google.com/file/d/1fDJz8ZQeT8oPsDhMvCaMBU1GVOUWDKx4/view?usp=drive_link')} >
-                            <Text className="text-slate-800 font-bold text-xl ml-1">
+                            <Text className="text-slate-800 font-super text-xl ml-1">
                             ¿Cuál es la parte faltante?
                             </Text>
                             <Pressable className="bg-sky-700 p-4 rounded w-3/4 mt-4" onPress={() => Linking.openURL('https://drive.google.com/file/d/1fDJz8ZQeT8oPsDhMvCaMBU1GVOUWDKx4/view?usp=drive_link')}>
-                                <Text className="text-center text-white font-bold">Descargar</Text>
+                                <Text className="text-center text-white font-super">Descargar</Text>
                             </Pressable>
                             <Image
                                 style={{ width: 70, height: 70, borderRadius: 12, position: 'absolute', right: 8, bottom: 25 }}
@@ -69,11 +69,11 @@ export default function Actvidades() {
                             ></Image>
                         </Pressable>
                         <Pressable className="p-4 bg-slate-300 rounded-lg mb-5" onPress={() => Linking.openURL('https://drive.google.com/file/d/1hs70QcHYUHybIzC1IAAHjy_YtkqbOoCG/view?usp=drive_link')} >
-                            <Text className="text-slate-800 font-bold text-xl ml-1">
+                            <Text className="text-slate-800 font-super text-xl ml-1">
                                 Relaciona las emociones
                             </Text>
                             <Pressable className="bg-sky-700 p-4 rounded w-3/4 mt-4" onPress={() => Linking.openURL('https://drive.google.com/file/d/1hs70QcHYUHybIzC1IAAHjy_YtkqbOoCG/view?usp=drive_link')}>
-                                <Text className="text-center text-white font-bold">Descargar</Text>
+                                <Text className="text-center text-white font-super">Descargar</Text>
                             </Pressable>
                             <Image
                                 style={{ width: 70, height: 70, borderRadius: 12, position: 'absolute', right: 8, bottom: 25 }}
@@ -81,11 +81,11 @@ export default function Actvidades() {
                             ></Image>
                         </Pressable>
                         <Pressable className="p-4 bg-slate-300 rounded-lg mb-6" onPress={() => Linking.openURL('https://drive.google.com/file/d/1onRV7GIIBZc0A5BIMYYcQPAEKN86_4tf/view?usp=drive_link')} >
-                            <Text className="text-slate-800 font-bold text-xl ml-1">
+                            <Text className="text-slate-800 font-super text-xl ml-1">
                                 Arma tu emoción
                             </Text>
                             <Pressable className="bg-sky-700 p-4 rounded w-3/4 mt-4" onPress={() => Linking.openURL('https://drive.google.com/file/d/1onRV7GIIBZc0A5BIMYYcQPAEKN86_4tf/view?usp=drive_link')}>
-                                <Text className="text-center text-white font-bold">Descargar</Text>
+                                <Text className="text-center text-white font-super">Descargar</Text>
                             </Pressable>
                             <Image
                                 style={{ width: 70, height: 70, borderRadius: 12, position: 'absolute', right: 8, bottom: 25 }}
@@ -93,7 +93,7 @@ export default function Actvidades() {
                             ></Image>
                         </Pressable>
                         <Pressable className="px-4 py-8 bg-slate-300 rounded-lg mb-20"  >
-                            <Text className="text-slate-800 font-bold text-xl ml-1 text-center">
+                            <Text className="text-slate-800 font-super text-xl ml-1 text-center">
                                 Más actividades pronto...
                             </Text>
                         </Pressable>

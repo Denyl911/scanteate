@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
+import { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -10,17 +10,18 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
-} from "react-native";
+} from 'react-native';
 
-import Tabs from "../components/Tabs";
+import Tabs from '../components/Tabs';
+import UserAvatar from '../components/UserAvatar';
 
 export default function HomeScreen() {
   const [user, setUser] = useState({
-    name: "",
-    type: "",
+    name: '',
+    type: '',
   });
   const getUser = async () => {
-    const data = await AsyncStorage.getItem("user");
+    const data = await AsyncStorage.getItem('user');
     if (data) {
       setUser(JSON.parse(data));
     }
@@ -30,85 +31,134 @@ export default function HomeScreen() {
       getUser();
     }, [])
   );
-
   return (
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
-      <View style={{ marginTop: StatusBar.currentHeight }}>
+      <View style={{ marginTop: StatusBar.currentHeight, zIndex: 99 }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require("../assets/images/home2.jpg")}
+          source={require('../assets/images/image.png')}
         ></Image>
         <View className="-mt-48 flex items-center">
-          <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 mt-10 flex items-center justify-center">
-            <Image
-              className="w-14 h-14"
-              source={require("../assets/images/user3.png")}
-            ></Image>
+          <View className="mt-10">
+            <UserAvatar />
           </View>
-          <Text className="text-white text-center text-md mt-2 font-bold">
+          <Text
+            style={{
+              color: 'white',
+              textAlign: 'center',
+              fontSize: 18,
+              marginTop: 8,
+              fontFamily: 'SuperFeel',
+            }}
+          >
             {user.name}
-          </Text>
-          <Text className="text-white text-center mt-1 mb-0 text-sm">
-            {user.type}
           </Text>
         </View>
       </View>
       <View style={styles.container}>
         <ScrollView className="mb-12">
           <Pressable
-            onPress={() => router.navigate("/emotions")}
-            className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-24"
+            onPress={() => router.navigate('/emotions')}
+            className="bg-sky-900 mx-8 rounded-xl px-5 py-5 mt-24 mb-20"
+            style={{ position: 'relative' }} // Añadir estilo relativo
           >
-            <Text className="text-white text-xl">Emociones</Text>
-            <Text className="text-white pr-16">
-              Escaner de emociones faciales para niños y adultos
+            <Text className="text-gray-100 text-xl font-custom">Scaner</Text>
+            <Text className="text-gray-100 pr-28 font-sla">
+              Escanea tus emociones en tiempo real!
             </Text>
             <Image
-              className="mt-10 absolute right-0 bottom-2"
-              source={require("../assets/images/juegos.png")}
-            ></Image>
+              className="absolute"
+              style={{
+                width: 180,
+                height: 140,
+                right: -41, // Hace que sobresalga hacia la derecha
+                bottom: 5, // Hace que sobresalga hacia abajo
+              }}
+              source={require('../assets/images/scaner.png')}
+            />
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/games")}
-            className="bg-sky-600 mx-10 rounded-xl px-6 py-5 my-20"
+            onPress={() => router.navigate('/games')}
+            className="bg-sky-600 mx-8 rounded-xl px-5 py-5 mb-20"
+            style={{ position: 'relative' }}
           >
-            <Text className="text-white text-xl">Juegos</Text>
-            <Text className="text-white">
-              Juegos para poner en práctica los conocimientos
+            <Text className="text-gray-100 text-xl font-custom">Juegos</Text>
+            <Text className="text-gray-100 font-sla pr-20">
+              Sal de la rutina y diviertete un rato con minijuegos!
             </Text>
             <Image
-              className="mt-10 absolute right-0 bottom-2"
-              source={require("../assets/images/juegos2.png")}
-            ></Image>
+              className="absolute"
+              style={{
+                width: 150,
+                height: 150,
+                right: -30, // Sobresale a la derecha
+                bottom: -10, // Sobresale hacia abajo
+              }}
+              source={require('../assets/images/juegos.png')}
+            />
           </Pressable>
           <Pressable
-            onPress={() => router.navigate("/actividades")}
-            className="bg-sky-300 mx-10 rounded-xl px-6 py-5 mb-12"
+            onPress={() => router.navigate('/cuentos')}
+            className="bg-sky-400 mx-8 rounded-xl px-5 py-5 mb-20"
+            style={{ position: 'relative' }}
           >
-            <Text className="text-white text-xl">Actividades</Text>
-            <Text className="text-white pr-6">
-              Actividades imprimibles para el desarrollo
+            <Text className="text-gray-100 text-xl font-custom">Cuentos</Text>
+            <Text className="text-gray-100 pr-20 font-sla">
+              Historias educativas para niños con pictogramas!
             </Text>
             <Image
-              className="mt-10 absolute right-0 bottom-2"
-              source={require("../assets/images/cronograma.png")}
-            ></Image>
+              className="absolute"
+              style={{
+                width: 200,
+                height: 150,
+                right: -45, // Sobresale a la derecha
+                bottom: -20, // Sobresale hacia abajo
+              }}
+              source={require('../assets/images/cuentos.png')}
+            />
           </Pressable>
-          {/* Nueva sección "Cuentos" */}
           <Pressable
-            onPress={() => router.navigate("/cuentos")}
-            className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mb-40"
+            onPress={() => router.navigate('/dailyTasks')}
+            className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-20"
+            style={{ position: 'relative' }}
           >
-            <Text className="text-white text-xl">Cuentos</Text>
-            <Text className="text-white pr-6">
-              Historias educativas para niños con pictogramas!!!
+            <Text className="text-gray-100 text-xl font-custom">Rutina</Text>
+            <Text className="text-gray-100 pr-20 font-sla">
+              Crear una rutina personalizable para tu hijo!
             </Text>
             <Image
-              className="absolute right-0 bottom-2"
-              source={require("../assets/images/cuentos.png")}
-              style={[styles.image, styles.imageCuentos]}  // Ajuste de estilo para mover la imagen hacia arriba
-            ></Image>
+              className="absolute"
+              style={{
+                width: 180,
+                height: 150,
+                right: -60, // Sobresale a la derecha
+                bottom: -20, // Sobresale hacia abajo
+              }}
+              source={require('../assets/images/actividades.png')}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => router.navigate('/actividades')}
+            className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-40"
+            style={{ position: 'relative' }}
+          >
+            <Text className="text-gray-100 text-xl font-custom">
+              Actividades
+            </Text>
+            <Text className="text-gray-100 pr-20 font-sla">
+              Actividades imprimibles para el desarrollo socioemocional
+            </Text>
+            <Image
+              className="absolute"
+              style={{
+                width: 200,
+                height: 150,
+                right: -50, // Sobresale a la derecha
+                bottom: -20, // Sobresale hacia abajo
+              }}
+              source={require('../assets/images/act_descarga.png')}
+            />
           </Pressable>
         </ScrollView>
       </View>
@@ -120,12 +170,5 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     height: 700,
-  },
-  image: {
-    width: 95,  // Tamaño de imagen uniforme
-    height: 95,
-  },
-  imageCuentos: {
-    bottom: 30,  // Mueve la imagen hacia arriba (ajusta el valor según necesidad)
   },
 });

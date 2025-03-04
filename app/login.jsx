@@ -9,74 +9,109 @@ import {
   Pressable,
   Alert,
   TextInput,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
 
   const login = async () => {
-    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
-    const user = users.find((el) => el.email == email && el.password == pass);
-    if (!user) {
+    try {
+      const res = await fetch('https://api.scanteate.fun/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: pass,
+        }),
+      });
+      if (!res.status == 200) {
+        ToastAndroid.showWithGravity(
+          'Datos incorrectos',
+          ToastAndroid.LONG,
+          ToastAndroid.CENTER
+        );
+      } else {
+        const data = await res.json();
+        await AsyncStorage.setItem('user', JSON.stringify(data.user));
+        await AsyncStorage.setItem('token', JSON.stringify(data.token));
+        router.replace('/home');
+      }
+    } catch (e) {
       ToastAndroid.showWithGravity(
         'Datos incorrectos',
         ToastAndroid.LONG,
         ToastAndroid.CENTER
       );
-      console.log('Datos incorrectos');
-    } else {
-      await AsyncStorage.setItem('user', JSON.stringify(user))
-      router.replace('Home');
+      console.log(e);
     }
   };
   return (
     <View>
       <View className="w-full flex flex-row justify-between bg-sky-700 pt-7">
-        <Pressable onPress={() => router.back()}>
-          <Image
-            className=" mx-6 mt-5"
-            source={require('../assets/images/back.png')}
-          ></Image>
-        </Pressable>
-        <Image source={require('../assets/images/login.png')}></Image>
+        <View>
+          <Pressable
+            className="ml-2 p-2 rounded-xl mt-5 bg-slate-50 opacity-40"
+            onPress={() => router.back()}
+          >
+            <AntDesign name="left" size={24} color="white" />
+          </Pressable>
+        </View>
+        <Image
+          style={{ height: 230, width: 230 }}
+          source={require('../assets/images/img6.png')}
+        ></Image>
       </View>
       <View>
         <View style={styles.separador}>
+          <View className="mt-14"></View>
+          <Text className="text-sky-900 text-3xl font-super">
+            Iniciar Sesión
+          </Text>
           <TextInput
-            className="mt-20 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
+            style={styles.input}
             onChangeText={setEmail}
             value={email}
             keyboardType="email-address"
             placeholder="Email"
+            autoCapitalize="none"
           />
           <TextInput
-            className="mt-12 border-b-2 border-sky-800 text-2xl placeholder:text-slate-400 w-60 p-2"
+            style={styles.input}
             onChangeText={setPass}
             value={pass}
             secureTextEntry={true}
             placeholder="Contraseña"
+            autoCapitalize="none"
           />
           <Pressable
             onPress={login}
             className="rounded-xl  shadow shadow-black bg-sky-800 py-3 px-4 mt-28"
           >
-            <Text className="text-white text-lg">Iniciar Sesión</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => Alert.alert('Enviaremos un email de recuperacion a tu correo')}
-            className="rounded-xl p-3 mb-12  mt-8"
-          >
-            <Text className="text-sky-800 text-lg">
-              Olvidaste tu contraseña?
+            <Text className="text-white text-xl font-super">
+              Iniciar Sesión
             </Text>
           </Pressable>
           <Pressable
-            onPress={() => router.navigate('/register')}
-            className="rounded-xl  p-3  mt-8 mb-80"
+            onPress={() =>
+              Alert.alert('Enviaremos un email de recuperacion a tu correo')
+            }
+            className="rounded-xl p-3 mb-8  mt-8"
           >
-            <Text className="text-sky-800 text-lg">Registrarme</Text>
+            <Text className="text-sky-800 text-lg font-super">
+              Olvidaste tu contraseña?
+            </Text>
+          </Pressable>
+          <Text className="text-gray-400 mb-6">ó</Text>
+          <Pressable
+            onPress={() => router.navigate('/register')}
+            className="rounded-xl py-4 px-6 mt-4 mb-80 bg-slate-50"
+          >
+            <Text className="text-sky-800 text-lg font-sla">Registrarme</Text>
           </Pressable>
         </View>
       </View>
@@ -97,5 +132,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  image: {},
+  input: {
+    marginTop: 48, // mt-12 equivale a 12 * 4 (en React Native, la unidad es dp)
+    borderBottomWidth: 2, // border-b-2
+    borderColor: '#0284c7', // border-sky-800
+    fontSize: 20, // text-2xl
+    placeholderTextColor: '#94a3b8', // placeholder:text-slate-400
+    width: 245, // w-60 equivale a 60 * 4 (en React Native, la unidad es dp)
+    padding: 10, // p-2 equivale a 2 * 4 (en React Native, la unidad es dp)
+    backgroundColor: '#f1f5f9', // bg-slate-100
+    borderRadius: 8, // rounded-md
+    fontFamily: 'Slaberlin',
+  },
 });
