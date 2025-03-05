@@ -43,11 +43,11 @@ export default function Tabs() {
           <Feather
             name="home"
             size={28}
-            color={route.name == 'home' ? '#0369a1' : '#000'}
+            color={route.name == 'home' ? '#0369a1' : 'rgb(107,114,128)'}
           />
           <Text
             className={`${
-              route.name == 'home' ? 'text-sky-800 font-bold' : 'text-black'
+              route.name == 'home' ? 'text-sky-800 font-slabold' : 'text-gray-500 font-slabold'
             } text-center`}
           >
             Inicio
@@ -65,7 +65,7 @@ export default function Tabs() {
               route.name == 'galery' ||
               route.name == 'report'
                 ? '#0369a1'
-                : '#000'
+                : 'rgb(107,114,128)'
             }
           />
           <Text
@@ -73,8 +73,8 @@ export default function Tabs() {
               route.name == 'emotions' ||
               route.name == 'galery' ||
               route.name == 'report'
-                ? 'text-sky-800 font-bold'
-                : 'text-black'
+                ? 'text-sky-800 font-slabold'
+                : 'text-gray-500 font-slabold'
             } text-center`}
           >
             Emociones
@@ -87,11 +87,11 @@ export default function Tabs() {
           <MaterialCommunityIcons
             name="account-circle-outline"
             size={28}
-            color={route.name == 'settings' ? '#0369a1' : '#000'}
+            color={route.name == 'settings' ? '#0369a1' : 'rgb(107,114,128)'}
           />
           <Text
             className={`${
-              route.name == 'settings' ? 'text-sky-800 font-bold' : 'text-black'
+              route.name == 'settings' ? 'text-sky-800 font-slabold' : 'text-gray-500 font-slabold'
             } text-center`}
           >
             Mi Perfil
