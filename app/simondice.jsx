@@ -128,18 +128,46 @@ export default function SimonSays() {
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {gameState === 'start' && (
-                <>
-                    <Text style={{ fontSize: 48, fontWeight: 'bold' }}>SIMONJI</Text>
-                    <Text style={{ fontSize: 22, marginVertical: 15 }}>SIGUE LA SECUENCIA DE LAS EMOCIONES!</Text>
-                    <TouchableOpacity
-                        onPress={() => setGameState('countdown')}
-                        style={{ marginTop: 20, padding: 20, borderRadius: 50, backgroundColor: 'blue' }}
-                    >
-                        <Text style={{ color: 'white', fontSize: 20 }}>Iniciar</Text>
-                    </TouchableOpacity>
-                </>
-            )}
+         {gameState === 'start' && (
+    <>
+        <Image
+            source={require('../assets/images/port_simonji.gif')}
+            style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                resizeMode: 'cover'
+            }}
+        />
+        <TouchableOpacity
+            onPress={() => setGameState('countdown')}
+            style={{
+                position: 'absolute',
+                bottom: 50,
+                alignSelf: 'center',
+                backgroundColor: '#4CAF50', // Verde vibrante
+                paddingVertical: 15,
+                paddingHorizontal: 40,
+                borderRadius: 30,
+                elevation: 10, // Sombra en Android
+                shadowColor: '#000', // Sombra en iOS
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+            }}
+        >
+            <Text style={{
+                color: 'white',
+                fontSize: 24,
+                fontWeight: 'bold',
+                textAlign: 'center',
+            }}>
+                ¡JUGAR!
+            </Text>
+        </TouchableOpacity>
+    </>
+)}
+
             {gameState === 'countdown' && (
                 <Text style={{ fontSize: 48, fontWeight: 'bold' }}>{countdown}</Text>
             )}

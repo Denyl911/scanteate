@@ -158,31 +158,23 @@ export default function Emotions() {
   const renderScreen = () => {
     switch (currentScreen) {
       case 1:
-        return (
-          <View className="flex-1 items-center justify-center">
-            <View className="absolute left-0 top-8">
+        case 1:
+          return (
+            <View className="flex-1 items-center justify-center relative">
+              <Image 
+                source={require('../assets/images/port_imitame.gif')} // Ajusta la ruta del GIF
+                style={{ width: '100%', height: '100%', position: 'absolute' }} 
+                resizeMode="cover"
+              />
               <Pressable
-                className="ml-4 p-2 rounded-xl mt-5 bg-sky-100"
-                onPress={() => router.back()}
+                className="bg-sky-800 p-4 rounded-lg absolute bottom-20"
+                onPress={() => setCurrentScreen(2)}
               >
-                <AntDesign name="left" size={24} color="gray" />
+                <Text className="text-white font-super text-lg">Comenzar</Text>
               </Pressable>
             </View>
-            <Text className="text-3xl font-custom">
-              Bienvenido a IMITAME!
-            </Text>
-            <Text className="text-center text-xl mt-2 font-sla">
-              Imita las emociones que te salgan en pantalla
-            </Text>
-            <Pressable
-              className="bg-sky-800 p-4 rounded-lg mt-4"
-              onPress={() => setCurrentScreen(2)}
-            >
-              <Text className="text-white font-super text-lg">Comenzar</Text>
-            </Pressable>
-          </View>
-        );
-
+          );
+        
       case 2:
         return (
           <View className="flex-1 items-center justify-center">
