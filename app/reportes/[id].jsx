@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
 import {
   View,
   Text,
@@ -11,32 +11,18 @@ import {
   Pressable,
   Modal,
   StyleSheet,
-  ToastAndroid
-} from 'react-native';
-import Tabs from '../../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
+  ToastAndroid,
+} from "react-native";
+import Tabs from "../../components/Tabs";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
-const meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
 export default function Reportes() {
   const { id } = useLocalSearchParams();
   const [user, setUser] = useState({
     id: 0,
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
   const [userEmotions, setUserEmotions] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,12 +30,12 @@ export default function Reportes() {
 
   const getUser = async () => {
     setUserEmotions([]);
-    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
+    const users = JSON.parse(await AsyncStorage.getItem("users")) || [];
     const alumno = users.find((el) => el.id == id);
     if (alumno) {
       setUser(alumno);
     }
-    const all = JSON.parse(await AsyncStorage.getItem('reports')) || [];
+    const all = JSON.parse(await AsyncStorage.getItem("reports")) || [];
     all.forEach((el) => {
       if (el.userId == alumno.id) {
         setUserEmotions((op) => [...op, el]);
@@ -64,13 +50,13 @@ export default function Reportes() {
   );
 
   const deleteReport = async () => {
-    const all = JSON.parse(await AsyncStorage.getItem('reports')) || [];
+    const all = JSON.parse(await AsyncStorage.getItem("reports")) || [];
     const allFilt = all.filter((el) => el.id != deleteId);
     setUserEmotions(allFilt);
-    await AsyncStorage.setItem('reports', JSON.stringify(allFilt));
+    await AsyncStorage.setItem("reports", JSON.stringify(allFilt));
     setModalVisible(!modalVisible);
     ToastAndroid.showWithGravity(
-      'Eliminado exitosamente',
+      "Eliminado exitosamente",
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );
@@ -123,7 +109,7 @@ export default function Reportes() {
                   <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 flex items-center justify-center">
                     <Image
                       className="w-14 h-14"
-                      source={require('../../assets/images/user2.png')}
+                      source={require("../../assets/images/user2.png")}
                     ></Image>
                   </View>
                 </Pressable>
@@ -131,7 +117,7 @@ export default function Reportes() {
             })}
             <View
               className={`mt-10 mb-10 ${
-                userEmotions.length > 0 ? 'block' : 'hidden'
+                userEmotions.length > 0 ? "block" : "hidden"
               }`}
             >
               <Pressable
@@ -145,7 +131,7 @@ export default function Reportes() {
             </View>
             <View
               className={`mt-28 ${
-                userEmotions.length > 0 ? 'hidden' : 'block'
+                userEmotions.length > 0 ? "hidden" : "block"
               }`}
             >
               <Text className="text-center text-lg">
@@ -201,17 +187,17 @@ export default function Reportes() {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -222,6 +208,6 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

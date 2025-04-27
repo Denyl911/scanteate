@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,30 +9,30 @@ import {
   ToastAndroid,
   Switch,
   Keyboard,
-} from 'react-native';
-import Tabs from '../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Entypo from '@expo/vector-icons/Entypo';
-import { Picker } from '@react-native-picker/picker';
+} from "react-native";
+import Tabs from "../components/Tabs";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Entypo from "@expo/vector-icons/Entypo";
+import { Picker } from "@react-native-picker/picker";
 
 export default function ReportConfig() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [user, setUser] = useState(null);
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  const [selectedVal, setSelectedVal] = useState('Semanal');
+  const [selectedVal, setSelectedVal] = useState("Semanal");
 
   useEffect(() => {
     const loadValue = async () => {
       try {
-        const data = JSON.parse(await AsyncStorage.getItem('user'));
+        const data = JSON.parse(await AsyncStorage.getItem("user"));
         console.log(data);
         setUser(data);
-        setEmail(data.psicoEmail)
+        setEmail(data.psicoEmail);
       } catch (e) {
-        console.error('Error al cargar el valor de AsyncStorage', e);
+        console.error("Error al cargar el valor de AsyncStorage", e);
       }
     };
 
@@ -41,7 +41,7 @@ export default function ReportConfig() {
 
   const sendReport = () => {
     ToastAndroid.showWithGravity(
-      'Enviando Reporte',
+      "Enviando Reporte",
       ToastAndroid.LONG,
       ToastAndroid.CENTER
     );
@@ -49,39 +49,39 @@ export default function ReportConfig() {
 
   const setPscicoEmail = async () => {
     if (user) {
-      const res = await fetch(`https://api.scanteate.fun/users/${user.id}`, {
-        method: 'PUT',
+      const res = await fetch(`https://api.scanteate.com/users/${user.id}`, {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           psicoEmail: email,
         }),
       });
-      const data = await res.json()
+      const data = await res.json();
       console.log(data);
-      
+
       if (res.status == 200) {
         const newData = { ...user };
         newData.psicoEmail = email;
         setUser(newData);
-        await AsyncStorage.setItem('user', JSON.stringify(newData))
-        Keyboard.dismiss()
+        await AsyncStorage.setItem("user", JSON.stringify(newData));
+        Keyboard.dismiss();
         ToastAndroid.showWithGravity(
-          'Actualizado Correctamente',
+          "Actualizado Correctamente",
           ToastAndroid.LONG,
           ToastAndroid.CENTER
         );
       } else {
-        console.log('Ocurrio un error');
+        console.log("Ocurrio un error");
         ToastAndroid.showWithGravity(
-          'Intentalo mas tarde',
+          "Intentalo mas tarde",
           ToastAndroid.LONG,
           ToastAndroid.CENTER
         );
       }
     } else {
-      console.log('Vuelve a iniciar sesion');
+      console.log("Vuelve a iniciar sesion");
     }
   };
 
@@ -128,15 +128,15 @@ export default function ReportConfig() {
             </Text>
             <Switch
               className="mr-2"
-              trackColor={{ false: '#767577', true: 'rgb(125 211 252)' }}
-              thumbColor={'#f4f3f4'}
+              trackColor={{ false: "#767577", true: "rgb(125 211 252)" }}
+              thumbColor={"#f4f3f4"}
               onValueChange={toggleSwitch}
               value={isEnabled}
             />
           </View>
           <View className="mb-10 mt-6 px-2">
             <Text className="text-slate-800 font-bold text-xl">
-              Periodo de envio:{' '}
+              Periodo de envio:{" "}
             </Text>
             <View className="bg-slate-300 rounded-lg">
               <Picker

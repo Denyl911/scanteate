@@ -1,21 +1,27 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 
 function Dots({ x }) {
   if (x == 1) {
     return (
       <View className="flex flex-row">
-        <Image className="mr-2" source={require('../assets/images/dot1.png')}></Image>
-        <Image source={require('../assets/images/dot2.png')}></Image>
+        <Image
+          className="mr-2"
+          source={require("../assets/images/dot1.png")}
+        ></Image>
+        <Image source={require("../assets/images/dot2.png")}></Image>
       </View>
     );
   } else {
     return (
       <View className="flex flex-row">
-        <Image className="mr-2" source={require('../assets/images/dot2.png')}></Image>
-        <Image source={require('../assets/images/dot1.png')}></Image>
+        <Image
+          className="mr-2"
+          source={require("../assets/images/dot2.png")}
+        ></Image>
+        <Image source={require("../assets/images/dot1.png")}></Image>
       </View>
     );
   }
@@ -25,9 +31,9 @@ function Slides({ x }) {
   if (x == 1) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image source={require('../assets/images/logo.png')}></Image>
+        <Image source={require("../assets/images/logo.png")}></Image>
         <Text className="text-sky-700 text-center text-xl font-bold py-4">
-          SCAN<Text style={{ fontFamily: 'PlayChicken' }}>TEA</Text>TE
+          SCAN<Text style={{ fontFamily: "PlayChicken" }}>TEA</Text>TE
         </Text>
         <Text className="text-center mx-5">
           Una aplicación de comunicación para ayudar a los estudiantes con
@@ -38,7 +44,7 @@ function Slides({ x }) {
   } else {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image source={require('../assets/images/slide2.png')}></Image>
+        <Image source={require("../assets/images/slide2.png")}></Image>
         <Text className="text-sky-800 text-center text-xl font-bold py-4">
           Todo muy facil
         </Text>
@@ -55,23 +61,25 @@ export default function Welcome({ navigation }) {
   const [n, setN] = useState(1);
 
   const [user, setUser] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
   const getUser = async () => {
-    const data = JSON.parse(await AsyncStorage.getItem('user'))
+    const data = JSON.parse(await AsyncStorage.getItem("user"));
     setUser(data);
     if (data) {
-      navigation.reset({index: 0, routes: [{name: 'Home'}]})
+      navigation.reset({ index: 0, routes: [{ name: "Home" }] });
     }
   };
-  useFocusEffect(useCallback(() => {
-    getUser();
-  }));
+  useFocusEffect(
+    useCallback(() => {
+      getUser();
+    })
+  );
 
   const nextSlide = () => {
     if (n == 2) {
-      navigation.navigate('LoginBefore');
+      navigation.navigate("LoginBefore");
     } else {
       setN(n + 1);
     }
@@ -97,11 +105,11 @@ export default function Welcome({ navigation }) {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#0D5692',
+    backgroundColor: "#0D5692",
     padding: 15,
-    borderRadius: '50%',
+    borderRadius: "50%",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
   },
 });

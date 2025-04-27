@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import { router } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { router } from "expo-router";
 import {
   View,
   Text,
@@ -10,21 +10,20 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
-} from 'react-native';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Octicons from '@expo/vector-icons/Octicons';
-import Tabs from '../components/Tabs';
-import UserAvatar from '../components/UserAvatar';
+} from "react-native";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Octicons from "@expo/vector-icons/Octicons";
+import Tabs from "../components/Tabs";
+import UserAvatar from "../components/UserAvatar";
 
 export default function Settings() {
   const [user, setUser] = useState({
     id: 0,
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
   const getUser = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
+    setUser(JSON.parse(await AsyncStorage.getItem("user")) || user);
   };
   useFocusEffect(
     useCallback(() => {
@@ -33,8 +32,8 @@ export default function Settings() {
   );
 
   const logout = async () => {
-    await AsyncStorage.removeItem('user');
-    router.replace('/loginBefore');
+    await AsyncStorage.removeItem("user");
+    router.replace("/loginBefore");
   };
   return (
     <View className="h-[100%]">
@@ -42,7 +41,7 @@ export default function Settings() {
       <View style={{ marginTop: StatusBar.currentHeight }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
-          source={require('../assets/images/image.png')}
+          source={require("../assets/images/image.png")}
         ></Image>
         <View className="-mt-48 flex items-center">
           <View className="mt-10">
@@ -50,11 +49,11 @@ export default function Settings() {
           </View>
           <Text
             style={{
-              color: 'white',
-              textAlign: 'center', // text-center
+              color: "white",
+              textAlign: "center", // text-center
               fontSize: 18, // text-md (en React Native, text-md suele ser 16px)
               marginTop: 8, // mt-2 (en React Native, la unidad es dp)
-              fontFamily: 'SuperFeel', // font-bold
+              fontFamily: "SuperFeel", // font-bold
             }}
           >
             {user.name}
@@ -64,7 +63,7 @@ export default function Settings() {
       <View style={styles.container}>
         <ScrollView className="mt-12">
           <Pressable
-            onPress={() => router.navigate('/createAvatar')}
+            onPress={() => router.navigate("/createAvatar")}
             className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mt-20"
           >
             <Text className="text-gray-100 text-xl font-super">Mi Avatar</Text>
@@ -73,11 +72,11 @@ export default function Settings() {
             </Text>
             <Image
               className="mt-10 absolute right-4 bottom-1 w-[70] h-[70]"
-              source={require('../assets/images/img3.png')}
+              source={require("../assets/images/img3.png")}
             ></Image>
           </Pressable>
           <Pressable
-            onPress={() => router.navigate('/galery')}
+            onPress={() => router.navigate("/galery")}
             className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-8"
           >
             <Text className="text-gray-100 text-xl font-super">Galería</Text>
@@ -92,7 +91,7 @@ export default function Settings() {
             />
           </Pressable>
           <Pressable
-            onPress={() => router.navigate('/reportConfig')}
+            onPress={() => router.navigate("/reportConfig")}
             className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
           >
             <Text className="text-gray-100 text-xl font-super">Reportes</Text>

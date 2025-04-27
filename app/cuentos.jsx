@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,26 +7,26 @@ import {
   Image,
   StatusBar,
   Linking,
-} from 'react-native';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
+} from "react-native";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function Cuentos() {
   const cuentos = [
     {
-      title: 'El Dragon Chef',
-      path: 'https://drive.google.com/uc?export=download&id=1WFvQyMxjIHF_5eyLPuZ3Uja5-_a-L-3u',
-      image: require('../assets/images/El Dragon Chef portada.png'),
+      title: "El Dragon Chef",
+      path: "https://drive.google.com/uc?export=download&id=1WFvQyMxjIHF_5eyLPuZ3Uja5-_a-L-3u",
+      image: require("../assets/images/El Dragon Chef portada.png"),
     },
     {
-      title: 'Un lío de narices',
-      path: 'https://drive.google.com/uc?export=download&id=1V_EDIxQreJZcnZEz1nOb1l42O6suov-3',
-      image: require('../assets/images/Un lío de narices portada.png'),
+      title: "Un lío de narices",
+      path: "https://drive.google.com/uc?export=download&id=1V_EDIxQreJZcnZEz1nOb1l42O6suov-3",
+      image: require("../assets/images/Un lío de narices portada.png"),
     },
     {
-      title: 'Un tirón de orejas',
-      path: 'https://drive.google.com/uc?export=download&id=1b_vENKrzT0gfGkEvtdvoTM6TAy6xOR_s',
-      image: require('../assets/images/Un tirón de orejas portada.png'),
+      title: "Un tirón de orejas",
+      path: "https://drive.google.com/uc?export=download&id=1b_vENKrzT0gfGkEvtdvoTM6TAy6xOR_s",
+      image: require("../assets/images/Un tirón de orejas portada.png"),
     },
   ];
 
@@ -54,32 +54,32 @@ export default function Cuentos() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 14,
     left: 5,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     padding: 10,
     borderRadius: 8,
     zIndex: 10,
     marginTop: 30,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 24,
-    fontFamily: 'PlayChickens',
+    fontFamily: "PlayChickens",
     marginTop: 65,
     marginBottom: 30,
-    color: '#0369a1',
+    color: "#0369a1",
   },
   cuentoButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 20,
     margin: 10,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 8,
   },
   cuentoImage: {
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
   },
   cuentoText: {
     fontSize: 18,
-    color: '#0369a1',
-    textAlign: 'left',
-    fontFamily: 'SuperFeel'
+    color: "#0369a1",
+    textAlign: "left",
+    fontFamily: "SuperFeel",
   },
 });

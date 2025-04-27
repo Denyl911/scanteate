@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Text,
@@ -7,45 +6,30 @@ import {
   Pressable,
   StatusBar,
   ToastAndroid,
-} from 'react-native';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
-import { useCallback, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-
-const meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
+} from "react-native";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function setUrl() {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
 
   const saveReport = async () => {
-    await AsyncStorage.setItem('apiUrl', url);
+    await AsyncStorage.setItem("apiUrl", url);
     ToastAndroid.showWithGravity(
-      'Reporte generado exitosamente',
+      "Reporte generado exitosamente",
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );
   };
 
   const getUser = async () => {
-    let data = await AsyncStorage.getItem('user');
+    let data = await AsyncStorage.getItem("user");
     if (data) {
       data = JSON.parse(data);
     }
-    const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+    const all = JSON.parse(await AsyncStorage.getItem("emotions")) || [];
     setAllEmotions(all);
     all.forEach((el) => {
       if (el.userId == id) {
@@ -95,13 +79,13 @@ export default function setUrl() {
                 <Text className="text-white text-center">Guardar </Text>
               </Pressable>
               <Pressable
-                onPress={() => router.navigate('/')}
+                onPress={() => router.navigate("/")}
                 className="bg-sky-700 rounded-xl px-3 py-4 mt-8"
               >
                 <Text className="text-white text-center">Welcome</Text>
               </Pressable>
               <Pressable
-                onPress={() => router.navigate('/home')}
+                onPress={() => router.navigate("/home")}
                 className="bg-sky-500 rounded-xl px-4 py-4 my-3"
               >
                 <Text className="text-white text-center">Home</Text>

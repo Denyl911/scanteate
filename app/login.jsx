@@ -19,7 +19,7 @@ export default function Login() {
 
   const login = async () => {
     try {
-      const res = await fetch('https://api.scanteate.fun/users/login', {
+      const res = await fetch('https://api.scanteate.com/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

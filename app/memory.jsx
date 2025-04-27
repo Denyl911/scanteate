@@ -190,7 +190,7 @@ export default function Memory() {
 
     try {
       const us = JSON.parse(await AsyncStorage.getItem('user'));
-      const response = await fetch('https://api.scanteate.fun/activities', {
+      const response = await fetch('https://api.scanteate.com/activities', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

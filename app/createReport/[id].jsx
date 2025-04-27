@@ -1,48 +1,46 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
 import {
   View,
   Text,
-  ScrollView,
-  Image,
   TextInput,
   Pressable,
   StatusBar,
-  ToastAndroid
-} from 'react-native';
-import Tabs from '../../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
+  ToastAndroid,
+} from "react-native";
+import Tabs from "../../components/Tabs";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 
 const meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 export default function createReport() {
-  const [selectedMonth, setSelectedMonth] = useState('5');
+  const [selectedMonth, setSelectedMonth] = useState("5");
   const { id } = useLocalSearchParams();
   const [user, setUser] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
   const [reportName, setReportName] = useState();
 
   const getUser = async () => {
-    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
+    const users = JSON.parse(await AsyncStorage.getItem("users")) || [];
     const alumno = users.find((el) => el.id == id);
     if (alumno) {
       setUser(alumno);
@@ -55,7 +53,7 @@ export default function createReport() {
   );
 
   const saveReport = async () => {
-    const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+    const all = JSON.parse(await AsyncStorage.getItem("emotions")) || [];
     let emotions = [];
     all.forEach((el) => {
       if (el.userId == user.id) {
@@ -76,9 +74,9 @@ export default function createReport() {
         }
       }
     });
-    const reports = JSON.parse(await AsyncStorage.getItem('reports')) || [];
+    const reports = JSON.parse(await AsyncStorage.getItem("reports")) || [];
     await AsyncStorage.setItem(
-      'reports',
+      "reports",
       JSON.stringify([
         ...reports,
         {
@@ -91,7 +89,7 @@ export default function createReport() {
       ])
     );
     ToastAndroid.showWithGravity(
-      'Reporte generado exitosamente',
+      "Reporte generado exitosamente",
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );

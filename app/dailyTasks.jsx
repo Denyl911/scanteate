@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,40 +6,40 @@ import {
   StyleSheet,
   Image,
   StatusBar,
-} from 'react-native';
-import Checkbox from 'expo-checkbox';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
+} from "react-native";
+import Checkbox from "expo-checkbox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
-const TASKS_KEY = 'tasks';
-const DATE_KEY = 'lastDate';
+const TASKS_KEY = "tasks";
+const DATE_KEY = "lastDate";
 
 export default function DailyTasks() {
   const initialTasks = [
     {
-      title: 'Despertar a las 8:00am',
-      image: require('../assets/images/cama.png'),
+      title: "Despertar a las 8:00am",
+      image: require("../assets/images/cama.png"),
       complete: false,
     },
     {
-      title: 'Comer saludable',
-      image: require('../assets/images/comida.png'),
+      title: "Comer saludable",
+      image: require("../assets/images/comida.png"),
       complete: false,
     },
     {
-      title: 'Lavarme los dientes',
-      image: require('../assets/images/cepillo.png'),
+      title: "Lavarme los dientes",
+      image: require("../assets/images/cepillo.png"),
       complete: false,
     },
     {
-      title: 'Hacer tarea',
-      image: require('../assets/images/tarea.png'),
+      title: "Hacer tarea",
+      image: require("../assets/images/tarea.png"),
       complete: false,
     },
     {
-      title: 'Hacer ejercicio',
-      image: require('../assets/images/ejercicio.png'),
+      title: "Hacer ejercicio",
+      image: require("../assets/images/ejercicio.png"),
       complete: false,
     },
   ];
@@ -58,11 +58,11 @@ export default function DailyTasks() {
         if (storedDate !== today || !storedTasks) {
           await resetTasks(today);
         } else {
-            await resetTasks(today);
-        //   setTasks(JSON.parse(storedTasks));
+          await resetTasks(today);
+          //   setTasks(JSON.parse(storedTasks));
         }
       } catch (error) {
-        console.error('Error al cargar tareas:', error);
+        console.error("Error al cargar tareas:", error);
       }
     };
 
@@ -76,7 +76,7 @@ export default function DailyTasks() {
       await AsyncStorage.setItem(TASKS_KEY, JSON.stringify(updatedTasks));
       await AsyncStorage.setItem(DATE_KEY, new Date().toDateString());
     } catch (error) {
-      console.error('Error al guardar tareas:', error);
+      console.error("Error al guardar tareas:", error);
     }
   };
 
@@ -95,7 +95,7 @@ export default function DailyTasks() {
       await AsyncStorage.setItem(DATE_KEY, date);
       setTasks(initialTasks);
     } catch (error) {
-      console.error('Error al reiniciar tareas:', error);
+      console.error("Error al reiniciar tareas:", error);
     }
   };
 
@@ -121,7 +121,11 @@ export default function DailyTasks() {
           >
             {task.title}
           </Text>
-          <Image blurRadius={task.complete ? 10 : 0} source={task.image} style={[styles.cuentoImage]} />
+          <Image
+            blurRadius={task.complete ? 10 : 0}
+            source={task.image}
+            style={[styles.cuentoImage]}
+          />
         </Pressable>
       ))}
     </View>
@@ -131,32 +135,32 @@ export default function DailyTasks() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 14,
     left: 5,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     padding: 10,
     borderRadius: 8,
     zIndex: 10,
     marginTop: 30,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 28,
-    fontFamily: 'PlayChickens',
+    fontFamily: "PlayChickens",
     marginTop: 65,
     marginBottom: 30,
-    color: '#0369a1',
+    color: "#0369a1",
   },
   cuentoButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 20,
     margin: 10,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 8,
   },
   cuentoImage: {
@@ -166,20 +170,20 @@ const styles = StyleSheet.create({
   },
   cuentoText: {
     fontSize: 18,
-    color: '#0369a1',
-    textAlign: 'left',
-    fontFamily: 'SuperFeel',
+    color: "#0369a1",
+    textAlign: "left",
+    fontFamily: "SuperFeel",
     marginLeft: 10,
     marginRight: 20,
   },
   checkbox: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   textComplete: {
-    textDecorationLine: 'line-through',
-    color: 'rgb(51, 65, 85)',
+    textDecorationLine: "line-through",
+    color: "rgb(51, 65, 85)",
   },
   imgComplete: {
-    tintColor: 'gray'
+    tintColor: "gray",
   },
 });

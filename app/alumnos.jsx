@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -8,26 +8,25 @@ import {
   Image,
   Pressable,
   StatusBar,
-} from 'react-native';
-import Tabs from '../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
+} from "react-native";
+import Tabs from "../components/Tabs";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function Galery() {
   const [user, setUser] = useState({
-    name: '',
-    email: '',
-    type: '',
+    name: "",
+    email: "",
+    type: "",
   });
   const [alumnos, setAlumnos] = useState([]);
 
   const getUser = async () => {
     setAlumnos([]);
-    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
-    const all = JSON.parse(await AsyncStorage.getItem('users')) || [];
+    setUser(JSON.parse(await AsyncStorage.getItem("user")) || user);
+    const all = JSON.parse(await AsyncStorage.getItem("users")) || [];
     all.forEach((el) => {
-      if (el.type == 'Alumno') {
+      if (el.type == "Alumno") {
         setAlumnos((op) => [...op, el]);
       }
     });
@@ -68,7 +67,7 @@ export default function Galery() {
                     <View className="w-20 h-20 rounded-full bg-sky-600 opacity-95 flex items-center justify-center">
                       <Image
                         className="w-14 h-14"
-                        source={require('../assets/images/user3.png')}
+                        source={require("../assets/images/user3.png")}
                       ></Image>
                     </View>
                   </View>

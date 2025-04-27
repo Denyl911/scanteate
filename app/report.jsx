@@ -1,31 +1,31 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   Image,
   StatusBar,
-  Pressable
-} from 'react-native';
-import Tabs from '../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
+  Pressable,
+} from "react-native";
+import Tabs from "../components/Tabs";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 const meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 function formatearFecha(fecha) {
@@ -42,10 +42,10 @@ function formatearFecha(fecha) {
 
 export default function Report() {
   const [user, setUser] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
-  const [maxEmotion, setMaxEmotion] = useState('');
+  const [maxEmotion, setMaxEmotion] = useState("");
   const counter = {};
   const [userEmotions, setUserEmotions] = useState([]);
   const [mes, setMes] = useState(() => {
@@ -53,8 +53,8 @@ export default function Report() {
     return meses[d.getMonth()];
   });
   const getUser = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
-    const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+    setUser(JSON.parse(await AsyncStorage.getItem("user")) || user);
+    const all = JSON.parse(await AsyncStorage.getItem("emotions")) || [];
     all.forEach((el) => {
       if (el.userId == user.id) {
         setUserEmotions((op) => [...op, el]);
@@ -100,7 +100,7 @@ export default function Report() {
             {mes}
           </Text>
           <Text className="text-center text-lg mb-2 px-10">
-            La emoción mas presente de este mes fue:{' '}
+            La emoción mas presente de este mes fue:{" "}
             <Text className="text-sky-600 font-bold">{maxEmotion}</Text>
           </Text>
           <ScrollView>
@@ -125,4 +125,3 @@ export default function Report() {
     </View>
   );
 }
-

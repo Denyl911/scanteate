@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
 import {
   View,
   Text,
@@ -11,25 +11,25 @@ import {
   Pressable,
   TextInput,
   KeyboardAvoidingView,
-  ToastAndroid
-} from 'react-native';
-import Tabs from '../../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
+  ToastAndroid,
+} from "react-native";
+import Tabs from "../../components/Tabs";
+import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 const meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 function formatearFecha(fecha) {
@@ -47,23 +47,23 @@ function formatearFecha(fecha) {
 export default function Reporte() {
   const { id } = useLocalSearchParams();
   const [user, setUser] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
-  const [maxEmotion, setMaxEmotion] = useState('');
+  const [maxEmotion, setMaxEmotion] = useState("");
   const counter = {};
   const [userEmotions, setUserEmotions] = useState([]);
-  const [mes, setMes] = useState('');
-  const [obs, setObs] = useState('');
+  const [mes, setMes] = useState("");
+  const [obs, setObs] = useState("");
   const [rep, setRep] = useState({});
   const getUser = async () => {
-    const users = JSON.parse(await AsyncStorage.getItem('users')) || [];
-    const all = JSON.parse(await AsyncStorage.getItem('reports')) || [];
+    const users = JSON.parse(await AsyncStorage.getItem("users")) || [];
+    const all = JSON.parse(await AsyncStorage.getItem("reports")) || [];
 
     const emo = all.find((el) => el.id == id);
     setRep(emo);
     if (emo.comments) {
-        setObs(emo.comments)
+      setObs(emo.comments);
     }
     const alumno = users.find((el) => el.id == emo.userId);
     if (alumno) {
@@ -95,14 +95,14 @@ export default function Reporte() {
   );
 
   const saveObs = async () => {
-    const all = JSON.parse(await AsyncStorage.getItem('reports')) || [];
+    const all = JSON.parse(await AsyncStorage.getItem("reports")) || [];
     const filtered = all.filter((el) => el.id != id);
     const data = { ...rep };
     data.comments = obs;
     filtered.push(data);
-    await AsyncStorage.setItem('reports', JSON.stringify(filtered));
+    await AsyncStorage.setItem("reports", JSON.stringify(filtered));
     ToastAndroid.showWithGravity(
-      'Observaciones guardadas exitosamente',
+      "Observaciones guardadas exitosamente",
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );

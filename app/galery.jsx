@@ -56,7 +56,7 @@ export default function Galery() {
     const us = JSON.parse(await AsyncStorage.getItem('user'));
     setUser(us);
     try {
-      const res = await fetch(`https://api.scanteate.fun/users/emotions/${us.id}`);
+      const res = await fetch(`https://api.scanteate.com/users/emotions/${us.id}`);
       const emotions = await res.json();
       setUserEmotions(emotions);
     } catch (e) {
@@ -80,7 +80,7 @@ export default function Galery() {
     const id = deleteId;
     if (Number.isInteger(id)) {
       try {
-        await fetch(`https://api.scanteate.fun/users/emotions/${id}`, {
+        await fetch(`https://api.scanteate.com/users/emotions/${id}`, {
           method: 'DELETE',
         });
       } catch (e) {
