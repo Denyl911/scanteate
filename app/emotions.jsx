@@ -122,10 +122,12 @@ export default function Emotions() {
         setColor(emotionColors[emo]);
         setBorder(color.replace("text", "border"));
         try {
+          const token = JSON.parse(await AsyncStorage.getItem("token"));
           const res = await fetch("https://api.scanteate.com/users/emotions", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              auth: token,
             },
             body: JSON.stringify({
               UserId: user.id,

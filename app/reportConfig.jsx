@@ -49,10 +49,12 @@ export default function ReportConfig() {
 
   const setPscicoEmail = async () => {
     if (user) {
+      const token = JSON.parse(await AsyncStorage.getItem("token"));
       const res = await fetch(`https://api.scanteate.com/users/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          auth: token,
         },
         body: JSON.stringify({
           psicoEmail: email,

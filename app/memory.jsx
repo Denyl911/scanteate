@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState, useEffect } from "react";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
   Text,
@@ -8,11 +8,11 @@ import {
   Animated,
   Easing,
   Pressable,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { AntDesign } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 const randomArrFunction = (arr) => {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -23,8 +23,8 @@ const randomArrFunction = (arr) => {
 };
 
 const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
+  const letters = "0123456789ABCDEF";
+  let color = "#";
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
@@ -34,15 +34,15 @@ const getRandomColor = () => {
 // Modifica `gameCardsFunction` para asignar un color único a cada par
 const gameCardsFunction = (pairsCount) => {
   const icons = [
-    'paw',
-    'heart',
-    'star',
-    'bell',
-    'gift',
-    'rocket',
-    'leaf',
-    'car',
-    'bicycle',
+    "paw",
+    "heart",
+    "star",
+    "bell",
+    "gift",
+    "rocket",
+    "leaf",
+    "car",
+    "bicycle",
   ];
 
   // Selecciona los íconos necesarios y duplica cada ícono para crear los pares
@@ -110,9 +110,9 @@ export default function Memory() {
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds
+    return `${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
-      .padStart(2, '0')}`;
+      .padStart(2, "0")}`;
   };
 
   const cardClickFunction = (card) => {
@@ -189,27 +189,29 @@ export default function Memory() {
     const duration = Math.floor((endTime - startTime) / 1000);
 
     try {
-      const us = JSON.parse(await AsyncStorage.getItem('user'));
-      const response = await fetch('https://api.scanteate.com/activities', {
-        method: 'POST',
+      const us = JSON.parse(await AsyncStorage.getItem("user"));
+      const token = JSON.parse(await AsyncStorage.getItem("token"));
+      const response = await fetch("https://api.scanteate.com/activities", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          auth: token,
         },
         body: JSON.stringify({
           UserId: us.id,
-          type: 'Memorama',
+          type: "Memorama",
           start: startTime.toISOString(),
           end: endTime.toISOString(),
           duration,
         }),
       });
       if (!response.ok) {
-        console.log('Error al enviar los datos del tiempo del juego');
+        console.log("Error al enviar los datos del tiempo del juego");
       }
       const data = await response.json();
-      console.log('Datos del tiempo enviados con éxito:', data);
+      console.log("Datos del tiempo enviados con éxito:", data);
     } catch (error) {
-      console.error('Error al enviar los datos del tiempo', error);
+      console.error("Error al enviar los datos del tiempo", error);
     }
   };
 
@@ -243,7 +245,7 @@ export default function Memory() {
           Cronómetro <Text className="text-sky-600">{formatTime(timer)}</Text>
         </Text>
         <Text className="text-center font-super text-lg">
-          Encontrados <Text className="text-sky-600">{matches} </Text>/{' '}
+          Encontrados <Text className="text-sky-600">{matches} </Text>/{" "}
           {cards.length / 2}
         </Text>
       </View>
@@ -257,7 +259,7 @@ export default function Memory() {
               Has ganado el juego
             </Text>
             <Text className="font-super text-white text-3xl text-center">
-              Tiempo:{' '}
+              Tiempo:{" "}
               <Text className="text-green-400">{formatTime(timer)}</Text>
             </Text>
             <Pressable
@@ -279,8 +281,8 @@ export default function Memory() {
               <LinearGradient
                 colors={
                   card.isFlipped
-                    ? ['#f4f4f4', '#f4f4f4']
-                    : ['#4dabf5', '#0284c7']
+                    ? ["#f4f4f4", "#f4f4f4"]
+                    : ["#4dabf5", "#0284c7"]
                 }
                 style={[styles.card, card.isFlipped && styles.cardFlipped]}
               >
@@ -303,54 +305,54 @@ export default function Memory() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'rgb(219, 234, 249)',
+    alignItems: "center",
+    backgroundColor: "rgb(219, 234, 249)",
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    width: '100%',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    width: "100%",
   },
   card: {
     width: 90,
     height: 90,
     margin: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 8,
   },
   cardFlipped: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderWidth: 2,
-    borderColor: 'rgb(3, 105, 161)',
+    borderColor: "rgb(3, 105, 161)",
     borderRadius: 8,
   },
   winMessage: {
-    position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: "absolute",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 1,
   },
   winMessageContent: {
-    backgroundColor: 'rgba(14, 165, 233, 0.7)',
+    backgroundColor: "rgba(14, 165, 233, 0.7)",
     padding: 25,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   winText: {
     fontSize: 36,
-    color: 'white',
-    fontFamily: 'PlayChickens',
+    color: "white",
+    fontFamily: "PlayChickens",
     marginBottom: 8,
   },
   winTimeText: {
     fontSize: 24,
-    color: 'white',
+    color: "white",
     marginTop: 10,
-    fontFamily: 'SuperFeel',
+    fontFamily: "SuperFeel",
   },
 });

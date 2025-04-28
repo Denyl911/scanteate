@@ -60,10 +60,12 @@ export default function RootLayout() {
   const sendSessionData = async (start, end, duration) => {
     try {
       const us = JSON.parse(await AsyncStorage.getItem("user"));
+      const token = JSON.parse(await AsyncStorage.getItem("token"));
       const response = await fetch("https://api.scanteate.com/sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          auth: token,
         },
         body: JSON.stringify({
           UserId: us.id,
