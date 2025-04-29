@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { router } from "expo-router";
+import { useState } from 'react';
+import { router } from 'expo-router';
 import {
   Image,
   StyleSheet,
@@ -10,14 +10,14 @@ import {
   ToastAndroid,
   ScrollView,
   KeyboardAvoidingView,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Register() {
-  const [name, setName] = useState("");
-  const [emailT, setEmailT] = useState("");
-  const [pass, setPass] = useState("");
-  const [pass2, setPass2] = useState("");
+  const [name, setName] = useState('');
+  const [emailT, setEmailT] = useState('');
+  const [pass, setPass] = useState('');
+  const [pass2, setPass2] = useState('');
   const [loading, setLoading] = useState(false);
 
   const registerUser = async () => {
@@ -26,16 +26,16 @@ export default function Register() {
       if (name && emailT && pass && pass2) {
         if (pass != pass2) {
           ToastAndroid.showWithGravity(
-            "Las contraseñas no coinciden",
+            'Las contraseñas no coinciden',
             ToastAndroid.LONG,
             ToastAndroid.CENTER
           );
           return;
         }
-        const res = await fetch("https://api.scanteate.com/users", {
-          method: "POST",
+        const res = await fetch('https://api.scanteate.com/users', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             name: name,
@@ -45,7 +45,7 @@ export default function Register() {
         });
         if (!res.status == 201) {
           ToastAndroid.showWithGravity(
-            "Oops ocurrio un error",
+            'Oops ocurrio un error',
             ToastAndroid.LONG,
             ToastAndroid.CENTER
           );
@@ -53,20 +53,20 @@ export default function Register() {
         } else {
           const data = await res.json();
           console.log(data);
-          await AsyncStorage.setItem("user", JSON.stringify(data.user));
-          await AsyncStorage.setItem("token", JSON.stringify(data.token));
-          router.replace("/home");
+          await AsyncStorage.setItem('user', JSON.stringify(data.user));
+          await AsyncStorage.setItem('token', JSON.stringify(data.token));
+          router.replace('/home');
         }
       } else {
         ToastAndroid.showWithGravity(
-          "Faltan campos por llenar",
+          'Faltan campos por llenar',
           ToastAndroid.LONG,
           ToastAndroid.CENTER
         );
       }
     } catch (e) {
       ToastAndroid.showWithGravity(
-        "Opps ocurrio un error!",
+        'Opps ocurrio un error!',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER
       );
@@ -80,9 +80,9 @@ export default function Register() {
         <Text
           style={{
             fontSize: 28,
-            fontFamily: "PlayChickens",
-            textAlign: "center",
-            color: "white",
+            fontFamily: 'PlayChickens',
+            textAlign: 'center',
+            color: 'white',
             marginTop: 64,
             marginLeft: 20,
           }}
@@ -90,8 +90,8 @@ export default function Register() {
           Registrarme
         </Text>
         <Image
-          style={{ height: 230, width: 230 }}
-          source={require("../assets/images/img77.png")}
+          style={{height: 230, width: 230}}
+          source={require('../assets/images/img77.png')}
         ></Image>
       </View>
       <View>
@@ -133,9 +133,7 @@ export default function Register() {
             disabled={loading}
             className="rounded-xl  shadow shadow-black bg-sky-800 py-3 px-4 mt-20"
           >
-            <Text className="text-white text-lg font-super">
-              {loading ? "Cargando..." : "Registrarme"}
-            </Text>
+            <Text className="text-white text-lg font-super">Registrarme</Text>
           </Pressable>
           <Pressable
             onPress={() => router.back()}
@@ -157,21 +155,21 @@ const styles = StyleSheet.create({
   separador: {
     borderRadius: 50,
     marginTop: -50,
-    backgroundColor: "white",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
-    marginTop: 48,
-    borderBottomWidth: 2,
-    borderColor: "#0284c7",
-    fontSize: 20,
-    placeholderTextColor: "#94a3b8",
-    width: 245,
-    padding: 10,
-    backgroundColor: "#f1f5f9",
-    borderRadius: 8,
-    fontFamily: "Slaberlin",
+    marginTop: 48, // mt-12 equivale a 12 * 4 (en React Native, la unidad es dp)
+    borderBottomWidth: 2, // border-b-2
+    borderColor: '#0284c7', // border-sky-800
+    fontSize: 20, // text-2xl
+    placeholderTextColor: '#94a3b8', // placeholder:text-slate-400
+    width: 245, // w-60 equivale a 60 * 4 (en React Native, la unidad es dp)
+    padding: 10, // p-2 equivale a 2 * 4 (en React Native, la unidad es dp)
+    backgroundColor: '#f1f5f9', // bg-slate-100
+    borderRadius: 8, // rounded-md
+    fontFamily: 'Slaberlin',
   },
 });

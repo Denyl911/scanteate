@@ -1,20 +1,20 @@
-import { Stack } from "expo-router/stack";
-import React, { useState, useEffect } from "react";
-import { AppState, Platform } from "react-native";
-import "../assets/css/glogal.css";
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Stack } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { AppState, Platform } from 'react-native';
+import '../assets/css/glogal.css';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    PlayChickens: require("../assets/fonts/PlayChickens.otf"),
-    AmberyGarden: require("../assets/fonts/AmberyGarden.ttf"),
-    SuperFeel: require("../assets/fonts/GrislyBeast.ttf"),
-    Slaberlin: require("../assets/fonts/Slaberlin.ttf"),
-    SlaberlinBold: require("../assets/fonts/SlaberlinBold.ttf"),
+    'PlayChickens': require('../assets/fonts/PlayChickens.otf'),
+    'AmberyGarden': require('../assets/fonts/AmberyGarden.ttf'),
+    'SuperFeel': require('../assets/fonts/GrislyBeast.ttf'),
+    'Slaberlin': require('../assets/fonts/Slaberlin.ttf'),
+    'SlaberlinBold': require('../assets/fonts/SlaberlinBold.ttf'),
   });
   const [appState, setAppState] = useState(AppState.currentState);
   const [sessionStart, setSessionStart] = useState(null);
@@ -24,21 +24,21 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
     const handleAppStateChange = (nextAppState) => {
-      if (appState.match(/inactive|background/) && nextAppState === "active") {
+      if (appState.match(/inactive|background/) && nextAppState === 'active') {
         // La app acaba de volver a primer plano (inicia sesión)
         const start = new Date().toISOString();
         setSessionStart(start);
-        console.log("La app está activa, inicio de sesión:", start);
+        console.log('La app está activa, inicio de sesión:', start);
       }
 
-      if (appState === "active" && nextAppState.match(/inactive|background/)) {
+      if (appState === 'active' && nextAppState.match(/inactive|background/)) {
         // La app va a segundo plano (finaliza sesión)
         const sessionEnd = new Date().toISOString();
         const sessionDuration = Math.floor(
           (new Date(sessionEnd) - new Date(sessionStart)) / 1000
         );
 
-        console.log("La app está en segundo plano, fin de sesión:", sessionEnd);
+        console.log('La app está en segundo plano, fin de sesión:', sessionEnd);
         sendSessionData(sessionStart, sessionEnd, sessionDuration);
       }
 
@@ -47,7 +47,7 @@ export default function RootLayout() {
 
     // Subscribe to app state changes
     const subscription = AppState.addEventListener(
-      "change",
+      'change',
       handleAppStateChange
     );
 
@@ -59,13 +59,11 @@ export default function RootLayout() {
 
   const sendSessionData = async (start, end, duration) => {
     try {
-      const us = JSON.parse(await AsyncStorage.getItem("user"));
-      const token = JSON.parse(await AsyncStorage.getItem("token"));
-      const response = await fetch("https://api.scanteate.com/sessions", {
-        method: "POST",
+      const us = JSON.parse(await AsyncStorage.getItem('user'));
+      const response = await fetch('https://api.scanteate.com/sessions', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          auth: token,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           UserId: us.id,
@@ -77,12 +75,12 @@ export default function RootLayout() {
       });
 
       if (!response.ok) {
-        console.log("Error al enviar los datos de la sesión");
+        console.log('Error al enviar los datos de la sesión');
       }
       const data = await response.json();
-      console.log("Sesión registrada con éxito", data);
+      console.log('Sesión registrada con éxito', data);
     } catch (error) {
-      console.error("Error al registrar la sesión", error);
+      console.error('Error al registrar la sesión', error);
     }
   };
 
@@ -94,6 +92,7 @@ export default function RootLayout() {
       screenOptions={{
         headerShown: false,
       }}
+      style={{ fontFamily: 'PlayChickens' }}
     ></Stack>
   );
 }

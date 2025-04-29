@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { manipulateAsync, FlipType, SaveFormat } from "expo-image-manipulator";
+import React, { useCallback, useState, useEffect } from 'react';
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import {
   View,
   Pressable,
@@ -9,39 +9,39 @@ import {
   StatusBar,
   Animated,
   Alert,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { router } from "expo-router";
+} from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { router } from 'expo-router';
 
 export default function Emotions() {
-  const [type, setType] = useState("front");
+  const [type, setType] = useState('front');
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
-  const [emotion, setEmotion] = useState("");
+  const [emotion, setEmotion] = useState('');
   const [fotoUri, setFotoUri] = useState(null);
   const [fotos, setFotos] = useState([]);
   const [currentScreen, setCurrentScreen] = useState(1);
   const [emojiIndex, setEmojiIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
-  const [selectedEmotion, setSelectedEmotion] = useState("");
+  const [selectedEmotion, setSelectedEmotion] = useState('');
   const [showPrepareText, setShowPrepareText] = useState(false);
   const [round, setRound] = useState(1);
   const [usedEmojis, setUsedEmojis] = useState([]);
   const [fadeAnim] = useState(new Animated.Value(1)); // Para animación de opacidad
 
-  const emojis = ["😄", "😡", "😢", "😨", "😔", "😲", "😐", "🤔", "😭"];
+  const emojis = ['😄', '😡', '😢', '😨', '😔', '😲', '😐', '🤔', '😭'];
   const emotionNames = [
-    "Feliz",
-    "Enojado",
-    "Triste",
-    "Asustado",
-    "Desilucionado",
-    "Asombrado",
-    "Neutral",
-    "Pensativo",
-    "Llorando",
+    'Feliz',
+    'Enojado',
+    'Triste',
+    'Asustado',
+    'Desilucionado',
+    'Asombrado',
+    'Neutral',
+    'Pensativo',
+    'Llorando',
   ];
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function Emotions() {
   const selectEmotion = () => {
     setIsAnimating(true);
     setShowPrepareText(false);
-    setSelectedEmotion(""); // Limpiar el texto de la emoción seleccionada antes de que se elija un nuevo emoji
+    setSelectedEmotion(''); // Limpiar el texto de la emoción seleccionada antes de que se elija un nuevo emoji
   };
 
   const getUser = async () => {
@@ -116,7 +116,7 @@ export default function Emotions() {
   const scanFace = async () => {
     if (fotoUri) {
       setFotoUri(null);
-      setEmotion("");
+      setEmotion('');
       return;
     }
 
@@ -145,44 +145,36 @@ export default function Emotions() {
       selectEmotion();
     } else {
       setCurrentScreen(5);
-      showCompletionAlert();
+      showCompletionAlert()
     }
   };
 
   const showCompletionAlert = () => {
-    Alert.alert("Felicidades", "¡Completaste las rondas correctamente!", [
-      { text: "OK" },
+    Alert.alert('Felicidades', '¡Completaste las rondas correctamente!', [
+      { text: 'OK' },
     ]);
   };
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 1:
-        return (
-          <View className="flex-1 items-center justify-center">
-            <View className="absolute left-0 top-8">
+        case 1:
+          return (
+            <View className="flex-1 items-center justify-center relative">
+              <Image 
+                source={require('../assets/images/port_imitame.gif')} // Ajusta la ruta del GIF
+                style={{ width: '100%', height: '100%', position: 'absolute' }} 
+                resizeMode="cover"
+              />
               <Pressable
-                className="ml-4 p-2 rounded-xl mt-5 bg-sky-100"
-                onPress={() => router.back()}
+                className="bg-sky-800 p-4 rounded-lg absolute bottom-20"
+                onPress={() => setCurrentScreen(2)}
               >
-                <AntDesign name="left" size={24} color="gray" />
+                <Text className="text-white font-super text-lg">Comenzar</Text>
               </Pressable>
             </View>
-            <Text className="text-3xl font-custom">
-              Bienvenido al juego IMITAME!
-            </Text>
-            <Text className="text-center text-xl mt-2 font-sla">
-              Imita las emociones que te salgan en pantalla
-            </Text>
-            <Pressable
-              className="bg-sky-800 p-4 rounded-lg mt-4"
-              onPress={() => setCurrentScreen(2)}
-            >
-              <Text className="text-white font-super text-lg">Comenzar</Text>
-            </Pressable>
-          </View>
-        );
-
+          );
+        
       case 2:
         return (
           <View className="flex-1 items-center justify-center">
@@ -195,7 +187,7 @@ export default function Emotions() {
               </Pressable>
             </View>
             <Text className="text-xl font-super mb-2">
-              Ronda <Text className="text-sky-600">{round}</Text> de 3
+            Ronda <Text className="text-sky-600">{round}</Text> de 3
             </Text>
             <Text className="text-lg font-super mb-4">
               Seleccionando tu emoción a imitar...
@@ -220,9 +212,9 @@ export default function Emotions() {
                   styles.pulseText,
                   {
                     opacity: fadeAnim,
-                    color: "red",
-                    textAlign: "center",
-                    fontFamily: "SlaberlinBold",
+                    color: 'red',
+                    textAlign: 'center',
+                    fontFamily: 'SlaberlinBold',
                     marginBottom: 24,
                   },
                 ]}
@@ -300,7 +292,7 @@ export default function Emotions() {
                   setCurrentScreen(1);
                   setFotos([]);
                   setUsedEmojis([]);
-                  setEmotion("");
+                  setEmotion('');
                   setFotoUri(null);
                 }}
               >
@@ -333,12 +325,12 @@ const styles = StyleSheet.create({
   pulseText: {
     fontSize: 20,
     marginTop: 20,
-    textAlign: "center", // Centrado del texto
+    textAlign: 'center', // Centrado del texto
   },
   emotionText: {
     fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center", // Centrado del texto
+    fontWeight: 'bold',
+    textAlign: 'center', // Centrado del texto
   },
   photo: {
     width: 350, // Aumentar tamaño de imagen
@@ -346,41 +338,41 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   photosContainer: {
-    flexDirection: "column", // Mantener en columna
-    alignItems: "center", // Alinear imágenes al centro
+    flexDirection: 'column', // Mantener en columna
+    alignItems: 'center', // Alinear imágenes al centro
     marginTop: 20,
   },
   finalPhoto: {
     width: 150, // Tamaño de imagen más grande
     height: 150, // Tamaño de imagen más grande
     marginBottom: 10,
-    borderRadius: 8,
+    borderRadius: 8
   },
   minimalistButton: {
-    backgroundColor: "navy", // Azul marino
+    backgroundColor: 'navy', // Azul marino
     padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 20,
-    justifyContent: "space-around",
-    width: "100%",
+    justifyContent: 'space-around',
+    width: '100%',
   },
   photoWithEmotion: {
-    alignItems: "center",
+    alignItems: 'center',
     marginRight: 20,
   },
   emotionLabel: {
     fontSize: 16,
     marginBottom: 14,
-    textAlign: "center", // Centrar el texto de la emoción
-    fontFamily: "SlaberlinBold",
+    textAlign: 'center', // Centrar el texto de la emoción
+    fontFamily: 'SlaberlinBold'
   },
   camera: {
     flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 });
