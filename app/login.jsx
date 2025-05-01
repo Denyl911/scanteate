@@ -103,7 +103,7 @@ export default function Login() {
             className="rounded-xl p-3 mb-8  mt-8"
           >
             <Text className="text-sky-800 text-lg font-super">
-              Olvidaste tu contraseña?
+              ¿Olvidaste tu contraseña?
             </Text>
           </Pressable>
           <Text className="text-gray-400 mb-6">ó</Text>

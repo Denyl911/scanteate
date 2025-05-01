@@ -4,11 +4,11 @@
     "slug": "scanteate",
     "version": "1.0.7",
     "orientation": "portrait",
-    "icon": "./assets/images/logo-scan.png",
+    "icon": "./assets/images/LogoApp-SCAN.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/LogoApp-SCAN.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/logo-scan.png",
+        "foregroundImage": "./assets/images/LogoApp-SCAN.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -53,7 +53,6 @@
       "eas": {
         "projectId": "79f7f43d-fa80-40a3-89df-8c2c5ce43f4a"
       }
-    },
-    "newArchEnabled": true
+    }
   }
 }

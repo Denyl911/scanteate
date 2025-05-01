@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useState } from "react";
-import { Image, StyleSheet, Text, View, Pressable } from "react-native";
-import { router } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
+import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
+import { router } from 'expo-router';
 
 function Dots({ x }) {
   if (x == 1) {
@@ -10,9 +10,9 @@ function Dots({ x }) {
       <View className="flex flex-row">
         <Image
           className="mr-2"
-          source={require("../assets/images/dot1.png")}
+          source={require('../assets/images/dot1.png')}
         ></Image>
-        <Image source={require("../assets/images/dot2.png")}></Image>
+        <Image source={require('../assets/images/dot2.png')}></Image>
       </View>
     );
   } else {
@@ -20,9 +20,9 @@ function Dots({ x }) {
       <View className="flex flex-row">
         <Image
           className="mr-2"
-          source={require("../assets/images/dot2.png")}
+          source={require('../assets/images/dot2.png')}
         ></Image>
-        <Image source={require("../assets/images/dot1.png")}></Image>
+        <Image source={require('../assets/images/dot1.png')}></Image>
       </View>
     );
   }
@@ -32,58 +32,25 @@ function Slides({ x }) {
   if (x == 1) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image
-          style={{ height: 270, width: 270 }}
-          source={require("../assets/images/img1.png")}
-        ></Image>
-        <Pressable onLongPress={() => router.navigate("/setUrl")}>
-          <Text
-            style={{
-              fontFamily: "PlayChickens",
-              textAlign: "center",
-              fontSize: 46,
-              paddingVertical: 16,
-              color: "rgb(3,105,161)",
-            }}
-          >
-            SCAN
-            <Text className="text-yellow-500">
-              T<Text className="text-green-500">E</Text>
-              <Text className="text-red-500">A</Text>
-            </Text>
-            TE
-          </Text>
+        <Image style={{height: 280, width: 380}} source={require('../assets/images/SNTv5.png')}></Image>
+        <Pressable onLongPress={() => router.navigate('/setUrl')}>
         </Pressable>
-        <Text className="text-center mx-5 text-xl font-sla">
-          Una aplicación de comunicación para ayudar a los estudiantes con
-          autismo a comunicarse con amigos y profesores.
+        <Text className="text-center mx-5 text-xl font-play">
+          Una aplicación para ayudar a los niños con
+          autismo a comunicarse con su entorno
         </Text>
       </View>
     );
   } else {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image
-          style={{ height: 270, width: 270 }}
-          source={require("../assets/images/img12.png")}
-        ></Image>
-        <Text
-          style={{
-            fontFamily: "PlayChickens",
-            textAlign: "center",
-            fontSize: 40,
-            paddingVertical: 16,
-            color: "rgb(3,105,161)",
-          }}
-        >
-          Todo muy fácil
-        </Text>
-        <Text className="text-center mx-5 text-xl font-sla">
+        <Image style={{height: 380, width: 350}} source={require('../assets/images/FIGURA-SLOGAN.png')}></Image>
+        <Text className="text-center mx-5 text-xl font-Mexcellent">
           En esta app la comunicación se hará a través de imágenes y figuras,
           para que todo sea mucho más amigable
         </Text>
       </View>
-    );
+    );5
   }
 }
 
@@ -91,9 +58,9 @@ export default function Welcome() {
   const [n, setN] = useState(1);
 
   const getUser = async () => {
-    const data = JSON.parse(await AsyncStorage.getItem("user"));
+    const data = JSON.parse(await AsyncStorage.getItem('user'));
     if (data) {
-      router.replace("/home");
+      router.replace('/home');
     }
   };
 
@@ -105,7 +72,7 @@ export default function Welcome() {
 
   const nextSlide = () => {
     if (n == 2) {
-      router.navigate("/loginBefore");
+      router.navigate('/loginBefore');
     } else {
       setN(n + 1);
     }
@@ -131,13 +98,13 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#0D5692",
+    backgroundColor: '#0D5692',
     padding: 15,
-    borderRadius: "50%",
+    borderRadius: '50%',
   },
   buttonText: {
-    color: "white",
-    fontFamily: "SuperFeel",
-    fontSize: 18,
+    color: 'white',
+    fontFamily: 'SuperFeel',
+    fontSize: 18
   },
 });
