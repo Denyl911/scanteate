@@ -11,9 +11,7 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Octicons from '@expo/vector-icons/Octicons';
+
 import Tabs from '../components/Tabs';
 import UserAvatar from '../components/UserAvatar';
 
@@ -23,9 +21,14 @@ export default function Settings() {
     name: '',
     type: '',
   });
+
   const getUser = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('user')) || user);
+    const data = await AsyncStorage.getItem('user');
+    if (data) {
+      setUser(JSON.parse(data));
+    }
   };
+
   useFocusEffect(
     useCallback(() => {
       getUser();
@@ -36,88 +39,67 @@ export default function Settings() {
     await AsyncStorage.removeItem('user');
     router.replace('/loginBefore');
   };
+
+  const settingsButtons = [
+    {
+      route: '/createAvatar',
+      image: require('../assets/images/bo_avatarv2.png'),
+      marginBottom: 0,
+    },
+    {
+      route: '/galery',
+      image: require('../assets/images/bo_galeriav2.png'),
+      marginBottom: -25,
+    },
+    {
+      route: '/reportConfig',
+      image: require('../assets/images/bo_reportv2.png'),
+      marginBottom: 0,
+    },
+    {
+      route: 'logout',
+      image: require('../assets/images/bo_logoutv2.png'),
+      marginBottom: -30,
+    },
+  ];
+
   return (
-    <View className="h-[100%]">
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
       <View style={{ marginTop: StatusBar.currentHeight }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
           source={require('../assets/images/image.png')}
-        ></Image>
+        />
         <View className="-mt-48 flex items-center">
           <View className="mt-10">
             <UserAvatar />
           </View>
-          <Text
-            style={{
-              color: 'white',
-              textAlign: 'center', // text-center
-              fontSize: 18, // text-md (en React Native, text-md suele ser 16px)
-              marginTop: 8, // mt-2 (en React Native, la unidad es dp)
-              fontFamily: 'SuperFeel', // font-bold
-            }}
-          >
-            {user.name}
+          <Text className="text-white text-center text-xl mt-2 font-custom">Configuración</Text>
+          <Text className="text-white text-center mt-1 mb-0 text-sm font-slabold">
+            Personaliza tu experiencia
           </Text>
         </View>
       </View>
+
       <View style={styles.container}>
-        <ScrollView className="mt-12">
-          <Pressable
-            onPress={() => router.navigate('/createAvatar')}
-            className="bg-sky-400 mx-10 rounded-xl px-6 py-5 mt-20"
-          >
-            <Text className="text-gray-100 text-xl font-super">Mi Avatar</Text>
-            <Text className="text-gray-100 font-sla">
-              Crea y personaliza tu avatar
-            </Text>
-            <Image
-              className="mt-10 absolute right-4 bottom-1 w-[90] h-[90]" // Se ajustó el tamaño aquí
-              source={require('../assets/images/img3.png')}
-            ></Image>
-          </Pressable>
-          <Pressable
-            onPress={() => router.navigate('/galery')}
-            className="bg-sky-500 mx-10 rounded-xl px-6 py-5 mt-8"
-          >
-            <Text className="text-gray-100 text-xl font-super">Galería</Text>
-            <Text className="text-gray-100 font-sla">
-              Tu Galería de emociones
-            </Text>
-            <Image
-              className="mt-10 absolute right-4 bottom-1 w-[135] h-[135]" // Se ajustó el tamaño aquí
-              source={require('../assets/images/galeria.png')}
-              style={{position: 'absolute', right: -5, bottom: -25 }}
-            ></Image>
-          </Pressable>
-          <Pressable
-            onPress={() => router.navigate('/reportConfig')}
-            className="bg-sky-700 mx-10 rounded-xl px-6 py-5 mt-8"
-          >
-            <Text className="text-gray-100 text-xl font-super">Reportes</Text>
-            <Text className="text-gray-100 font-sla">
-              Configuración y envio de reportes
-            </Text>
-            <Image
-              className="mt-10 absolute right-4 bottom-1 w-[145] h-[145]" // Se ajustó el tamaño aquí
-              source={require('../assets/images/reportes.png')}
-              style={{position: 'absolute', right: -15, bottom: -15 }}
-            ></Image>
-          </Pressable>
-          <Pressable
-            onPress={logout}
-            className="bg-sky-900 mx-10 rounded-xl px-6 py-5 mt-8"
-          >
-            <Text className="text-gray-100 text-xl font-super">Logout</Text>
-            <Text className="text-gray-100 font-sla">Cerrar Sesión</Text>
-            <Image
-              className="mt-10 absolute right-4 bottom-1 w-[170] h-[170]" // Se ajustó el tamaño aquí
-              source={require('../assets/images/logout.png')}
-              style={{position: 'absolute', right: -30, bottom: -35 }}
-            ></Image>
-          </Pressable>
+        <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 30 }}>
+          {settingsButtons.map((item, index) => (
+            <Pressable
+              key={index}
+              onPress={item.route === 'logout' ? logout : () => router.navigate(item.route)}
+              style={[styles.buttonContainer, { marginBottom: item.marginBottom }]}
+            >
+              <Image
+                source={item.image}
+                style={styles.buttonImage}
+                resizeMode="cover"
+              />
+            </Pressable>
+          ))}
         </ScrollView>
       </View>
+
       <Tabs className="absolute bottom-0" />
     </View>
   );
@@ -125,6 +107,16 @@ export default function Settings() {
 
 const styles = StyleSheet.create({
   container: {
-    height: 700,
+    flex: 1,
+  },
+  buttonContainer: {
+    paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  buttonImage: {
+    width: '100%',
+    maxWidth: 300,
+    height: 300,
+    alignSelf: 'center',
   },
 });
