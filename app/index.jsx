@@ -32,12 +32,12 @@ function Slides({ x }) {
   if (x == 1) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image style={{height: 280, width: 380}} source={require('../assets/images/SNTv5.png')}></Image>
+        <Image style={{height: 200, width: 400}} source={require('../assets/images/SNT+.png')}></Image>
         <Pressable onLongPress={() => router.navigate('/setUrl')}>
         </Pressable>
         <Text className="text-center mx-5 text-xl font-play">
           Una aplicación para ayudar a los niños con
-          autismo a comunicarse con su entorno
+          autismo a comunicarse con su entorno usando un dispositivo móvil
         </Text>
       </View>
     );

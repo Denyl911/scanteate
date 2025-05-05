@@ -209,7 +209,7 @@ export default function Emotions() {
         </Pressable>
 
         <Image
-          source={require('../assets/images/SNTv2.png')}  // Asegúrate de que la ruta sea correcta
+          source={require('../assets/images/SNT+.png')}  // Asegúrate de que la ruta sea correcta
           style={{ width: 135, height: 50 }}  // Ajusta el tamaño según sea necesario
         />
 
