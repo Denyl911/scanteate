@@ -10,6 +10,7 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
+  Linking, // <-- IMPORTANTE: para abrir URLs externas
 } from 'react-native';
 
 import Tabs from '../components/Tabs';
@@ -57,6 +58,11 @@ export default function Settings() {
       marginBottom: 0,
     },
     {
+      route: 'gotoweb',
+      image: require('../assets/images/bo_web.png'),
+      marginBottom: -30,
+    },
+    {
       route: 'logout',
       image: require('../assets/images/bo_logoutv2.png'),
       marginBottom: -30,
@@ -87,7 +93,13 @@ export default function Settings() {
           {settingsButtons.map((item, index) => (
             <Pressable
               key={index}
-              onPress={item.route === 'logout' ? logout : () => router.navigate(item.route)}
+              onPress={
+                item.route === 'logout'
+                  ? logout
+                  : item.route === 'gotoweb'
+                  ? () => Linking.openURL('https://scanteate.com')
+                  : () => router.navigate(item.route)
+              }
               style={[styles.buttonContainer, { marginBottom: item.marginBottom }]}
             >
               <Image
