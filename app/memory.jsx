@@ -1,5 +1,3 @@
-// MemoryGame.js
-
 import React, { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -11,7 +9,7 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import * as Speech from 'expo-speech';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
@@ -34,36 +32,34 @@ const getRandomColor = () => {
   return color;
 };
 
+// Lista de cartas con nombre asociado
+const imageIcons = [
+  { img: require('../assets/images/memasombrado.png'), name: 'Asombrado' },
+  { img: require('../assets/images/memconfuso.png'), name: 'Confuso' },
+  { img: require('../assets/images/memcontento.png'), name: 'Contento' },
+  { img: require('../assets/images/memenfermo.png'), name: 'Enfermo' },
+  { img: require('../assets/images/memenojado.png'), name: 'Enojado' },
+  { img: require('../assets/images/memfeliz.png'), name: 'Feliz' },
+  { img: require('../assets/images/memjugueton.png'), name: 'Juguetón' },
+  { img: require('../assets/images/memriendo.png'), name: 'Riendo' },
+  { img: require('../assets/images/memtriste.png'), name: 'Triste' },
+];
+
 // Genera cartas del juego
 const gameCardsFunction = (pairsCount) => {
-  const imageIcons = [
-    require('../assets/images/memasombrado.png'),
-    require('../assets/images/memconfuso.png'),
-    require('../assets/images/memcontento.png'),
-    require('../assets/images/memenfermo.png'),
-    require('../assets/images/memenojado.png'),
-    require('../assets/images/memfeliz.png'),
-    require('../assets/images/memjugueton.png'),
-    require('../assets/images/memriendo.png'),
-    require('../assets/images/memtriste.png'),
-  ];
-
-  const selectedImages = imageIcons
-    .slice(0, pairsCount)
-    .flatMap((img) => [img, img]);
-
+  const selected = imageIcons.slice(0, pairsCount);
+  const duplicated = selected.flatMap((item) => [item, item]);
   const colors = Array.from({ length: pairsCount }, () => getRandomColor());
 
-  const randomCards = randomArrFunction(
-    selectedImages.map((img, index) => ({
-      id: index,
-      image: img,
-      isFlipped: false,
-      color: colors[Math.floor(index / 2)],
-    }))
-  );
+  const cards = duplicated.map((item, index) => ({
+    id: index,
+    image: item.img,
+    name: item.name,
+    isFlipped: false,
+    color: colors[Math.floor(index / 2)],
+  }));
 
-  return randomCards;
+  return randomArrFunction(cards);
 };
 
 export default function Memory() {
@@ -112,44 +108,64 @@ export default function Memory() {
       .padStart(2, '0')}`;
   };
 
-  const cardClickFunction = (card) => {
-    if (!isActive) startTimer();
-    if (!gameWon && selectedCards.length < 2 && !card.isFlipped) {
-      const updatedSelectedCards = [...selectedCards, card];
-      const updatedCards = cards.map((c) =>
-        c.id === card.id ? { ...c, isFlipped: true } : c
-      );
-      setSelectedCards(updatedSelectedCards);
-      setCards(updatedCards);
+const cardClickFunction = (card) => {
+  if (!isActive) startTimer();
+  if (!gameWon && selectedCards.length < 2 && !card.isFlipped) {
+    const updatedSelectedCards = [...selectedCards, card];
+    const updatedCards = cards.map((c) =>
+      c.id === card.id ? { ...c, isFlipped: true } : c
+    );
+    setSelectedCards(updatedSelectedCards);
+    setCards(updatedCards);
 
-      if (updatedSelectedCards.length === 2) {
-        if (updatedSelectedCards[0].image === updatedSelectedCards[1].image) {
-          setMatches(matches + 1);
-          setSelectedCards([]);
-          if (matches + 1 === cards.length / 2) {
-            if (round < maxRounds) {
-              setTimeout(() => nextRound(), 500);
-            } else {
-              geekWinGameFunction();
-              setGameWon(true);
-              stopTimer();
-              sendGameTimeToAPI();
-            }
+    // Reproducir nombre de la carta
+    Speech.speak(card.name, { language: 'es-MX' });
+
+    if (updatedSelectedCards.length === 2) {
+      const [first, second] = updatedSelectedCards;
+      if (first.image === second.image) {
+        // Reproducir "¡Muy bien!" tras un acierto
+        setTimeout(() => {
+          Speech.speak('¡Muy bien!', { language: 'es-MX' });
+        }, 600);
+
+        setMatches(matches + 1);
+        setSelectedCards([]);
+
+        if (matches + 1 === cards.length / 2) {
+          if (round < maxRounds) {
+            setTimeout(() => nextRound(), 1000);
+          } else {
+            setTimeout(() => {
+              Speech.speak('¡Felicidades! Has ganado. ¿Quieres volver a jugar?', { language: 'es-MX' });
+            }, 1000);
+
+            geekWinGameFunction();
+            setGameWon(true);
+            stopTimer();
+            sendGameTimeToAPI();
           }
-        } else {
-          setTimeout(() => {
-            const flippedCards = updatedCards.map((c) =>
-              updatedSelectedCards.some((s) => s.id === c.id)
-                ? { ...c, isFlipped: false }
-                : c
-            );
-            setSelectedCards([]);
-            setCards(flippedCards);
-          }, 1000);
         }
+      } else {
+        // Reproducir "Ese no era" tras un error
+        setTimeout(() => {
+          Speech.speak('Ese no era', { language: 'es-MX' });
+        }, 600);
+
+        setTimeout(() => {
+          const flippedCards = updatedCards.map((c) =>
+            updatedSelectedCards.some((s) => s.id === c.id)
+              ? { ...c, isFlipped: false }
+              : c
+          );
+          setSelectedCards([]);
+          setCards(flippedCards);
+        }, 1000);
       }
     }
-  };
+  }
+};
+
 
   const nextRound = () => {
     setRound(round + 1);
@@ -215,7 +231,6 @@ export default function Memory() {
 
   return (
     <View style={styles.container}>
-      {/* Encabezado y botones */}
       <Text style={styles.title}>MEMORAMA</Text>
       <Text style={styles.subtext}>Encuentra las imágenes iguales</Text>
       <Text style={styles.subtext}>Ronda {round} de {maxRounds}</Text>
