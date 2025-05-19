@@ -15,8 +15,8 @@ export default function PreLogin() {
       <View style={{ marginTop: StatusBar.currentHeight }}></View>
       <View className="flex flex-row items-center bg-sky-600 pb-96 px-10 pt-20">
         <Image
-          source={require('../assets/images/SNTv2.png')} // Ruta de la imagen del logo
-          style={{ width: 335, height: 150 }} // Ajusta el tamaño según necesites
+          source={require('../assets/images/SNT+B.png')} // Ruta de la imagen del logo
+          style={{ width: 340, height: 150 }} // Ajusta el tamaño según necesites
         />
       </View>
       <View>

@@ -32,7 +32,7 @@ function Slides({ x }) {
   if (x == 1) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Image style={{height: 200, width: 400}} source={require('../assets/images/SNT+.png')}></Image>
+        <Image style={{height: 200, width: 400}} source={require('../assets/images/SNT+B.png')}></Image>
         <Pressable onLongPress={() => router.navigate('/setUrl')}>
         </Pressable>
         <Text className="text-center mx-5 text-xl font-play">
