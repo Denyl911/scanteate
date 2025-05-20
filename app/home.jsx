@@ -20,17 +20,48 @@ export default function HomeScreen() {
     name: '',
     type: '',
   });
+
   const getUser = async () => {
     const data = await AsyncStorage.getItem('user');
     if (data) {
       setUser(JSON.parse(data));
     }
   };
+
   useFocusEffect(
     useCallback(() => {
       getUser();
     }, [])
   );
+
+  const buttons = [
+    {
+      route: '/emotions',
+      image: require('../assets/images/bo_escanv2.png'),
+      marginBottom: -20,
+    },
+    {
+      route: '/games',
+      image: require('../assets/images/bo_juegosv2.png'),
+      marginBottom: 10,
+    },
+    {
+      route: '/cuentos',
+      image: require('../assets/images/bo_cuentosv2.png'),
+      marginBottom: 10,
+    },
+    {
+      route: '/dailyTasks',
+      image: require('../assets/images/bo_rutinav2.png'),
+      marginBottom: 10,
+    },
+    {
+      route: '/actividades',
+      image: require('../assets/images/bo_actividadesv2.png'),
+      marginBottom: -20,
+    },
+  ];
+
   return (
     <View className="h-[100%]">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
@@ -38,7 +69,7 @@ export default function HomeScreen() {
         <Image
           className="w-screen h-44 rounded-b-3xl"
           source={require('../assets/images/image.png')}
-        ></Image>
+        />
         <View className="-mt-48 flex items-center">
           <View className="mt-10">
             <UserAvatar />
@@ -56,112 +87,25 @@ export default function HomeScreen() {
           </Text>
         </View>
       </View>
+
       <View style={styles.container}>
-        <ScrollView className="mb-12">
-          <Pressable
-            onPress={() => router.navigate('/emotions')}
-            className="bg-sky-900 mx-8 rounded-xl px-5 py-5 mt-24 mb-20"
-            style={{ position: 'relative' }} // Añadir estilo relativo
-          >
-            <Text className="text-gray-100 text-xl font-custom">Scaner</Text>
-            <Text className="text-gray-100 pr-28 font-sla">
-              Escanea tus emociones en tiempo real!
-            </Text>
-            <Image
-              className="absolute"
-              style={{
-                width: 180,
-                height: 140,
-                right: -41, // Hace que sobresalga hacia la derecha
-                bottom: 5, // Hace que sobresalga hacia abajo
-              }}
-              source={require('../assets/images/scaner.png')}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => router.navigate('/games')}
-            className="bg-sky-600 mx-8 rounded-xl px-5 py-5 mb-20"
-            style={{ position: 'relative' }}
-          >
-            <Text className="text-gray-100 text-xl font-custom">Juegos</Text>
-            <Text className="text-gray-100 font-sla pr-20">
-              Sal de la rutina y diviertete un rato con minijuegos!
-            </Text>
-            <Image
-              className="absolute"
-              style={{
-                width: 150,
-                height: 150,
-                right: -30, // Sobresale a la derecha
-                bottom: -10, // Sobresale hacia abajo
-              }}
-              source={require('../assets/images/juegos.png')}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => router.navigate('/cuentos')}
-            className="bg-sky-400 mx-8 rounded-xl px-5 py-5 mb-20"
-            style={{ position: 'relative' }}
-          >
-            <Text className="text-gray-100 text-xl font-custom">Cuentos</Text>
-            <Text className="text-gray-100 pr-20 font-sla">
-              Historias educativas para niños con pictogramas!
-            </Text>
-            <Image
-              className="absolute"
-              style={{
-                width: 200,
-                height: 150,
-                right: -45, // Sobresale a la derecha
-                bottom: -20, // Sobresale hacia abajo
-              }}
-              source={require('../assets/images/cuentos.png')}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => router.navigate('/dailyTasks')}
-            className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-20"
-            style={{ position: 'relative' }}
-          >
-            <Text className="text-gray-100 text-xl font-custom">Rutina</Text>
-            <Text className="text-gray-100 pr-20 font-sla">
-              Crear una rutina personalizable para tu hijo!
-            </Text>
-            <Image
-              className="absolute"
-              style={{
-                width: 180,
-                height: 150,
-                right: -60, // Sobresale a la derecha
-                bottom: -20, // Sobresale hacia abajo
-              }}
-              source={require('../assets/images/actividades.png')}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => router.navigate('/actividades')}
-            className="bg-sky-300 mx-8 rounded-xl px-5 py-5 mb-40"
-            style={{ position: 'relative' }}
-          >
-            <Text className="text-gray-100 text-xl font-custom">
-              Actividades
-            </Text>
-            <Text className="text-gray-100 pr-20 font-sla">
-              Actividades imprimibles para el desarrollo socioemocional
-            </Text>
-            <Image
-              className="absolute"
-              style={{
-                width: 200,
-                height: 150,
-                right: -50, // Sobresale a la derecha
-                bottom: -20, // Sobresale hacia abajo
-              }}
-              source={require('../assets/images/act_descarga.png')}
-            />
-          </Pressable>
+        <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 30 }}>
+          {buttons.map((item, index) => (
+            <Pressable
+              key={index}
+              onPress={() => router.navigate(item.route)}
+              style={[styles.buttonContainer, { marginBottom: item.marginBottom }]}
+            >
+              <Image
+                source={item.image}
+                style={styles.buttonImage}
+                resizeMode="cover"
+              />
+            </Pressable>
+          ))}
         </ScrollView>
       </View>
+
       <Tabs className="absolute bottom-0" />
     </View>
   );
@@ -169,6 +113,17 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    height: 700,
+    flex: 1,
+  },
+  buttonContainer: {
+    paddingHorizontal: 2,
+    alignItems: 'center',
+  },
+  buttonImage: {
+    width: '100%',
+    maxWidth: 300,
+    height: 300,
+    alignSelf: 'center',
+    borderRadius: 10,
   },
 });

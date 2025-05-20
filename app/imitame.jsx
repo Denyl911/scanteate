@@ -14,6 +14,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
+import * as Speech from 'expo-speech';
 
 export default function Emotions() {
   const [type, setType] = useState('front');
@@ -29,7 +30,7 @@ export default function Emotions() {
   const [showPrepareText, setShowPrepareText] = useState(false);
   const [round, setRound] = useState(1);
   const [usedEmojis, setUsedEmojis] = useState([]);
-  const [fadeAnim] = useState(new Animated.Value(1)); // Para animación de opacidad
+  const [fadeAnim] = useState(new Animated.Value(1));
 
   const emojis = ['😄', '😡', '😢', '😨', '😔', '😲', '😐', '🤔', '😭'];
   const emotionNames = [
@@ -37,7 +38,7 @@ export default function Emotions() {
     'Enojado',
     'Triste',
     'Asustado',
-    'Desilucionado',
+    'Desilusionado',
     'Asombrado',
     'Neutral',
     'Pensativo',
@@ -45,42 +46,53 @@ export default function Emotions() {
   ];
 
   useEffect(() => {
-    if (usedEmojis.length >= emojis.length) return;
+  if (usedEmojis.length >= emojis.length) return;
 
-    const interval = setInterval(() => {
-      if (isAnimating) {
-        setEmojiIndex(
-          (prevIndex) =>
-            (prevIndex + Math.floor(Math.random() * emojis.length)) %
-            emojis.length
-        );
-      }
-    }, 250);
+  const interval = setInterval(() => {
+    if (isAnimating) {
+      setEmojiIndex(
+        (prevIndex) =>
+          (prevIndex + Math.floor(Math.random() * emojis.length)) % emojis.length
+      );
+    }
+  }, 250);
 
+  // Solo ejecuta esto si isAnimating es true
+  if (isAnimating) {
     const timeout = setTimeout(() => {
-      let newEmojiIndex = emojiIndex;
-      while (usedEmojis.includes(newEmojiIndex)) {
-        newEmojiIndex = Math.floor(Math.random() * emojis.length);
-      }
+      let newEmojiIndex;
+do {
+  newEmojiIndex = Math.floor(Math.random() * emojis.length);
+} while (usedEmojis.includes(newEmojiIndex));
 
-      setIsAnimating(false);
-      setSelectedEmotion(emotionNames[newEmojiIndex]);
-      setEmotion(emojis[newEmojiIndex]);
+setIsAnimating(false);
+setSelectedEmotion(emotionNames[newEmojiIndex]);
+setEmotion(emojis[newEmojiIndex]);
+setEmojiIndex(newEmojiIndex); // ¡Esto mantiene el emoji en pantalla sincronizado con el nombre!
+
       setShowPrepareText(true);
-      setUsedEmojis((prevUsedEmojis) => [...prevUsedEmojis, newEmojiIndex]);
+      setUsedEmojis((prev) => [...prev, newEmojiIndex]);
 
-      // Iniciar la animación de parpadeo
+      // Esta parte se asegura que se ejecute una sola vez
+      Speech.speak(`Vas a imitar la emoción: ${emotionNames[newEmojiIndex]}`);
       fadeInOut();
+      setTimeout(() => {
+        Speech.speak('Prepárate para imitar, ponte guapo y péinate');
+      }, 1500);
     }, 2500);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [isAnimating]);
+  } else {
+    clearInterval(interval);
+  }
+}, [isAnimating]);
+
 
   const fadeInOut = () => {
-    fadeAnim.setValue(1); // Restablecer opacidad a 1
+    fadeAnim.setValue(1);
     Animated.loop(
       Animated.sequence([
         Animated.timing(fadeAnim, {
@@ -100,7 +112,7 @@ export default function Emotions() {
   const selectEmotion = () => {
     setIsAnimating(true);
     setShowPrepareText(false);
-    setSelectedEmotion(''); // Limpiar el texto de la emoción seleccionada antes de que se elija un nuevo emoji
+    setSelectedEmotion('');
   };
 
   const getUser = async () => {
@@ -124,17 +136,13 @@ export default function Emotions() {
 
     try {
       const img = await cameraRef.takePictureAsync();
-
       const flippedImg = await manipulateAsync(
         img.uri,
         [{ flip: FlipType.Horizontal }],
         { format: SaveFormat.JPEG }
       );
       setFotoUri(flippedImg.uri);
-      setFotos((prevFotos) => [
-        ...prevFotos,
-        { uri: flippedImg.uri, emotion: selectedEmotion },
-      ]);
+      setFotos((prev) => [...prev, { uri: flippedImg.uri, emotion: selectedEmotion }]);
     } catch (e) {
       console.log(e);
     }
@@ -145,7 +153,8 @@ export default function Emotions() {
       selectEmotion();
     } else {
       setCurrentScreen(5);
-      showCompletionAlert()
+      Speech.speak('¡Felicidades! Completaste las rondas correctamente');
+      showCompletionAlert();
     }
   };
 
@@ -158,23 +167,22 @@ export default function Emotions() {
   const renderScreen = () => {
     switch (currentScreen) {
       case 1:
-        case 1:
-          return (
-            <View className="flex-1 items-center justify-center relative">
-              <Image 
-                source={require('../assets/images/port_imitame.gif')} // Ajusta la ruta del GIF
-                style={{ width: '100%', height: '100%', position: 'absolute' }} 
-                resizeMode="cover"
-              />
-              <Pressable
-                className="bg-sky-800 p-4 rounded-lg absolute bottom-20"
-                onPress={() => setCurrentScreen(2)}
-              >
-                <Text className="text-white font-super text-lg">Comenzar</Text>
-              </Pressable>
-            </View>
-          );
-        
+        return (
+          <View className="flex-1 items-center justify-center relative">
+            <Image 
+              source={require('../assets/images/port_imitame.gif')}
+              style={{ width: '100%', height: '100%', position: 'absolute' }} 
+              resizeMode="cover"
+            />
+            <Pressable
+              className="bg-sky-800 p-4 rounded-lg absolute bottom-20"
+              onPress={() => setCurrentScreen(2)}
+            >
+              <Text className="text-white font-super text-lg">Comenzar</Text>
+            </Pressable>
+          </View>
+        );
+
       case 2:
         return (
           <View className="flex-1 items-center justify-center">
@@ -187,7 +195,7 @@ export default function Emotions() {
               </Pressable>
             </View>
             <Text className="text-xl font-super mb-2">
-            Ronda <Text className="text-sky-600">{round}</Text> de 3
+              Ronda <Text className="text-sky-600">{round}</Text> de 3
             </Text>
             <Text className="text-lg font-super mb-4">
               Seleccionando tu emoción a imitar...
@@ -195,7 +203,6 @@ export default function Emotions() {
             <View style={styles.emojiContainer}>
               <Text style={styles.emoji}>{emojis[emojiIndex]}</Text>
             </View>
-            {/* Solo mostrar el nombre de la emoción después de que se haya seleccionado */}
             {!isAnimating && selectedEmotion && (
               <View className="mb-5">
                 <Text className="text-xl font-super">
@@ -234,6 +241,7 @@ export default function Emotions() {
             )}
           </View>
         );
+
       case 3:
         return (
           <View className="flex-1">
@@ -249,6 +257,7 @@ export default function Emotions() {
             </Pressable>
           </View>
         );
+
       case 4:
         return (
           <View className="flex-1 items-center justify-center">
@@ -259,14 +268,14 @@ export default function Emotions() {
             <Text className="text-lg text-center">
               Imitaste la emoción: {selectedEmotion}
             </Text>
-            {round === 3 ? (
+            {round === 3 && (
               <Pressable
                 className="bg-sky-800 p-4 rounded-lg mt-4"
-                onPress={() => setCurrentScreen(5)} // Ir a la pantalla de resultados
+                onPress={() => setCurrentScreen(5)}
               >
                 <Text className="text-white font-bold text-lg">Siguiente</Text>
               </Pressable>
-            ) : null}
+            )}
           </View>
         );
 
@@ -286,7 +295,7 @@ export default function Emotions() {
             </View>
             <View style={styles.buttonContainer}>
               <Pressable
-                className="bg-sky-700 p-4 rounded-lg" // Botón azul marino
+                className="bg-sky-700 p-4 rounded-lg"
                 onPress={() => {
                   setRound(1);
                   setCurrentScreen(1);
@@ -307,6 +316,7 @@ export default function Emotions() {
             </View>
           </View>
         );
+
       default:
         return null;
     }
@@ -325,34 +335,28 @@ const styles = StyleSheet.create({
   pulseText: {
     fontSize: 20,
     marginTop: 20,
-    textAlign: 'center', // Centrado del texto
+    textAlign: 'center',
   },
   emotionText: {
     fontSize: 30,
     fontWeight: 'bold',
-    textAlign: 'center', // Centrado del texto
+    textAlign: 'center',
   },
   photo: {
-    width: 350, // Aumentar tamaño de imagen
-    height: 350, // Aumentar tamaño de imagen
+    width: 350,
+    height: 350,
     marginTop: 20,
   },
   photosContainer: {
-    flexDirection: 'column', // Mantener en columna
-    alignItems: 'center', // Alinear imágenes al centro
+    flexDirection: 'column',
+    alignItems: 'center',
     marginTop: 20,
   },
   finalPhoto: {
-    width: 150, // Tamaño de imagen más grande
-    height: 150, // Tamaño de imagen más grande
+    width: 150,
+    height: 150,
     marginBottom: 10,
-    borderRadius: 8
-  },
-  minimalistButton: {
-    backgroundColor: 'navy', // Azul marino
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 8,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -367,8 +371,8 @@ const styles = StyleSheet.create({
   emotionLabel: {
     fontSize: 16,
     marginBottom: 14,
-    textAlign: 'center', // Centrar el texto de la emoción
-    fontFamily: 'SlaberlinBold'
+    textAlign: 'center',
+    fontFamily: 'SlaberlinBold',
   },
   camera: {
     flex: 1,
