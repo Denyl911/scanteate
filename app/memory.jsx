@@ -108,64 +108,66 @@ export default function Memory() {
       .padStart(2, '0')}`;
   };
 
-const cardClickFunction = (card) => {
-  if (!isActive) startTimer();
-  if (!gameWon && selectedCards.length < 2 && !card.isFlipped) {
-    const updatedSelectedCards = [...selectedCards, card];
-    const updatedCards = cards.map((c) =>
-      c.id === card.id ? { ...c, isFlipped: true } : c
-    );
-    setSelectedCards(updatedSelectedCards);
-    setCards(updatedCards);
+  const cardClickFunction = (card) => {
+    if (!isActive) startTimer();
+    if (!gameWon && selectedCards.length < 2 && !card.isFlipped) {
+      const updatedSelectedCards = [...selectedCards, card];
+      const updatedCards = cards.map((c) =>
+        c.id === card.id ? { ...c, isFlipped: true } : c
+      );
+      setSelectedCards(updatedSelectedCards);
+      setCards(updatedCards);
 
-    // Reproducir nombre de la carta
-    Speech.speak(card.name, { language: 'es-MX' });
+      // Reproducir nombre de la carta
+      Speech.speak(card.name, { language: 'es-MX' });
 
-    if (updatedSelectedCards.length === 2) {
-      const [first, second] = updatedSelectedCards;
-      if (first.image === second.image) {
-        // Reproducir "¡Muy bien!" tras un acierto
-        setTimeout(() => {
-          Speech.speak('¡Muy bien!', { language: 'es-MX' });
-        }, 600);
+      if (updatedSelectedCards.length === 2) {
+        const [first, second] = updatedSelectedCards;
+        if (first.image === second.image) {
+          // Reproducir "¡Muy bien!" tras un acierto
+          setTimeout(() => {
+            Speech.speak('¡Muy bien!', { language: 'es-MX' });
+          }, 600);
 
-        setMatches(matches + 1);
-        setSelectedCards([]);
-
-        if (matches + 1 === cards.length / 2) {
-          if (round < maxRounds) {
-            setTimeout(() => nextRound(), 1000);
-          } else {
-            setTimeout(() => {
-              Speech.speak('¡Felicidades! Has ganado. ¿Quieres volver a jugar?', { language: 'es-MX' });
-            }, 1000);
-
-            geekWinGameFunction();
-            setGameWon(true);
-            stopTimer();
-            sendGameTimeToAPI();
-          }
-        }
-      } else {
-        // Reproducir "Ese no era" tras un error
-        setTimeout(() => {
-          Speech.speak('Ese no era', { language: 'es-MX' });
-        }, 600);
-
-        setTimeout(() => {
-          const flippedCards = updatedCards.map((c) =>
-            updatedSelectedCards.some((s) => s.id === c.id)
-              ? { ...c, isFlipped: false }
-              : c
-          );
+          setMatches(matches + 1);
           setSelectedCards([]);
-          setCards(flippedCards);
-        }, 1000);
+
+          if (matches + 1 === cards.length / 2) {
+            if (round < maxRounds) {
+              setTimeout(() => nextRound(), 1000);
+            } else {
+              setTimeout(() => {
+                Speech.speak(
+                  '¡Felicidades! Has ganado. ¿Quieres volver a jugar?',
+                  { language: 'es-MX' }
+                );
+              }, 1000);
+
+              geekWinGameFunction();
+              setGameWon(true);
+              stopTimer();
+              sendGameTimeToAPI();
+            }
+          }
+        } else {
+          // Reproducir "Ese no era" tras un error
+          setTimeout(() => {
+            Speech.speak('Ese no era', { language: 'es-MX' });
+          }, 600);
+
+          setTimeout(() => {
+            const flippedCards = updatedCards.map((c) =>
+              updatedSelectedCards.some((s) => s.id === c.id)
+                ? { ...c, isFlipped: false }
+                : c
+            );
+            setSelectedCards([]);
+            setCards(flippedCards);
+          }, 1000);
+        }
       }
     }
-  }
-};
-
+  };
 
   const nextRound = () => {
     setRound(round + 1);
@@ -196,12 +198,13 @@ const cardClickFunction = (card) => {
     const endTime = new Date();
     const duration = Math.floor((endTime - startTime) / 1000);
     try {
+      const token = await AsyncStorage.getItem('token');
       const us = JSON.parse(await AsyncStorage.getItem('user'));
       const response = await fetch('https://api.scanteate.com/activities', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', auth: token },
         body: JSON.stringify({
-          UserId: us.id,
+          userId: us.id,
           type: 'Memorama',
           start: startTime.toISOString(),
           end: endTime.toISOString(),
@@ -222,7 +225,10 @@ const cardClickFunction = (card) => {
           source={require('../assets/images/port_memo.gif')}
           style={styles.coverImage}
         />
-        <Pressable style={styles.startButton} onPress={() => setHasStarted(true)}>
+        <Pressable
+          style={styles.startButton}
+          onPress={() => setHasStarted(true)}
+        >
           <Text style={styles.startButtonText}>Iniciar</Text>
         </Pressable>
       </View>
@@ -233,7 +239,9 @@ const cardClickFunction = (card) => {
     <View style={styles.container}>
       <Text style={styles.title}>MEMORAMA</Text>
       <Text style={styles.subtext}>Encuentra las imágenes iguales</Text>
-      <Text style={styles.subtext}>Ronda {round} de {maxRounds}</Text>
+      <Text style={styles.subtext}>
+        Ronda {round} de {maxRounds}
+      </Text>
       <Text style={styles.subtext}>
         Tiempo: {formatTime(timer)} | Encontrados: {matches}/{cards.length / 2}
       </Text>
@@ -256,7 +264,9 @@ const cardClickFunction = (card) => {
             >
               <LinearGradient
                 colors={
-                  card.isFlipped ? ['#f4f4f4', '#f4f4f4'] : ['#4dabf5', '#0284c7']
+                  card.isFlipped
+                    ? ['#f4f4f4', '#f4f4f4']
+                    : ['#4dabf5', '#0284c7']
                 }
                 style={styles.card}
               >

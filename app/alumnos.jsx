@@ -12,7 +12,6 @@ import {
 import Tabs from '../components/Tabs';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
 
 export default function Galery() {
   const [user, setUser] = useState({

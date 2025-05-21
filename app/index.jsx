@@ -35,7 +35,7 @@ function Slides({ x }) {
         <Image style={{height: 200, width: 400}} source={require('../assets/images/SNT+B.png')}></Image>
         <Pressable onLongPress={() => router.navigate('/setUrl')}>
         </Pressable>
-        <Text className="text-center mx-5 text-xl font-play">
+        <Text className="text-center mx-5 text-xl font-super">
           Una aplicación para ayudar a los niños con
           autismo a comunicarse con su entorno usando un dispositivo móvil
         </Text>
@@ -45,7 +45,7 @@ function Slides({ x }) {
     return (
       <View className="flex-1 items-center justify-center">
         <Image style={{height: 380, width: 350}} source={require('../assets/images/FIGURA-SLOGAN.png')}></Image>
-        <Text className="text-center mx-5 text-xl font-Mexcellent">
+        <Text className="text-center mx-5 text-xl font-super mt-10">
           En esta app la comunicación se hará a través de imágenes y figuras,
           para que todo sea mucho más amigable
         </Text>

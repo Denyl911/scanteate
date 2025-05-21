@@ -6,10 +6,12 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
+  Alert,
 } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 const TASKS_KEY = 'tasks';
 const DATE_KEY = 'lastDate';
@@ -18,7 +20,7 @@ export default function DailyTasks() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
-  
+
   useEffect(() => {
     const loadTasks = async () => {
       try {
@@ -30,7 +32,9 @@ export default function DailyTasks() {
           await AsyncStorage.setItem(DATE_KEY, today);
           setTasks([]);
         } else {
-          setTasks(JSON.parse(storedTasks).filter(task => !task.complete) || []);
+          setTasks(
+            JSON.parse(storedTasks).filter((task) => !task.complete) || []
+          );
         }
       } catch (error) {
         console.error('Error al cargar tareas:', error);
@@ -41,15 +45,16 @@ export default function DailyTasks() {
 
   const saveTasks = async (updatedTasks) => {
     try {
-      setTasks(updatedTasks.filter(task => !task.complete));
       await AsyncStorage.setItem(TASKS_KEY, JSON.stringify(updatedTasks));
+      setTasks(updatedTasks.filter((task) => !task.complete));
     } catch (error) {
       console.error('Error al guardar tareas:', error);
     }
   };
 
   const toggleTaskComplete = (index) => {
-    const updatedTasks = tasks.map((task, i) =>
+    const allStoredTasks = tasks;
+    const updatedTasks = allStoredTasks.map((task, i) =>
       i === index ? { ...task, complete: !task.complete } : task
     );
     saveTasks(updatedTasks);
@@ -77,24 +82,78 @@ export default function DailyTasks() {
     setEditingIndex(index);
   };
 
+  const deleteTask = (indexToDelete) => {
+    Alert.alert(
+      'Confirmar Eliminación',
+      '¿Estás seguro de que quieres eliminar esta tarea?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: () => {
+            const updatedTasks = tasks.filter((_, i) => i !== indexToDelete);
+            saveTasks(updatedTasks);
+
+            if (editingIndex === indexToDelete) {
+              setEditingIndex(null);
+              setNewTask('');
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <View style={styles.container}>
+      <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <AntDesign name="left" size={24} color="#0369a1" />
+      </Pressable>
       <Text style={styles.title}>Mis Tareas</Text>
       {tasks.length === 0 ? (
-        <Text style={styles.noTasksText}>Parece que completaste las tareas, si deseas agregar más presiona el botón</Text>
+        <Text style={styles.noTasksText}>
+          Parece que completaste las tareas, si deseas agregar más presiona el
+          botón
+        </Text>
       ) : (
         <FlatList
           data={tasks}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <View style={styles.taskItem}>
-              <Pressable style={styles.taskButton} onPress={() => toggleTaskComplete(index)}>
-                <Checkbox value={item.complete} onValueChange={() => toggleTaskComplete(index)} />
+              <Pressable
+                style={styles.taskButton}
+                onPress={() => toggleTaskComplete(index)}
+              >
+                <Checkbox
+                  value={item.complete}
+                  onValueChange={() => toggleTaskComplete(index)}
+                />
                 <Text style={styles.taskText}>{item.title}</Text>
               </Pressable>
-              <Pressable onPress={() => editTask(index)}>
-                <AntDesign name="edit" size={24} color="blue" />
-              </Pressable>
+              <View style={styles.taskActions}>
+                <Pressable onPress={() => editTask(index)}>
+                  <AntDesign
+                    name="edit"
+                    size={24}
+                    color="blue"
+                    style={styles.actionIcon}
+                  />
+                </Pressable>
+                <Pressable onPress={() => deleteTask(index)}>
+                  <AntDesign
+                    name="delete"
+                    size={24}
+                    color="red"
+                    style={styles.actionIcon}
+                  />
+                </Pressable>
+              </View>
             </View>
           )}
         />
@@ -106,7 +165,9 @@ export default function DailyTasks() {
         onChangeText={setNewTask}
       />
       <Pressable style={styles.button} onPress={addTask}>
-        <Text style={styles.buttonText}>{editingIndex !== null ? 'Editar' : 'Agregar'}</Text>
+        <Text style={styles.buttonText}>
+          {editingIndex !== null ? 'Editar' : 'Agregar'}
+        </Text>
       </Pressable>
     </View>
   );
@@ -119,8 +180,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
+    textAlign: 'center',
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: 'PlayChickens',
+    marginTop: 40,
+    marginBottom: 30,
     color: '#0369a1',
   },
   noTasksText: {
@@ -152,7 +216,7 @@ const styles = StyleSheet.create({
   taskButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 1, // Permite que el texto ocupe el espacio restante
   },
   taskText: {
     fontSize: 18,
@@ -164,5 +228,23 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginTop: 10,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 14,
+    left: 5,
+    backgroundColor: '#e0e0e0',
+    padding: 10,
+    borderRadius: 8,
+    zIndex: 10,
+    marginTop: 30,
+  },
+
+  taskActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionIcon: {
+    marginLeft: 15,
   },
 });

@@ -16,8 +16,10 @@ import { AntDesign } from '@expo/vector-icons';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const login = async () => {
+    setLoading(true);
     try {
       const res = await fetch('https://api.scanteate.com/users/login', {
         method: 'POST',
@@ -38,7 +40,8 @@ export default function Login() {
       } else {
         const data = await res.json();
         await AsyncStorage.setItem('user', JSON.stringify(data.user));
-        await AsyncStorage.setItem('token', JSON.stringify(data.token));
+        await AsyncStorage.setItem('token', data.token);
+        router.dismissAll();
         router.replace('/home');
       }
     } catch (e) {
@@ -49,6 +52,7 @@ export default function Login() {
       );
       console.log(e);
     }
+    setLoading(false);
   };
   return (
     <View>
@@ -87,13 +91,15 @@ export default function Login() {
             secureTextEntry={true}
             placeholder="Contraseña"
             autoCapitalize="none"
+            onSubmitEditing={login}
           />
           <Pressable
             onPress={login}
+            disabled={loading}
             className="rounded-xl  shadow shadow-black bg-sky-800 py-3 px-4 mt-28"
           >
             <Text className="text-white text-xl font-super">
-              Iniciar Sesión
+              {loading ? 'Cargando...' : 'Iniciar Sesión'}
             </Text>
           </Pressable>
           <Pressable

@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import {
     View,
     Text,
@@ -6,7 +5,6 @@ import {
     Pressable,
     StyleSheet,
     Image,
-    ToastAndroid,
 } from "react-native";
 import Tabs from "../components/Tabs";
 import { router } from "expo-router";

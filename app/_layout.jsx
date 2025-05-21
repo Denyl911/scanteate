@@ -66,7 +66,7 @@ export default function RootLayout() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          UserId: us.id,
+          userId: us.id,
           start,
           end,
           duration,

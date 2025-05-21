@@ -10,7 +10,7 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
-  Linking, // <-- IMPORTANTE: para abrir URLs externas
+  Linking,
 } from 'react-native';
 
 import Tabs from '../components/Tabs';
@@ -38,6 +38,7 @@ export default function Settings() {
 
   const logout = async () => {
     await AsyncStorage.removeItem('user');
+    router.dismissAll();
     router.replace('/loginBefore');
   };
 
@@ -72,7 +73,7 @@ export default function Settings() {
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
-      <View style={{ marginTop: StatusBar.currentHeight }}>
+      <View style={{ marginTop: StatusBar.currentHeight, zIndex: 90 }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
           source={require('../assets/images/image.png')}
@@ -81,7 +82,9 @@ export default function Settings() {
           <View className="mt-10">
             <UserAvatar />
           </View>
-          <Text className="text-white text-center text-xl mt-2 font-custom">Configuración</Text>
+          <Text className="text-white text-center text-xl mt-2 font-custom">
+            Configuración
+          </Text>
           <Text className="text-white text-center mt-1 mb-0 text-sm font-slabold">
             Personaliza tu experiencia
           </Text>
@@ -89,7 +92,9 @@ export default function Settings() {
       </View>
 
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 30 }}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 100, paddingTop: 30 }}
+        >
           {settingsButtons.map((item, index) => (
             <Pressable
               key={index}
@@ -100,7 +105,10 @@ export default function Settings() {
                   ? () => Linking.openURL('https://scanteate.com')
                   : () => router.navigate(item.route)
               }
-              style={[styles.buttonContainer, { marginBottom: item.marginBottom }]}
+              style={[
+                styles.buttonContainer,
+                { marginBottom: item.marginBottom },
+              ]}
             >
               <Image
                 source={item.image}

@@ -55,9 +55,20 @@ export default function Galery() {
   const getUser = async () => {
     const us = JSON.parse(await AsyncStorage.getItem('user'));
     setUser(us);
+    const token = await AsyncStorage.getItem('token');
+
     try {
-      const res = await fetch(`https://api.scanteate.com/users/emotions/${us.id}`);
+      const res = await fetch(
+        `https://api.scanteate.com/users/emotions/${us.id}`,
+        {
+          method: 'GET',
+          headers: {
+            auth: token,
+          },
+        }
+      );
       const emotions = await res.json();
+      console.log(emotions);
       setUserEmotions(emotions);
     } catch (e) {
       const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
@@ -78,10 +89,14 @@ export default function Galery() {
 
   const deleteEmotion = async () => {
     const id = deleteId;
+    const token = await AsyncStorage.getItem('token');
     if (Number.isInteger(id)) {
       try {
         await fetch(`https://api.scanteate.com/users/emotions/${id}`, {
           method: 'DELETE',
+          headers: {
+            auth: token,
+          },
         });
       } catch (e) {
         console.log(e);
@@ -114,15 +129,25 @@ export default function Galery() {
       </Pressable>
       <View>
         <View className="h-[87%] mt-16">
-          <Text className="text-sky-800 text-center font-bold text-3xl mb-10">
+          <Text className="text-sky-800 text-center font-super text-2xl mb-10">
             Galería de Emociones
           </Text>
           <ScrollView>
             {userEmotions.map((el, i) => {
               return (
-                <View
+                <Pressable
                   className="flex flex-row items-center justify-between rounded-lg p-3 bg-white w-[90%] mx-auto my-1"
                   key={i}
+                  onPress={() => {
+                    console.log(el.uri);
+                    
+                    router.push({
+                      pathname: '/galeria/detalles',
+                      params: {
+                        emotionId: el.id
+                      },
+                    });
+                  }}
                 >
                   <View className="basis-">
                     <Text className={`text-lg font-bold ${el.color}`}>
@@ -142,7 +167,7 @@ export default function Galery() {
                     className="w-28 h-28 rounded"
                     source={{ uri: el.uri }}
                   ></Image>
-                </View>
+                </Pressable>
               );
             })}
           </ScrollView>

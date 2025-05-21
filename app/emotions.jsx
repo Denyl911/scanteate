@@ -28,6 +28,7 @@ export default function Emotions() {
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
   const [emotion, setEmotion] = useState('Escaner de Emociones');
+  const [description, setDescription] = useState('');
   const [scanText, setScanText] = useState('ESCANEAR');
   const [fotoUri, setFotoUri] = useState(null);
   const [color, setColor] = useState('text-sky-900');
@@ -63,11 +64,12 @@ export default function Emotions() {
 
   const sayEmotion = () => {
     if (emotion != 'Escaner de Emociones') {
-      Speech.speak(emotion, { language: 'es' });
+      Speech.speak(description, { language: 'es' });
     }
   };
 
   async function scanFace() {
+    const token = await AsyncStorage.getItem('token');
     if (fotoUri) {
       setFotoUri(null);
       setScanText('ESCANEAR');
@@ -93,7 +95,7 @@ export default function Emotions() {
       }
       const msg = await anthropic.messages.create({
         model: 'claude-3-5-sonnet-20240620',
-        max_tokens: 20,
+        max_tokens: 40,
         messages: [
           {
             role: 'user',
@@ -108,42 +110,43 @@ export default function Emotions() {
               },
               {
                 type: 'text',
-                text: "Identifica exclusivamente la emoción predominante reflejada en el rostro de la persona. Si no se detecta ningún rostro, responde únicamente con 'No'.",
+                text: 'Analiza la siguiente imagen de una persona; identifica la emoción principal que expresa y devuelve el resultado exactamente en el formato "NombreEmocion-Descripcion"; considera para el análisis las expresiones faciales, el lenguaje corporal y el contexto general si es visible en la imagen; los casos posibles son: Felicidad-Se ve muy feliz. Enojo-Parece que está enojado/a. Tristeza-Podría estar sintiendo tristeza. Sorpresa-¡Qué sorpresa! Miedo-Se ve asustado/a. Disgusto-Parece que algo le disgusta. Ninguna-No se ha detectado ninguna emoción clara.',
               },
             ],
           },
         ],
       });
-      const emo = msg.content[0].text;
-
-      if (emo != 'No') {
-        setEmotion(emo);
-        Speech.speak(emo, { language: 'es' });
-        setColor(emotionColors[emo]);
-        setBorder(color.replace('text', 'border'));
-        try {
-          const res = await fetch('https://api.scanteate.com/users/emotions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              UserId: user.id,
-              name: emo,
-              color: emotionColors[emo],
-              uri: img.uri,
-            }),
-          });
-          const data = await res.json();
-          const emotions =
-            JSON.parse(await AsyncStorage.getItem('emotions')) || [];
-          emotions.unshift(data);
-          await AsyncStorage.setItem('emotions', JSON.stringify(emotions));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        setEmotion('No se detectó ninguna');
+      const resp = msg.content[0].text.split('-');
+      const emo = resp[0];
+      const descrip = cleanText(resp[1]);
+      setEmotion(emo);
+      setDescription(descrip);
+      Speech.speak(descrip, { language: 'es' });
+      setColor(emotionColors[emo]);
+      setBorder(color.replace('text', 'border'));
+      try {
+        const res = await fetch('https://api.scanteate.com/users/emotions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            auth: token,
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            name: emo,
+            color: emotionColors[emo],
+            uri: img.uri,
+          }),
+        });
+        const data = await res.json();
+        console.log();
+        
+        const emotions =
+          JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+        emotions.unshift(data);
+        await AsyncStorage.setItem('emotions', JSON.stringify(emotions));
+      } catch (e) {
+        console.log(e);
       }
     } catch (e) {
       console.log(e);
@@ -209,22 +212,22 @@ export default function Emotions() {
         </Pressable>
 
         <Image
-          source={require('../assets/images/SNT+B.png')}  // Asegúrate de que la ruta sea correcta
-          style={{ width: 130, height: 60 }}  // Ajusta el tamaño según sea necesario
+          source={require('../assets/images/SNT+B.png')} // Asegúrate de que la ruta sea correcta
+          style={{ width: 130, height: 60 }} // Ajusta el tamaño según sea necesario
         />
 
         <View className="px-5"></View>
       </View>
       <View className="flex- items-center">
         <View
-          className={`h-[500] w-[100%] rounded-xl border-4 ${border} mx-5 ${fotoUri ? 'hidden' : 'block'
-            }`}
+          className={`h-[500] w-[100%] rounded-xl border-4 ${border} mx-5 ${
+            fotoUri ? 'hidden' : 'block'
+          }`}
         >
           <CameraView
             ref={(ref) => setCameraRef(ref)}
             style={styles.camera}
             facing={type}
-            pictureSize="1080x1080"
           ></CameraView>
         </View>
         <ShowImage show={fotoUri ? true : false}></ShowImage>
@@ -266,6 +269,14 @@ export default function Emotions() {
   );
 }
 
+function cleanText(cadena) {
+  const ultimoPuntoIndex = cadena.lastIndexOf('.');
+  if (ultimoPuntoIndex === -1 || ultimoPuntoIndex === cadena.length - 1) {
+    return cadena;
+  }
+  return cadena.substring(0, ultimoPuntoIndex + 1);
+}
+
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
@@ -285,7 +296,7 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
-    borderRadius: 15,
+    borderRadius: 6,
   },
   buttonContainer: {
     flex: 1,

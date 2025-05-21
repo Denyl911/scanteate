@@ -55,6 +55,7 @@ export default function Register() {
           console.log(data);
           await AsyncStorage.setItem('user', JSON.stringify(data.user));
           await AsyncStorage.setItem('token', JSON.stringify(data.token));
+          router.dismissAll();
           router.replace('/home');
         }
       } else {
@@ -90,7 +91,7 @@ export default function Register() {
           Registrarme
         </Text>
         <Image
-          style={{height: 230, width: 230}}
+          style={{ height: 230, width: 230 }}
           source={require('../assets/images/img77.png')}
         ></Image>
       </View>
@@ -133,7 +134,9 @@ export default function Register() {
             disabled={loading}
             className="rounded-xl  shadow shadow-black bg-sky-800 py-3 px-4 mt-20"
           >
-            <Text className="text-white text-lg font-super">Registrarme</Text>
+            <Text className="text-white text-lg font-super">
+              {loading ? 'Cargando...' : 'Registrarme'}
+            </Text>
           </Pressable>
           <Pressable
             onPress={() => router.back()}

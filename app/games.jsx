@@ -62,7 +62,7 @@ export default function Games() {
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
-      <View style={{ marginTop: StatusBar.currentHeight }}>
+      <View style={{ marginTop: StatusBar.currentHeight, zIndex:90 }}>
         <Image
           className="w-screen h-44 rounded-b-3xl"
           source={require('../assets/images/image.png')}
@@ -79,7 +79,7 @@ export default function Games() {
       </View>
 
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 30 }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 35 }}>
           {gameButtons.map((item, index) => (
             <Pressable
               key={index}

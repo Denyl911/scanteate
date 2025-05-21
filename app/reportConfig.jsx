@@ -28,9 +28,8 @@ export default function ReportConfig() {
     const loadValue = async () => {
       try {
         const data = JSON.parse(await AsyncStorage.getItem('user'));
-        console.log(data);
         setUser(data);
-        setEmail(data.psicoEmail)
+        setEmail(data.psicoEmail);
       } catch (e) {
         console.error('Error al cargar el valor de AsyncStorage', e);
       }
@@ -49,24 +48,26 @@ export default function ReportConfig() {
 
   const setPscicoEmail = async () => {
     if (user) {
+      const token = await AsyncStorage.getItem('token');
       const res = await fetch(`https://api.scanteate.com/users/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          auth: token,
         },
         body: JSON.stringify({
           psicoEmail: email,
         }),
       });
-      const data = await res.json()
+      const data = await res.json();
       console.log(data);
-      
+
       if (res.status == 200) {
         const newData = { ...user };
         newData.psicoEmail = email;
         setUser(newData);
-        await AsyncStorage.setItem('user', JSON.stringify(newData))
-        Keyboard.dismiss()
+        await AsyncStorage.setItem('user', JSON.stringify(newData));
+        Keyboard.dismiss();
         ToastAndroid.showWithGravity(
           'Actualizado Correctamente',
           ToastAndroid.LONG,
@@ -96,7 +97,7 @@ export default function ReportConfig() {
       </Pressable>
       <View>
         <View className="h-[87%] mt-24 p-3">
-          <Text className="text-sky-800 text-center font-bold text-3xl">
+          <Text className="text-sky-800 text-center font-super text-2xl">
             Configuración de envio de reportes
           </Text>
           <View className="mb-5 mt-10 px-2">
@@ -114,9 +115,9 @@ export default function ReportConfig() {
               />
               <Pressable
                 onPress={setPscicoEmail}
-                className="p-2 bg-slate-600 rounded-lg w-[25%] flex items-center justify-center"
+                className="p-3 bg-slate-600 rounded-lg w-[25%] flex items-center justify-center"
               >
-                <Text className="text-white font-bold">
+                <Text className="text-white font-bold text-center">
                   Guardar <Entypo name="save" size={16} color="white" />
                 </Text>
               </Pressable>
@@ -162,9 +163,9 @@ export default function ReportConfig() {
               Enviar reporte manualmente
             </Text>
             <MaterialCommunityIcons
-              className="absolute right-7 bottom-2"
+              className="absolute right-6 bottom-2"
               name="email-send"
-              size={30}
+              size={29}
               color="white"
             />
           </Pressable>
