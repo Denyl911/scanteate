@@ -2,7 +2,7 @@
   "expo": {
     "name": "SCANTEATE",
     "slug": "scanteate",
-    "version": "1.0.7",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/images/LogoApp-SCAN.png",
     "scheme": "myapp",

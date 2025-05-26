@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -11,27 +11,27 @@ import {
   ToastAndroid,
   Modal,
   StyleSheet,
-} from 'react-native';
-import Tabs from '../components/Tabs';
-import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
+} from "react-native";
+import Tabs from "../components/Tabs";
+import { router, Link } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 function formatearFecha(fecha) {
   if (fecha) {
     fecha = new Date(fecha);
     const meses = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ];
 
     const dia = fecha.getDate();
@@ -44,8 +44,8 @@ function formatearFecha(fecha) {
 
 export default function Galery() {
   const [user, setUser] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
   });
   const [allEmotions, setAllEmotions] = useState([]);
   const [userEmotions, setUserEmotions] = useState([]);
@@ -53,25 +53,24 @@ export default function Galery() {
   const [deleteId, setDeleteId] = useState(0);
 
   const getUser = async () => {
-    const us = JSON.parse(await AsyncStorage.getItem('user'));
+    const us = JSON.parse(await AsyncStorage.getItem("user"));
     setUser(us);
-    const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem("token");
 
     try {
       const res = await fetch(
         `https://api.scanteate.com/users/emotions/${us.id}`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
             auth: token,
           },
         }
       );
       const emotions = await res.json();
-      console.log(emotions);
-      setUserEmotions(emotions);
+      setUserEmotions(emotions.reverse());
     } catch (e) {
-      const all = JSON.parse(await AsyncStorage.getItem('emotions')) || [];
+      const all = JSON.parse(await AsyncStorage.getItem("emotions")) || [];
       setAllEmotions(all);
       all.forEach((el) => {
         if (el.UserId == us.id) {
@@ -89,11 +88,11 @@ export default function Galery() {
 
   const deleteEmotion = async () => {
     const id = deleteId;
-    const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem("token");
     if (Number.isInteger(id)) {
       try {
         await fetch(`https://api.scanteate.com/users/emotions/${id}`, {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
             auth: token,
           },
@@ -105,10 +104,10 @@ export default function Galery() {
     const allFilt = allEmotions.filter((el) => el.id != id);
     setAllEmotions(allFilt);
     setUserEmotions(userEmotions.filter((el) => el.id != id));
-    await AsyncStorage.setItem('emotions', JSON.stringify(allFilt));
+    await AsyncStorage.setItem("emotions", JSON.stringify(allFilt));
     setModalVisible(!modalVisible);
     ToastAndroid.showWithGravity(
-      'Eliminado exitosamente',
+      "Eliminado exitosamente",
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );
@@ -121,12 +120,12 @@ export default function Galery() {
   return (
     <View className="h-[100%] bg-slate-200">
       <StatusBar backgroundColor="#0d5692" hidden={false} translucent={true} />
-      <Pressable
+      <Link
+        href="/emotions"
         className="absolute top-14 left-5 bg-slate-300 p-2 rounded-lg opacity-50 z-40"
-        onPress={() => router.back()}
       >
         <AntDesign name="left" size={24} color="#0369a1" />
-      </Pressable>
+      </Link>
       <View>
         <View className="h-[87%] mt-16">
           <Text className="text-sky-800 text-center font-super text-2xl mb-10">
@@ -139,12 +138,10 @@ export default function Galery() {
                   className="flex flex-row items-center justify-between rounded-lg p-3 bg-white w-[90%] mx-auto my-1"
                   key={i}
                   onPress={() => {
-                    console.log(el.uri);
-                    
-                    router.push({
-                      pathname: '/galeria/detalles',
+                    router.navigate({
+                      pathname: "/galeria/detalles",
                       params: {
-                        emotionId: el.id
+                        emotionId: el.id,
                       },
                     });
                   }}
@@ -211,17 +208,17 @@ export default function Galery() {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -236,18 +233,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

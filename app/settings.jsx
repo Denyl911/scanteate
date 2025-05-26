@@ -83,7 +83,7 @@ export default function Settings() {
             <UserAvatar />
           </View>
           <Text className="text-white text-center text-xl mt-2 font-custom">
-            Configuración
+            Mi Perfil
           </Text>
           <Text className="text-white text-center mt-1 mb-0 text-sm font-slabold">
             Personaliza tu experiencia
